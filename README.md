@@ -16,7 +16,7 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
 1. **Clone the Repository**:
 
     ```
-    git clone https://github.com/your_username/FurEver-Friends.git
+    git clone https://github.com/tylerlight071/FurEver-Friends.git
     ```
 
 2. **Run the Application**:
