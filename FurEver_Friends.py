@@ -19,7 +19,7 @@ DEFAULT_ANIMAL_DATA = {}
 
 def change_admin_password():
     clear_screen()
-    print("Your password must be changed from the default 'ADMIN' for security reasons.")
+    print(Fore.YELLOW + "Your password must be changed from the default 'ADMIN' for security reasons." + Style.RESET_ALL)
     new_password = getpass.getpass("Enter a new password for ADMIN: ")
     confirm_password = getpass.getpass("Confirm the new password: ")
 
@@ -30,11 +30,11 @@ def change_admin_password():
             user_file.seek(0)
             json.dump(data, user_file, indent=4)
             user_file.truncate()
-            print("Password changed successfully!")
+            print(Fore.GREEN + "Password changed successfully!" + Style.RESET_ALL)
             time.sleep(2)
             clear_screen()
     else:
-        print("Passwords do not match. Please try again.")
+        print(Fore.RED + "Passwords do not match. Please try again." + Style.RESET_ALL)
         time.sleep(2)
         clear_screen()
         change_admin_password()
@@ -49,19 +49,18 @@ def login():
 
             if username in users:
                 if users[username] == password:
-                    if username == "ADMIN":
-                        if username == "ADMIN" and password == "ADMIN":
-                            change_admin_password()
-                            admin_dashboard()
-                        else:
-                            admin_dashboard()                           
-                    return username
+                    if username == "ADMIN" and password == "ADMIN":
+                        change_admin_password()
+                        admin_dashboard()
+                        return username  # Ensure to return after admin login
+                    else:
+                        return username  # Return username for non-admin users
                 else:
-                    print("Incorrect password. Please try again.")
+                    print(Fore.RED + "Incorrect password. Please try again." + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
             else:
-                print("Username not found. Please try again.")
+                print(Fore.RED + "Username not found. Please try again." + Style.RESET_ALL)
                 time.sleep(2)
                 clear_screen()
 
@@ -80,8 +79,8 @@ def main():
 
     while True:
         print(Fore.CYAN + "\nWelcome to the Animal Adoption System!" + Style.RESET_ALL)
-        print("1. Login")
-        print("2. Exit")
+        print("1. " + Fore.GREEN + "Login" + Style.RESET_ALL)
+        print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
         choice = input("Please select an option: ")
 
         if choice == '1':
@@ -90,11 +89,11 @@ def main():
             if username is not None:
                 while True:
                     clear_screen()
-                    print("\nMenu:")
-                    print("1. Add a new animal")
-                    print("2. View all animals")
-                    print("3. Change animal to adopted")
-                    print("4. Logout")
+                    print(Fore.CYAN + "\nMenu:" + Style.RESET_ALL)
+                    print("1. " + Fore.GREEN + "Add a new animal" + Style.RESET_ALL)
+                    print("2. " + Fore.GREEN + "View all animals" + Style.RESET_ALL)
+                    print("3. " + Fore.GREEN + "Change animal adoption status" + Style.RESET_ALL)
+                    print("4. " + Fore.YELLOW + "Logout" + Style.RESET_ALL)
                     option = input("Please select an option: ")
 
                     if option == '1':
