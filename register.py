@@ -12,10 +12,20 @@ def register():
     if username in users:
         print(Fore.RED + "\nUsername already exists. Please choose another one." + Style.RESET_ALL)
         time.sleep(2)
-        return register()
-    password = getpass.getpass("Enter a password: ")
-    users[username] = password
-    save_data(users, USER_DATA_FILE)
-    print(Fore.GREEN + "\nRegistration successful!" + Style.RESET_ALL)
-    time.sleep(2)
-    clear_screen()
+        return
+
+    while True:
+        password = getpass.getpass("Enter a password: ")
+        confirm_password = getpass.getpass("Confirm your password: ")
+        if password == confirm_password:
+            users[username] = password
+            save_data(users, USER_DATA_FILE)
+            print(Fore.GREEN + "\nRegistration successful!" + Style.RESET_ALL)
+            time.sleep(2)
+            clear_screen()
+            break  # Exit the loop when registration is successful
+        else:
+            print(Fore.RED + "\nPasswords do not match. Please try again." + Style.RESET_ALL)
+
+if __name__ == "__main__":
+    register()
