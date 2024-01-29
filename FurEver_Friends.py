@@ -19,8 +19,8 @@ DEFAULT_ANIMAL_DATA = {}
 
 def change_admin_password():
     clear_screen()
-    print(Fore.YELLOW + "Your password must be changed from the default 'ADMIN' for security reasons." + Style.RESET_ALL)
-    new_password = getpass.getpass("Enter a new password for ADMIN: ")
+    print(Fore.YELLOW + "\nYour password must be changed from the default 'ADMIN' for security reasons." + Style.RESET_ALL)
+    new_password = getpass.getpass("\nEnter a new password for ADMIN: ")
     confirm_password = getpass.getpass("Confirm the new password: ")
 
     if new_password == confirm_password:
@@ -30,18 +30,18 @@ def change_admin_password():
             user_file.seek(0)
             json.dump(data, user_file, indent=4)
             user_file.truncate()
-            print(Fore.GREEN + "Password changed successfully!" + Style.RESET_ALL)
+            print(Fore.GREEN + "\nPassword changed successfully!" + Style.RESET_ALL)
             time.sleep(2)
             clear_screen()
     else:
-        print(Fore.RED + "Passwords do not match. Please try again." + Style.RESET_ALL)
+        print(Fore.RED + "\nPasswords do not match. Please try again." + Style.RESET_ALL)
         time.sleep(2)
         clear_screen()
         change_admin_password()
 
 def login():
     while True:
-        username = input("Enter your username: ")
+        username = input("\nEnter your username: ")
         password = getpass.getpass("Enter your password: ")
 
         with open(USER_DATA_FILE, 'r') as user_file:
@@ -53,14 +53,17 @@ def login():
                         change_admin_password()
                         admin_dashboard()
                         return username  # Ensure to return after admin login
+                    elif username == "ADMIN":
+                        admin_dashboard()
+                        return username
                     else:
                         return username  # Return username for non-admin users
                 else:
-                    print(Fore.RED + "Incorrect password. Please try again." + Style.RESET_ALL)
+                    print(Fore.RED + "\nIncorrect password. Please try again." + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
             else:
-                print(Fore.RED + "Username not found. Please try again." + Style.RESET_ALL)
+                print(Fore.RED + "\nUsername not found. Please try again." + Style.RESET_ALL)
                 time.sleep(2)
                 clear_screen()
 
@@ -79,9 +82,9 @@ def main():
 
     while True:
         print(Fore.CYAN + "\nWelcome to the Animal Adoption System!" + Style.RESET_ALL)
-        print("1. " + Fore.GREEN + "Login" + Style.RESET_ALL)
+        print("\n1. " + Fore.GREEN + "Login" + Style.RESET_ALL)
         print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
-        choice = input("Please select an option: ")
+        choice = input("\nPlease select an option: ")
 
         if choice == '1':
             clear_screen()
@@ -90,11 +93,11 @@ def main():
                 while True:
                     clear_screen()
                     print(Fore.CYAN + "\nMenu:" + Style.RESET_ALL)
-                    print("1. " + Fore.GREEN + "Add a new animal" + Style.RESET_ALL)
+                    print("\n1. " + Fore.GREEN + "Add a new animal" + Style.RESET_ALL)
                     print("2. " + Fore.GREEN + "View all animals" + Style.RESET_ALL)
                     print("3. " + Fore.GREEN + "Change animal adoption status" + Style.RESET_ALL)
                     print("4. " + Fore.YELLOW + "Logout" + Style.RESET_ALL)
-                    option = input("Please select an option: ")
+                    option = input("\nPlease select an option: ")
 
                     if option == '1':
                         add_animal()
@@ -103,19 +106,19 @@ def main():
                     elif option == '3':
                         change_adopted_status()
                     elif option == '4':
-                        print("Logging out...")
+                        print("\nLogging out...")
                         clear_screen()
                         break
                     else:
-                        print(Fore.RED + "Invalid option. Please try again." + Style.RESET_ALL)
+                        print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
                         time.sleep(2)
                         clear_screen()
         elif choice == '2':
-            print("Exiting...")
+            print("\nExiting...")
             time.sleep(2)
             exit()
         else:
-            print(Fore.RED + "Invalid option. Please try again." + Style.RESET_ALL)
+            print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
             time.sleep(2)
             clear_screen()
 

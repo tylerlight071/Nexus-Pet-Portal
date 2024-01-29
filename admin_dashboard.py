@@ -8,21 +8,21 @@ USER_DATA_FILE = "users.json"
 def admin_dashboard():
     while True:
         clear_screen()
-        print(Fore.YELLOW + "\nADMIN Dashboard" + Style.RESET_ALL)
+        print(Fore.YELLOW + "\nADMIN Dashboard\n" + Style.RESET_ALL)
         print("1. Register a new user")
         print("2. Manage settings")
         print("3. Logout")
-        option = input("Please select an option: ")
+        option = input("\nPlease select an option: ")
 
         if option == '1':
             register()
         elif option == '2':
             # Implement settings management
-            print("This feature is under development.")
+            print("\nThis feature is under development.")
             time.sleep(2)
         elif option == '3':
-            print("Logging out...")
+            print("\nLogging out...")
             exit()
         else:
-            print(Fore.RED + "Invalid option. Please try again." + Style.RESET_ALL)
+            print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
             time.sleep(2)
