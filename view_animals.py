@@ -8,7 +8,7 @@ def print_animal_table(animals):
     """Prints the table of animals."""
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
     print("--------------------------------------------------------------------------------------------")
-    print("| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| " + Fore.YELLOW + "Age".ljust(6) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(8) + Style.RESET_ALL + " |")
+    print("| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| " + Fore.YELLOW + "Age".ljust(5) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(9) + Style.RESET_ALL + " |")
     print("--------------------------------------------------------------------------------------------")
 
     for name, data in animals.items():
@@ -105,7 +105,7 @@ def view_animals():
     print_animal_table(animals)
 
     while True:
-        print(Fore.CYAN + "\nMenu:" + Style.RESET_ALL)
+        print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)
         print("\n1. " + Fore.GREEN + "Search for animal" + Style.RESET_ALL)
         print("2. " + Fore.GREEN + "Sort animals" + Style.RESET_ALL)
         print("3. " + Fore.GREEN + "Filter animals" + Style.RESET_ALL)
