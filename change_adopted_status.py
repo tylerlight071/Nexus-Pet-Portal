@@ -9,12 +9,16 @@ ANIMAL_DATA_FILE = "animals.json"
 def change_adopted_status():
     clear_screen()
     animals = load_data(ANIMAL_DATA_FILE)
-    name = input("\nEnter the name of the animal to mark as adopted: ")
+    name = input("\nEnter the name of the animal to toggle adoption status: ")
 
     if name in animals:
-        animals[name]['adopted'] = True
+        # Toggle the adopted status
+        animals[name]['adopted'] = not animals[name].get('adopted', False)
         save_data(animals, ANIMAL_DATA_FILE)
-        print(Fore.GREEN + f"\n{name} has been marked as adopted!" + Style.RESET_ALL)
+        if animals[name]['adopted']:
+            print(Fore.GREEN + f"\n{name} has been marked as " + Fore.CYAN + "adopted!" + Style.RESET_ALL)
+        else:
+            print(Fore.GREEN + f"\n{name} has been marked as " + Fore.RED + "not adopted!" + Style.RESET_ALL)
     else:
         print(Fore.RED + f"\nNo animal found with the name {name}" + Style.RESET_ALL)
 
