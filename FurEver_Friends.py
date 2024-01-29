@@ -41,6 +41,7 @@ def change_admin_password():
 
 def login():
     while True:
+        print("\n👤 User Login 👤")
         username = input("\nEnter your username: ")
         password = getpass.getpass("Enter your password: ")
 
@@ -81,7 +82,7 @@ def main():
             json.dump(DEFAULT_ANIMAL_DATA, animal_file, indent=4)
 
     while True:
-        print(Fore.CYAN + "\nWelcome to the Animal Adoption System!" + Style.RESET_ALL)
+        print(Fore.CYAN + "\n🐕 Welcome to FurEver Friends Management System! 🐈" + Style.RESET_ALL)
         print("\n1. " + Fore.GREEN + "Login" + Style.RESET_ALL)
         print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
         choice = input("\nPlease select an option: ")
@@ -92,11 +93,11 @@ def main():
             if username is not None:
                 while True:
                     clear_screen()
-                    print(Fore.CYAN + "\nMenu:" + Style.RESET_ALL)
-                    print("\n1. " + Fore.GREEN + "Add a new animal" + Style.RESET_ALL)
-                    print("2. " + Fore.GREEN + "View all animals" + Style.RESET_ALL)
-                    print("3. " + Fore.GREEN + "Change animal adoption status" + Style.RESET_ALL)
-                    print("4. " + Fore.YELLOW + "Logout" + Style.RESET_ALL)
+                    print(Fore.CYAN + "\n📖 Main Menu 📖" + Style.RESET_ALL)
+                    print("\n1. " + Fore.GREEN + "🐶 Add a new animal" + Style.RESET_ALL)
+                    print("2. " + Fore.GREEN + "🔎 View all animals" + Style.RESET_ALL)
+                    print("3. " + Fore.GREEN + "🏡 Change animal adoption status" + Style.RESET_ALL)
+                    print("4. " + Fore.YELLOW + "🔐 Logout" + Style.RESET_ALL)
                     option = input("\nPlease select an option: ")
 
                     if option == '1':
