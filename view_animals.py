@@ -1,25 +1,27 @@
 import time
 from colorama import Fore, Style
 from common_functions import clear_screen, load_data
+from view_animal_profile import view_animal_profile
 
 ANIMAL_DATA_FILE = "animals.json"
 
 def print_animal_table(animals):
     """Prints the table of animals."""
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
-    print("--------------------------------------------------------------------------------------------")
-    print("| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| " + Fore.YELLOW + "Age".ljust(5) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(9) + Style.RESET_ALL + " |")
-    print("--------------------------------------------------------------------------------------------")
+    print("---------------------------------------------------------------------------------------------")
+    print("| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(8) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| " + Fore.YELLOW + "Gender".ljust(15) + Style.RESET_ALL + "| " + Fore.YELLOW + "Age".ljust(1) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(7) + Style.RESET_ALL + " |")
+    print("---------------------------------------------------------------------------------------------")
 
     for name, data in animals.items():
         name_column = f"| {name.ljust(20)}"
-        species_column = f"| {data['species'].ljust(20)}"
+        species_column = f"| {data['species'].ljust(8)}"
         breed_column = f"| {data['breed'].ljust(25)}"
-        age_column = f"| {str(data['age']).ljust(6)}"
-        adopted_column = f"| {str(data['adopted']).ljust(10)}|"
-        print(name_column + species_column + breed_column + age_column + adopted_column)
+        gender_column = f"| {data['gender'].ljust(15)}"
+        age_column = f"|  {str(data['age']).ljust(3)}"
+        adopted_column = f"| {str(data['adopted']).ljust(7)} |"
+        print(name_column + species_column + breed_column + gender_column + age_column + adopted_column)
 
-    print("--------------------------------------------------------------------------------------------")
+    print("---------------------------------------------------------------------------------------------")
 
 def filter_animals(animals):
     """Filters animals based on species, breed and adoption status."""
@@ -136,10 +138,7 @@ def view_animals():
         elif user_input == '3':
             filter_animals(animals)
         elif user_input == '4':
-            print("\nThis feature is coming soon!")
-            time.sleep(2)
-            clear_screen()
-            print_animal_table(animals)
+            view_animal_profile()
         elif user_input == '5':
             clear_screen()
             return
