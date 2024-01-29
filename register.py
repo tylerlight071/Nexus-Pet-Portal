@@ -8,14 +8,14 @@ USER_DATA_FILE = "users.json"
 def register():
     clear_screen()
     users = load_data(USER_DATA_FILE)
-    username = input("Enter a username: ")
+    username = input("\nEnter a username: ")
     if username in users:
-        print(Fore.RED + "Username already exists. Please choose another one." + Style.RESET_ALL)
+        print(Fore.RED + "\nUsername already exists. Please choose another one." + Style.RESET_ALL)
         time.sleep(2)
         return register()
     password = getpass.getpass("Enter a password: ")
     users[username] = password
     save_data(users, USER_DATA_FILE)
-    print(Fore.GREEN + "Registration successful!" + Style.RESET_ALL)
+    print(Fore.GREEN + "\nRegistration successful!" + Style.RESET_ALL)
     time.sleep(2)
     clear_screen()
