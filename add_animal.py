@@ -28,6 +28,12 @@ def add_animal():
             input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
             continue
 
+        gender = input("Enter the animal's gender: ")
+        if not gender.strip():  # Check if the breed is empty
+            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
+            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
+            continue
+
         age = input("Enter the animal's age: ")
         if not age.strip():  # Check if the age is empty
             print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
@@ -46,7 +52,7 @@ def add_animal():
             input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
             continue
 
-        animals[name] = {'species': species, 'breed': breed, 'age': age, 'adopted': False}
+        animals[name] = {'name': name, 'species': species, 'breed': breed, 'gender': gender,  'age': age, 'adopted': False}
         save_data(animals, ANIMAL_DATA_FILE)
         print(Fore.GREEN + "\nAnimal added successfully!" + Style.RESET_ALL)
         time.sleep(2)
