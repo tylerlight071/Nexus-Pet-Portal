@@ -58,6 +58,18 @@ def search_animals(animals):
         time.sleep(2)
         clear_screen()
 
+def sort_animals(animals, key='name', reverse=False):
+    """Sorts the animals based on the specified key."""
+    if key == 'name':
+        sorted_animals = sorted(animals.items(), key=lambda x: x[0], reverse=reverse)
+    elif key == 'age':
+        sorted_animals = sorted(animals.items(), key=lambda x: int(x[1]['age']), reverse=reverse)
+    else:
+        print("Invalid key for sorting.")
+        return
+
+    return dict(sorted_animals)
+
 def view_animals():
     """Main function to view animals."""
     clear_screen()
@@ -66,20 +78,36 @@ def view_animals():
 
     while True:
         print("")
+        print("Menu:")
         print("1. " + Fore.GREEN + "Search for animal" + Style.RESET_ALL)
-        print("2. " + Fore.GREEN + "View animal profile" + Style.RESET_ALL)
-        print("3. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+        print("2. " + Fore.GREEN + "Sort animals" + Style.RESET_ALL)
+        print("3. " + Fore.GREEN + "View animal profile" + Style.RESET_ALL)
+        print("4. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
         user_input = input("Please select an option: ")
 
         if user_input == '1':
             clear_screen()
             search_animals(animals)
         elif user_input == '2':
+            print("\nSort by:")
+            print("1." + Fore.GREEN + " Name (A-Z)" + Style.RESET_ALL)
+            print("2." + Fore.GREEN + " Name (Z-A)" + Style.RESET_ALL)
+            print("3." + Fore.GREEN + " Age (Youngest to Oldest)" + Style.RESET_ALL)
+            sort_option = input("Please select an option: ")
+            if sort_option in ['1', '2', '3']:
+                sort_key = 'name' if sort_option in ['1', '2'] else 'age'
+                reverse_sort = True if sort_option == '2' else False
+                animals = sort_animals(animals, key=sort_key, reverse=reverse_sort)
+                clear_screen()
+                print_animal_table(animals)
+            else:
+                print("Invalid option.")
+        elif user_input == '3':
             print("This feature is coming soon!")
             time.sleep(2)
             clear_screen()
             print_animal_table(animals)
-        elif user_input == '3':
+        elif user_input == '4':
             clear_screen()
             return
         else:
