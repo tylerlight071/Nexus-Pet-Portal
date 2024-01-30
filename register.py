@@ -7,27 +7,44 @@ USER_DATA_FILE = "users.json"
 
 def register():
     clear_screen()
+
+    # Load user data from file
     users = load_data(USER_DATA_FILE)
+
+    # Prompt user to enter a username
     username = input("\nEnter a username: ")
+    
+    # Check if usernaem already exists
     if username in users:
         print(Fore.RED + "\nUsername already exists. Please choose another one." + Style.RESET_ALL)
         time.sleep(2)
         return
 
+    # Continuous loop for user registration
     while True:
+        # Prompt user to enter and confirm a password
         password = getpass.getpass("Enter a password: ")
         confirm_password = getpass.getpass("Confirm your password: ")
+
+        # Check if passwords match
         if password == confirm_password:
+            # Prompt user to enter their user level
             user_level = input("Enter your user level (1-3): ")
+            
+            # Validate user level input
             if user_level.isdigit() and 1 <= int(user_level) <= 3:
+                # Update user data with new registration information
                 users[username] = {'password': password, 'level': int(user_level)}
                 save_data(users, USER_DATA_FILE)
                 print(Fore.GREEN + "\nRegistration successful!" + Style.RESET_ALL)
                 time.sleep(2)
                 clear_screen()
-                break  # Exit the loop when registration is successful
+                # Exit the loop when registration is successful
+                break  
+            # Notify about invalid user level
             else:
                 print(Fore.RED + "\nInvalid user level. Please enter a number between 1 and 3." + Style.RESET_ALL)
+        # Notify about mismatching passwords
         else:
             print(Fore.RED + "\nPasswords do not match. Please try again." + Style.RESET_ALL)
 

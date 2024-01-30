@@ -9,7 +9,7 @@ from common_functions import clear_screen, load_data, save_data
 ANIMAL_DATA_FILE = "animals.json"
 
 def print_animal_table_with_index(animals):
-    """Prints the table of animals with index numbers."""
+    # Displays the table of animals with index numbers
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
     print("--------------------------------------------------------------------------------------------------")
     print("| " + Fore.YELLOW + "Index".ljust(6) + Style.RESET_ALL + "| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(8) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| "  + Fore.YELLOW + "Gender".ljust(15) + Style.RESET_ALL + Fore.YELLOW + "Age".ljust(1) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(7) + Style.RESET_ALL + " |")
@@ -28,9 +28,10 @@ def print_animal_table_with_index(animals):
     print("--------------------------------------------------------------------------------------------------")
 
 def select_animal_to_view(animals):
-    """Allows the user to select an animal from the table to view its profile."""
     clear_screen()
     print_animal_table_with_index(animals)
+
+    # Allows the user to select an animal from the table to view its profile
     selected_index = input("\nEnter the index of the animal to view its profile: ")
 
     try:
@@ -44,10 +45,10 @@ def select_animal_to_view(animals):
         print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
 
 def view_animal_profile():
-    """Displays the profile of the selected animal in a Tkinter window."""
     clear_screen()
     animals = load_data(ANIMAL_DATA_FILE)
     
+    # Displays the profile of the selected animal in a Tkinter window
     print_animal_table_with_index(animals)
     selected_index = input("\nEnter the index of the animal to view its profile: ")
 
@@ -119,10 +120,10 @@ def view_animal_profile():
         print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
 
 def view_animals():
-    """Main function to view animals."""
     clear_screen()
 
     while True:
+        # Continuous loop for viewing the animal options
         print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)
         print("\n1. " + Fore.GREEN + "Select an animal to view profile" + Style.RESET_ALL)
         print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)

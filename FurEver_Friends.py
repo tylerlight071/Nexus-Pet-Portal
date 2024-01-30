@@ -1,13 +1,12 @@
 import os
 import json
 import time
-import getpass
 from colorama import Fore, Style
 from view_animals import view_animals
 from add_animal import add_animal
 from change_adopted_status import change_adopted_status
-from common_functions import clear_screen, save_data
-from admin_dashboard import admin_dashboard
+from common_functions import clear_screen, log_action
+from login import login
 
 # File paths for user and animal data
 USER_DATA_FILE = "users.json"
@@ -17,69 +16,11 @@ ANIMAL_DATA_FILE = "animals.json"
 DEFAULT_USER_DATA = {
     "ADMIN": {
         "password": "ADMIN",
-        "level": 5
+        "level": 3
     }
 }
 
 DEFAULT_ANIMAL_DATA = {}
-
-def change_admin_password():
-    clear_screen()
-    print(Fore.YELLOW + "\nYour password must be changed from the default 'ADMIN' for security reasons." + Style.RESET_ALL)
-    new_password = getpass.getpass("\nEnter a new password for ADMIN: ")
-    confirm_password = getpass.getpass("Confirm the new password: ")
-
-    if new_password == confirm_password:
-        with open(USER_DATA_FILE, 'r+') as user_file:
-            data = json.load(user_file)
-            data["ADMIN"] = {
-                "password": new_password,
-                "level": 5
-            }
-            user_file.seek(0)
-            json.dump(data, user_file, indent=4)
-            user_file.truncate()
-            print(Fore.GREEN + "\nPassword changed successfully!" + Style.RESET_ALL)
-            time.sleep(2)
-            clear_screen()
-    else:
-        print(Fore.RED + "\nPasswords do not match. Please try again." + Style.RESET_ALL)
-        time.sleep(2)
-        clear_screen()
-        change_admin_password()
-
-def login():
-    while True:
-        print("\n👤 User Login 👤")
-        username = input("\nEnter your username: ")
-        password = getpass.getpass("Enter your password: ")
-
-        with open(USER_DATA_FILE, 'r') as user_file:
-            users = json.load(user_file)
-
-            if username in users:
-                if users[username]['password'] == password:
-                    user_level = users[username]['level'] # Retrieve the user level
-                    if username == "ADMIN" and password == "ADMIN":
-                        change_admin_password()
-                        admin_dashboard()
-                        return username, user_level  # Ensure to return after admin login
-                    elif username == "ADMIN":
-                        admin_dashboard()
-                        return username, user_level
-                    else:
-                        print("\nLogging in...")
-                        time.sleep(2)
-                        return username, user_level  # Return username and user level for non-admin users
-                    
-                else:
-                    print(Fore.RED + "\nIncorrect password. Please try again." + Style.RESET_ALL)
-                    time.sleep(2)
-                    clear_screen()
-            else:
-                print(Fore.RED + "\nUsername not found. Please try again." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
 
 def main():
     clear_screen()
@@ -93,8 +34,10 @@ def main():
     if not os.path.exists(ANIMAL_DATA_FILE):
         with open(ANIMAL_DATA_FILE, 'w') as animal_file:
             json.dump(DEFAULT_ANIMAL_DATA, animal_file, indent=4)
+
     try:
         while True:
+            # Display main menu options
             print(Fore.CYAN + "\n🐕 Welcome to FurEver Friends Management System! 🐈" + Style.RESET_ALL)
             print("\n1. " + Fore.GREEN + "Login" + Style.RESET_ALL)
             print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
@@ -102,10 +45,12 @@ def main():
 
             if choice == '1':
                 clear_screen()
+                # Pull the username and user level from the login function
                 username, user_level = login()
                 if username is not None:
                     while True:
                         clear_screen()
+                        # Display main menu after successful login
                         print(Fore.CYAN + "\n📖 Main Menu 📖" + Style.RESET_ALL)
                         print("\n1. " + Fore.GREEN + "🔎 View all animals" + Style.RESET_ALL)
 
