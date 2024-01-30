@@ -1,11 +1,18 @@
 # Import necessary libraries and modules
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, load_data
+from common_functions import clear_screen, load_animal_data, log_action
 from view_animal_profile import view_animal_profile
+from sudo_user import sudo_user
+from pymongo import MongoClient
+from config import mongodb_uri
 
-# Define constant for animal data file
-ANIMAL_DATA_FILE = "animals.json"
+# Connect to MongoDB
+uri = mongodb_uri
+client = MongoClient(uri)
+
+db = client['animal_rescue']
+animals_collection = db['animals']
 
 # Function to print the table of animals
 def print_animal_table(animals):
@@ -41,8 +48,9 @@ def filter_animals(animals):
         animals (dict): Dictionary containing animal data.
     """
     species_query = input(Fore.GREEN + "\nEnter species" + Style.RESET_ALL + " (leave blank to skip): ").lower()
-    breed_query = input(Fore.GREEN + "Enter breed " + Style.RESET_ALL + "(leave blank to skip): ").lower()
-    adopted_query = input(Fore.GREEN + "Enter adoption status " + Style.RESET_ALL + "(True/False, leave blank to skip): ").lower()
+    breed_query = input(Fore.GREEN + "\nEnter breed " + Style.RESET_ALL + "(leave blank to skip): ").lower()
+    gender_query = input(Fore.GREEN + "\nEnter gender "+ Style.RESET_ALL + "(leave blank to skip): ")
+    adopted_query = input(Fore.GREEN + "\nEnter adoption status " + Style.RESET_ALL + "(True/False, leave blank to skip): ").lower()
     clear_screen()
 
     filtered_animals = {}
@@ -50,6 +58,7 @@ def filter_animals(animals):
     for name, data in animals.items():
         if (not species_query or species_query == data['species'].lower()) and \
            (not breed_query or breed_query == data['breed'].lower()) and \
+           (not gender_query or gender_query == data['gender'].lower()) and \
            (not adopted_query or adopted_query == str(data['adopted']).lower()):
             filtered_animals[name] = data
 
@@ -63,42 +72,50 @@ def filter_animals(animals):
         print_animal_table(animals)
 
 # Function to search animals based on user input
-def search_animals(animals):
+def search_animals(animals, current_user):
     """
     Search animals based on user input criteria.
     Args:
         animals (dict): Dictionary containing animal data.
+        current_user (str): Username of the current user.
     """
     while True:
-        search_query = input("\nEnter (name/species/breed/age): ").lower()
-        found_results = False
+        clear_screen()
+        search_query = input("\nEnter (name/species/breed/gender/age): ").lower()
 
-        if search_query.strip(): 
+        log_action(current_user, f"Searched for {search_query}")
+
+        found_results = {}
+
+        if search_query.strip():
             for name, data in animals.items():
                 if search_query in name.lower() or \
-                   search_query in data['species'].lower() or \
-                   search_query in data['breed'].lower() or \
-                   search_query == str(data['age']):
-                    found_results = True
-                    clear_screen()
-                    print_animal_table({name: data})
-                    print("\n1. " + Fore.GREEN + "Search for animal" + Style.RESET_ALL)
-                    print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
-                    exit_input = input("\nPlease select an option: ")
+                search_query in data['species'].lower() or \
+                search_query in data['breed'].lower() or \
+                (search_query == 'male' and data['gender'].lower() == 'male') or \
+                (search_query == 'female' and data['gender'].lower() == 'female') or \
+                search_query == str(data['age']):
+                    found_results[name] = data
 
-                    if exit_input == '1':
-                        clear_screen()
-                        continue  # Go back to the search menu
-                    elif exit_input == '2':
-                        clear_screen()
-                        print_animal_table(animals)
-                        return
-                    else:
-                        print(Fore.RED + "Invalid input. Please choose one of the options." + Style.RESET_ALL)
-                        time.sleep(2)
-                        clear_screen()
-                        print_animal_table(animals)
-            if not found_results:
+            if found_results:
+                clear_screen()
+                print_animal_table(found_results)
+                print("\n1. " + Fore.GREEN + "Search for another animal" + Style.RESET_ALL)
+                print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+                exit_input = input("\nPlease select an option: ")
+
+                if exit_input == '1':
+                    continue
+                elif exit_input == '2':
+                    clear_screen()
+                    print_animal_table(animals)
+                    return
+                else:
+                    print(Fore.RED + "Invalid input. Please choose one of the options." + Style.RESET_ALL)
+                    time.sleep(2)
+                    clear_screen()
+                    print_animal_table(animals)
+            else:
                 print(Fore.RED + "No animals found matching the search criteria" + Style.RESET_ALL)
                 time.sleep(2)
                 clear_screen()
@@ -135,7 +152,10 @@ def view_animals():
     View animals and interact with different options.
     """
     clear_screen()
-    animals = load_data(ANIMAL_DATA_FILE)
+    current_user = sudo_user()
+
+    clear_screen()
+    animals = load_animal_data(animals_collection)
     print_animal_table(animals)
 
     while True:
@@ -149,8 +169,9 @@ def view_animals():
         user_input = input("\nPlease select an option: ")
 
         if user_input == '1':
+            time.sleep(1)
             clear_screen()
-            search_animals(animals)
+            search_animals(animals, current_user)
         elif user_input == '2':
             clear_screen()
             print_animal_table(animals)
@@ -174,6 +195,9 @@ def view_animals():
         elif user_input == '4':
             view_animal_profile()
         elif user_input == '5':
+            log_action(current_user, "Exited 'View Animal Database'")
+            print("\nExiting...")
+            time.sleep(2)
             clear_screen()
             return
         else:

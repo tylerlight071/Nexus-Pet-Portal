@@ -1,12 +1,19 @@
 import tkinter as tk
+import time
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from colorama import Fore, Style
-from tkinter import messagebox
-from common_functions import clear_screen, load_data, save_data
+from common_functions import clear_screen, load_animal_data, save_data, log_action
+from sudo_user import sudo_user
+from pymongo import MongoClient
+from config import mongodb_uri
 
+# Connect to MongoDB
+uri = mongodb_uri
+client = MongoClient(uri)
 
-ANIMAL_DATA_FILE = "animals.json"
+db = client['animal_rescue']
+animals_collection = db['animals']
 
 def print_animal_table_with_index(animals):
     # Displays the table of animals with index numbers
@@ -30,7 +37,7 @@ def print_animal_table_with_index(animals):
 def select_animal_to_view(animals):
     clear_screen()
     print_animal_table_with_index(animals)
-
+    
     # Allows the user to select an animal from the table to view its profile
     selected_index = input("\nEnter the index of the animal to view its profile: ")
 
@@ -46,11 +53,16 @@ def select_animal_to_view(animals):
 
 def view_animal_profile():
     clear_screen()
-    animals = load_data(ANIMAL_DATA_FILE)
+    animals = load_animal_data(animals_collection)
+
+    # Checks if the user has permisson to view the animal's profile
+    current_user = sudo_user()
     
     # Displays the profile of the selected animal in a Tkinter window
     print_animal_table_with_index(animals)
     selected_index = input("\nEnter the index of the animal to view its profile: ")
+
+    log_action(current_user, f"Viewed index: {selected_index} animal profile")
 
     try:
         selected_index = int(selected_index)
@@ -104,7 +116,7 @@ def view_animal_profile():
                 file_path = filedialog.askopenfilename()
                 if file_path:
                     animal['image'] = file_path
-                    save_data(animals, ANIMAL_DATA_FILE)
+                    save_data(animals)
 
             upload_button = tk.Button(root, text="Upload Image", command=upload_image, width=15, height=2)
             upload_button.pack(pady=10)
@@ -121,7 +133,7 @@ def view_animal_profile():
 
 def view_animals():
     clear_screen()
-
+    current_user = sudo_user()
     while True:
         # Continuous loop for viewing the animal options
         print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)
@@ -132,8 +144,13 @@ def view_animals():
 
         if user_input == '1':
             view_animal_profile()
+        
         elif user_input == '2':
+            print("\nExiting...")
+            log_action(current_user, "Exited 'View Profile'")
+            time.sleep(2)
             clear_screen()
             return
+        
         else:
             print("\nInvalid input. Please choose one of the options.")

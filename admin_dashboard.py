@@ -1,8 +1,9 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, load_data, save_data
+from common_functions import clear_screen, log_action
 from register import register
 from user_management import user_management
+
 
 USER_DATA_FILE = "users.json"
 
@@ -28,6 +29,8 @@ def admin_dashboard():
             time.sleep(2)
         elif option == '4':
             print("\nLogging out...")
+            log_action("ADMIN", "Logged Out")
+            time.sleep(2)
             exit()
         else:
             print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
