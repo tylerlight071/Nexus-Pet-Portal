@@ -1,59 +1,93 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen ,load_data, save_data
+from common_functions import clear_screen, log_action, hash_animal_data, generate_salt
+from sudo_user import sudo_user
+from pymongo import MongoClient
+from config import mongodb_uri
 
-ANIMAL_DATA_FILE = "animals.json"
+# Connect to MongoDB
+uri = mongodb_uri 
+client = MongoClient(uri)
+
+db = client['animal_rescue']
+animals_collection = db['animals']
 
 def add_animal():
-    animals = load_data(ANIMAL_DATA_FILE)
-
+    # Continuous loop for adding animals
     while True:
-        clear_screen()  # Clear the screen before prompting for input
+        clear_screen()
 
-        name = input("\nEnter the animal's name: ")
-        if not name.strip():  # Check if the name is empty
-            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
+        # Display header 
+        print(Fore.CYAN + "\n🐾 Add Animal 🐾\n" + Style.RESET_ALL)
+
+        print("Enter animal details or type 'exit' to cancel:")
+
+        # Input fields for animal data
+        name = input(Fore.CYAN + "Name: " + Style.RESET_ALL).strip()
+
+        # Check if user wants to exit
+        if name.lower() == 'exit':
+            print(Fore.YELLOW + "\nExiting..." + Style.RESET_ALL)
+            time.sleep(2)
+            break
+
+        species = input(Fore.GREEN + "Species: " + Style.RESET_ALL).strip()
+        breed = input(Fore.GREEN + "Breed: " + Style.RESET_ALL).strip()
+        gender = input(Fore.GREEN + "Gender: " + Style.RESET_ALL).strip()
+        age = input(Fore.GREEN + "Age: " + Style.RESET_ALL).strip()
+
+        # Validate input fields
+        if not all([name, species, breed, gender, age]):
+            print(Fore.RED + "\nInvalid input. All fields are required." + Style.RESET_ALL)
+            input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
             continue
 
-        species = input("Enter the animal's species: ")
-        if not species.strip():  # Check if the species is empty
-            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
+        # Validate age as positive integer
+        if not age.isdigit() or int(age) <= 0:
+            print(Fore.RED + "\nInvalid age. Please enter a positive integer." + Style.RESET_ALL)
+            input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
             continue
 
-        breed = input("Enter the animal's breed: ")
-        if not breed.strip():  # Check if the breed is empty
-            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
-            continue
+        age = int(age)
 
-        gender = input("Enter the animal's gender: ")
-        if not gender.strip():  # Check if the breed is empty
-            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
-            continue
+        # Make the user verify their identity
+        current_user = sudo_user() 
 
-        age = input("Enter the animal's age: ")
-        if not age.strip():  # Check if the age is empty
-            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
-            continue
-        elif not age.isdigit():  # Check if the age is a valid number
-            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
-            continue
+        # Generate salt
+        salt = generate_salt()
 
-        age = int(age)  # Convert age to an integer
+        # Hash the new animal data with the salt
+        hashed_animal_data = hash_animal_data({
+            'name': name,
+            'species': species,
+            'breed': breed,
+            'gender': gender,
+            'age': age,
+            'adopted': False
+        }, salt)
 
-        # Assuming age should be a positive number
-        if age <= 0:
-            print(Fore.RED + "Invalid input. Please enter the animal's name." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..."+ Style.RESET_ALL)
-            continue
+        # Store the salt in hexadecimal format
+        salt_hex = salt.hex()
 
-        animals[name] = {'name': name, 'species': species, 'breed': breed, 'gender': gender,  'age': age, 'adopted': False}
-        save_data(animals, ANIMAL_DATA_FILE)
-        print(Fore.GREEN + "\nAnimal added successfully!" + Style.RESET_ALL)
+        # Add hashed animal data to the animals dictionary
+        animals_collection.insert_one ({
+            'name': name,
+            'species': species,
+            'breed': breed,
+            'gender': gender,
+            'age': age,
+            'adopted': False,
+            'salt': salt_hex,
+            'hashed_animal_data': hashed_animal_data,
+        })
+
+        # Log the action of adding the animal into the audit file
+        log_action(current_user, f"Added animal: {name}, {species}, {breed}")
+
+        # Confirm successful addition of the animal 
+        print(Fore.GREEN + "\n✨ Animal added successfully! ✨" + Style.RESET_ALL)
+        log_action(current_user, f"Exited 'Add an animal'")
         time.sleep(2)
-        break  # Break the loop after successfully adding the animal
+
+        # Exit the loop after successful addition
+        break 

@@ -37,22 +37,6 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
   - Username: `ADMIN`
   - Password: `ADMIN`
 
-## Usage 🐾
-
-1. **Login**: Upon first login, administrators are prompted to use the default credentials provided above.
-2. **Main Menu**: Once logged in, administrators can manage animals, update adoption statuses, and access administrative features.
-3. **Admin Dashboard**: Enjoy additional features for managing users, animals, and shelter operations efficiently.
-
-## File Structure 📁
-
-- **FurEver_Friends.py**: The heart and soul of our application.
-- **add_animal.py**: Module for adding new animals to the shelter and updating their information.
-- **admin_dashboard.py**: Module for administrative tasks and features.
-- **change_adopted_status.py**: Module for updating adoption statuses and managing adoption processes.
-- **common_functions.py**: Common functions used throughout the application for seamless operations.
-- **register.py**: Module for registering new administrators and users.
-- **view_animals.py**: Module for viewing animals in the shelter and their adoption statuses.
-
 ## Contributing 💖
 
 We welcome contributions from compassionate individuals who share our mission! If you'd like to contribute to FurEver Friends, follow these steps:
@@ -60,8 +44,8 @@ We welcome contributions from compassionate individuals who share our mission! I
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-name`).
 3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature-name`).
-5. Create a new Pull Request filled with love and dedication!
+5. Push to the branch (`git push origin feature-name`).
+6. Create a new Pull Request filled with love and dedication!
 
 ## License 📝
 

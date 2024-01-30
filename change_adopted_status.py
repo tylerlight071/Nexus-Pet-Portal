@@ -1,25 +1,49 @@
-import json
-import os
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, load_data, save_data
+from sudo_user import sudo_user
+from common_functions import clear_screen, load_animal_data, save_data, log_action
+from pymongo import MongoClient
+from config import mongodb_uri
 
-ANIMAL_DATA_FILE = "animals.json"
+# Connect to MongoDB
+uri = mongodb_uri
+client = MongoClient(uri)
+
+db = client['animal_rescue']
+animals_collection = db['animals']
 
 def change_adopted_status():
     clear_screen()
-    animals = load_data(ANIMAL_DATA_FILE)
-    name = input("\nEnter the name of the animal to toggle adoption status: ")
 
-    if name in animals:
-        # Toggle the adopted status
-        animals[name]['adopted'] = not animals[name].get('adopted', False)
-        save_data(animals, ANIMAL_DATA_FILE)
-        if animals[name]['adopted']:
-            print(Fore.GREEN + f"\n{name} has been marked as " + Fore.CYAN + "adopted!" + Style.RESET_ALL)
-        else:
-            print(Fore.GREEN + f"\n{name} has been marked as " + Fore.RED + "not adopted!" + Style.RESET_ALL)
+    # Load animal data from file
+    animals = load_animal_data(animals_collection)
+    current_user = sudo_user()
+
+    name = input("\nEnter the name of the animal to toggle adoption status (type 'exit' to leave): ")
+    
+    if name == "exit":
+        log_action(current_user, "Exited 'Change Adoption Status'")
+        print("\nExiting...")
+        time.sleep(2)
+        return
+
     else:
-        print(Fore.RED + f"\nNo animal found with the name {name}" + Style.RESET_ALL)
+        # Check if animal exists in the data
+        if name in animals:
+            
+            # Toggle the adopted status
+            animals[name]['adopted'] = not animals[name].get('adopted', False)
+            save_data(animals)
 
-    time.sleep(2)
+            # Notify the user about the updated adoptino status
+            if animals[name]['adopted']:
+                print(Fore.GREEN + f"\n{name} has been marked as " + Fore.CYAN + "adopted!" + Style.RESET_ALL)
+                log_action(current_user, f"{name} marked as adopted")
+            else:
+                print(Fore.GREEN + f"\n{name} has been marked as " + Fore.RED + "not adopted!" + Style.RESET_ALL)
+                log_action(current_user, f"{name} marked as not adopted")
+        # Notify the user if the animal is not found
+        else:
+            print(Fore.RED + f"\nNo animal found with the name {name}" + Style.RESET_ALL)
+
+        time.sleep(2)

@@ -1,15 +1,22 @@
 import tkinter as tk
+import time
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from colorama import Fore, Style
-from tkinter import messagebox
-from common_functions import clear_screen, load_data, save_data
+from common_functions import clear_screen, load_animal_data, save_data, log_action
+from sudo_user import sudo_user
+from pymongo import MongoClient
+from config import mongodb_uri
 
+# Connect to MongoDB
+uri = mongodb_uri
+client = MongoClient(uri)
 
-ANIMAL_DATA_FILE = "animals.json"
+db = client['animal_rescue']
+animals_collection = db['animals']
 
 def print_animal_table_with_index(animals):
-    """Prints the table of animals with index numbers."""
+    # Displays the table of animals with index numbers
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
     print("--------------------------------------------------------------------------------------------------")
     print("| " + Fore.YELLOW + "Index".ljust(6) + Style.RESET_ALL + "| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(8) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| "  + Fore.YELLOW + "Gender".ljust(15) + Style.RESET_ALL + Fore.YELLOW + "Age".ljust(1) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(7) + Style.RESET_ALL + " |")
@@ -28,9 +35,10 @@ def print_animal_table_with_index(animals):
     print("--------------------------------------------------------------------------------------------------")
 
 def select_animal_to_view(animals):
-    """Allows the user to select an animal from the table to view its profile."""
     clear_screen()
     print_animal_table_with_index(animals)
+    
+    # Allows the user to select an animal from the table to view its profile
     selected_index = input("\nEnter the index of the animal to view its profile: ")
 
     try:
@@ -44,12 +52,17 @@ def select_animal_to_view(animals):
         print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
 
 def view_animal_profile():
-    """Displays the profile of the selected animal in a Tkinter window."""
     clear_screen()
-    animals = load_data(ANIMAL_DATA_FILE)
+    animals = load_animal_data(animals_collection)
+
+    # Checks if the user has permisson to view the animal's profile
+    current_user = sudo_user()
     
+    # Displays the profile of the selected animal in a Tkinter window
     print_animal_table_with_index(animals)
     selected_index = input("\nEnter the index of the animal to view its profile: ")
+
+    log_action(current_user, f"Viewed index: {selected_index} animal profile")
 
     try:
         selected_index = int(selected_index)
@@ -103,7 +116,7 @@ def view_animal_profile():
                 file_path = filedialog.askopenfilename()
                 if file_path:
                     animal['image'] = file_path
-                    save_data(animals, ANIMAL_DATA_FILE)
+                    save_data(animals)
 
             upload_button = tk.Button(root, text="Upload Image", command=upload_image, width=15, height=2)
             upload_button.pack(pady=10)
@@ -119,10 +132,10 @@ def view_animal_profile():
         print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
 
 def view_animals():
-    """Main function to view animals."""
     clear_screen()
-
+    current_user = sudo_user()
     while True:
+        # Continuous loop for viewing the animal options
         print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)
         print("\n1. " + Fore.GREEN + "Select an animal to view profile" + Style.RESET_ALL)
         print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
@@ -131,8 +144,13 @@ def view_animals():
 
         if user_input == '1':
             view_animal_profile()
+        
         elif user_input == '2':
+            print("\nExiting...")
+            log_action(current_user, "Exited 'View Profile'")
+            time.sleep(2)
             clear_screen()
             return
+        
         else:
             print("\nInvalid input. Please choose one of the options.")
