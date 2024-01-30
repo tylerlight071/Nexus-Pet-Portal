@@ -160,5 +160,5 @@ cython_debug/
 #.idea/
 
 # User Files
-*.json
-*.txt
+audit_log.txt
+config.py

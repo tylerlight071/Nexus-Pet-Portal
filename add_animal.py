@@ -1,14 +1,18 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, load_data, save_data, log_action
+from common_functions import clear_screen, log_action, hash_animal_data, generate_salt
 from sudo_user import sudo_user
+from pymongo import MongoClient
+from config import mongodb_uri
 
-ANIMAL_DATA_FILE = "animals.json"
+# Connect to MongoDB
+uri = mongodb_uri 
+client = MongoClient(uri)
+
+db = client['animal_rescue']
+animals_collection = db['animals']
 
 def add_animal():
-    # Load animal data from file
-    animals = load_data(ANIMAL_DATA_FILE)
-
     # Continuous loop for adding animals
     while True:
         clear_screen()
@@ -18,7 +22,7 @@ def add_animal():
 
         print("Enter animal details or type 'exit' to cancel:")
 
-        #Input fields for animal data
+        # Input fields for animal data
         name = input(Fore.CYAN + "Name: " + Style.RESET_ALL).strip()
 
         # Check if user wants to exit
@@ -46,26 +50,43 @@ def add_animal():
 
         age = int(age)
 
-        # Add animals to the data dictionary
-        animals[name] = {
+        # Make the user verify their identity
+        current_user = sudo_user() 
+
+        # Generate salt
+        salt = generate_salt()
+
+        # Hash the new animal data with the salt
+        hashed_animal_data = hash_animal_data({
             'name': name,
             'species': species,
             'breed': breed,
             'gender': gender,
             'age': age,
             'adopted': False
-        }
+        }, salt)
 
-        # Make the user verify their identity
-        current_user = sudo_user() 
+        # Store the salt in hexadecimal format
+        salt_hex = salt.hex()
 
-        save_data(animals, ANIMAL_DATA_FILE)
+        # Add hashed animal data to the animals dictionary
+        animals_collection.insert_one ({
+            'name': name,
+            'species': species,
+            'breed': breed,
+            'gender': gender,
+            'age': age,
+            'adopted': False,
+            'salt': salt_hex,
+            'hashed_animal_data': hashed_animal_data,
+        })
 
-        # Log the action of adding animal into the audit file
-        log_action(current_user, f"Added animal: {name}")
+        # Log the action of adding the animal into the audit file
+        log_action(current_user, f"Added animal: {name}, {species}, {breed}")
 
         # Confirm successful addition of the animal 
         print(Fore.GREEN + "\n✨ Animal added successfully! ✨" + Style.RESET_ALL)
+        log_action(current_user, f"Exited 'Add an animal'")
         time.sleep(2)
 
         # Exit the loop after successful addition
