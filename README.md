@@ -4,6 +4,19 @@ Welcome to FurEver Friends, your ultimate destination for managing animals in th
 
 FurEver Friends is a heartwarming Animal Shelter Management System designed to simplify the process of caring for and finding homes for shelter animals. Our system provides a seamless platform for shelter administrators to manage animals, update their adoption statuses, and maintain records efficiently.
 
+# Table of Contents
+
+- [FurEver Friends 🐾](#-furever-friends-)
+- [Features 🌟](#features-)
+- [Installation 🚀](#installation-)
+- [Setting Up MongoDB 🍃](#setting-up-mongodb-)
+- [First-Time Login ⚙️](#first-time-login-)
+- [System Requirements 💻](#system-requirements-)
+- [Future Plans 🚀](#future-plans-)
+- [Contributing 💖](#contributing-)
+- [License 📝](#license-)
+
+
 ## Features 🌟
 
 - **Secure Login**: Administrators can log in securely with the username `ADMIN` and password `ADMIN` on first start to access the system.
@@ -24,12 +37,52 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
     ```
     cd FurEver_Friends
     ```
+
+3. **Install the required dependancies**
+    '''
+    pip install -r requirements.txt
+    '''
     
-3. **Run the Application**:
+4. **Run the Application**:
 
     ```
     python FurEver_Friends.py
     ```
+
+## Setting Up MongoDB 🍃
+
+To use FurEver Friends, you need to have a MongoDB database. Here's how you can set it up:
+
+1. **Create a MongoDB Account**:
+
+   - Visit the [MongoDB website](https://www.mongodb.com/) and create an account.
+
+2. **Create a New Project**:
+
+   - After logging in, create a new project.
+   - Give your project a name and create it.
+
+3. **Create a New Cluster**:
+
+   - In your project, create a new cluster.
+   - Choose a provider and a region.
+   - Choose a cluster tier. The free tier, M0 Sandbox, is sufficient for this project.
+   - Give your cluster a name and create it.
+
+4. **Create a Database User**:
+
+   - In the Database Access tab, add a new database user.
+   - Choose a username and a password. Remember these credentials as you'll need them to connect to your database.
+
+5. **Get Your MongoDB URI**:
+
+   - In your cluster, click on the CONNECT button.
+   - Choose "Connect your application".
+   - Copy the provided connection string (MongoDB URI).
+
+Remember to replace `<password>` in the MongoDB URI with the password of the database user you created.
+
+You can now use this MongoDB URI to connect to your MongoDB database from FurEver Friends! Everything else is automatically set up so you don't need to do anything past that point.
 
 ## First-Time Login ⚙️
 
@@ -37,21 +90,23 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
   - Username: `ADMIN`
   - Password: `ADMIN`
 
-## Usage 🐾
+## System Requirements 💻
 
-1. **Login**: Upon first login, administrators are prompted to use the default credentials provided above.
-2. **Main Menu**: Once logged in, administrators can manage animals, update adoption statuses, and access administrative features.
-3. **Admin Dashboard**: Enjoy additional features for managing users, animals, and shelter operations efficiently.
+FurEver Friends is developed using Python. To run this application from the source code, you need:
 
-## File Structure 📁
+- Python 3.12 or higher
+- pip (Python Package Installer)
 
-- **FurEver_Friends.py**: The heart and soul of our application.
-- **add_animal.py**: Module for adding new animals to the shelter and updating their information.
-- **admin_dashboard.py**: Module for administrative tasks and features.
-- **change_adopted_status.py**: Module for updating adoption statuses and managing adoption processes.
-- **common_functions.py**: Common functions used throughout the application for seamless operations.
-- **register.py**: Module for registering new administrators and users.
-- **view_animals.py**: Module for viewing animals in the shelter and their adoption statuses.
+## Future Plans 🚀
+
+We're constantly working to improve FurEver Friends and add new features. Here are some of the updates we're planning:
+
+- Animal medical records
+- User schedule for hours and events
+- Notifications in app
+- Website intergration
+
+Stay tuned for these exciting updates and more!
 
 ## Contributing 💖
 
@@ -60,8 +115,9 @@ We welcome contributions from compassionate individuals who share our mission! I
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-name`).
 3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature-name`).
-5. Create a new Pull Request filled with love and dedication!
+5. Push to the branch (`git push origin feature-name`).
+6. Create a new Pull Request filled with love and dedication!
+
 
 ## License 📝
 
