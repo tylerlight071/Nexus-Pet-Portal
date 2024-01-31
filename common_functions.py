@@ -12,17 +12,15 @@ def load_data(file_name):
     with open(file_name, 'r') as f:
         return json.load(f)
 
-def load_animal_data(collection):
-    """
-    Load animal data from the MongoDB collection
-    Args:
-        collection (str): Name of the collection to load data from.
-    Returns:
-        dict: Animal data loaded from the collection
-    """
-    animals = {}
-    for animal in collection.find():
-        animals[animal['name']] = animal
+def load_animal_data(animals_collection):
+    animals = []
+    try:
+        # Load all animals from the database
+        cursor = animals_collection.find({})
+        for animal in cursor:
+            animals.append(animal)
+    except Exception as e:
+        print(f"Error loading animal data: {e}")
     return animals
 
 def save_data(data, file_name):

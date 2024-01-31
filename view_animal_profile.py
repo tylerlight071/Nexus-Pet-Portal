@@ -22,14 +22,14 @@ def print_animal_table_with_index(animals):
     print("| " + Fore.YELLOW + "Index".ljust(6) + Style.RESET_ALL + "| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(8) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| "  + Fore.YELLOW + "Gender".ljust(15) + Style.RESET_ALL + Fore.YELLOW + "Age".ljust(1) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(7) + Style.RESET_ALL + " |")
     print("--------------------------------------------------------------------------------------------------")
 
-    for i, (name, data) in enumerate(animals.items(), 1):
+    for i, animal in enumerate(animals, 1):
         index_column = f"| {str(i).ljust(6)}"
-        name_column = f"| {name.ljust(20)}"
-        species_column = f"| {data['species'].ljust(8)}"
-        breed_column = f"| {data['breed'].ljust(25)}"
-        gender_column = f"| {data['gender'].ljust(15)}"
-        age_column = f"| {str(data['age']).ljust(3)}"
-        adopted_column = f"| {str(data['adopted']).ljust(7)}|"
+        name_column = f"| {animal['name'].ljust(20)}"
+        species_column = f"| {animal['species'].ljust(8)}"
+        breed_column = f"| {animal['breed'].ljust(25)}"
+        gender_column = f"| {animal['gender'].ljust(15)}"
+        age_column = f"| {str(animal['age']).ljust(3)}"
+        adopted_column = f"| {str(animal['adopted']).ljust(7)}|"
         print(index_column + name_column + species_column + breed_column + gender_column + age_column + adopted_column)
 
     print("--------------------------------------------------------------------------------------------------")
@@ -44,7 +44,7 @@ def select_animal_to_view(animals):
     try:
         selected_index = int(selected_index)
         if 1 <= selected_index <= len(animals):
-            selected_animal = list(animals.keys())[selected_index - 1]
+            selected_animal = animals[selected_index - 1]
             view_animal_profile(animals[selected_animal])
         else:
             print(Fore.RED + "Invalid index!" + Style.RESET_ALL)
@@ -67,8 +67,7 @@ def view_animal_profile():
     try:
         selected_index = int(selected_index)
         if 1 <= selected_index <= len(animals):
-            selected_animal = list(animals.keys())[selected_index - 1]
-            animal = animals[selected_animal]
+            animal = animals[selected_index - 1]
 
             # Create a new Tkinter window
             root = tk.Tk()
@@ -128,7 +127,8 @@ def view_animal_profile():
 
             root.mainloop()
         else:
-            print(Fore.RED + "Invalid index!" + Style.RESET_ALL)
+            print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+            input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
     except ValueError:
         print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
 

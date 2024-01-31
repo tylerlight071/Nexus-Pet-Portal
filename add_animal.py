@@ -23,22 +23,28 @@ def add_animal():
         print("Enter animal details or type 'exit' to cancel:")
 
         # Input fields for animal data
-        name = input(Fore.CYAN + "Name: " + Style.RESET_ALL).strip()
+        name = input(Fore.GREEN + "\nName: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
 
         # Check if user wants to exit
         if name.lower() == 'exit':
-            print(Fore.YELLOW + "\nExiting..." + Style.RESET_ALL)
+            print("\nExiting..." + Style.RESET_ALL)
             time.sleep(2)
             break
 
-        species = input(Fore.GREEN + "Species: " + Style.RESET_ALL).strip()
-        breed = input(Fore.GREEN + "Breed: " + Style.RESET_ALL).strip()
-        gender = input(Fore.GREEN + "Gender: " + Style.RESET_ALL).strip()
+        species = input(Fore.GREEN + "Species: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
+        breed = input(Fore.GREEN + "Breed: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
+        gender = input(Fore.GREEN + "Gender: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
         age = input(Fore.GREEN + "Age: " + Style.RESET_ALL).strip()
 
         # Validate input fields
         if not all([name, species, breed, gender, age]):
             print(Fore.RED + "\nInvalid input. All fields are required." + Style.RESET_ALL)
+            input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
+            continue
+
+        # Validate gender fields
+        if gender.lower() not in ["male", "female"]:
+            print(Fore.RED + "\nInvalid input. Gender must be 'Male' or 'Female'." + Style.RESET_ALL)
             input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
             continue
 
@@ -50,6 +56,7 @@ def add_animal():
 
         age = int(age)
 
+        clear_screen()
         # Make the user verify their identity
         current_user = sudo_user() 
 
@@ -69,7 +76,7 @@ def add_animal():
         # Store the salt in hexadecimal format
         salt_hex = salt.hex()
 
-        # Add hashed animal data to the animals dictionary
+        # Add hashed animal data to the animals collection
         animals_collection.insert_one ({
             'name': name,
             'species': species,
@@ -89,5 +96,7 @@ def add_animal():
         log_action(current_user, f"Exited 'Add an animal'")
         time.sleep(2)
 
-        # Exit the loop after successful addition
-        break 
+        # Ask if the user wants to add another animal
+        add_another = input(Fore.LIGHTYELLOW_EX + "Do you want to add another animal? (yes/no): " + Style.RESET_ALL)
+        if add_another.lower() == 'no':
+            break
