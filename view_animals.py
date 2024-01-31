@@ -49,17 +49,17 @@ def filter_animals(animals):
     """
     species_query = input(Fore.GREEN + "\nEnter species" + Style.RESET_ALL + " (leave blank to skip): ").lower()
     breed_query = input(Fore.GREEN + "\nEnter breed " + Style.RESET_ALL + "(leave blank to skip): ").lower()
-    gender_query = input(Fore.GREEN + "\nEnter gender "+ Style.RESET_ALL + "(leave blank to skip): ")
+    gender_query = input(Fore.GREEN + "\nEnter gender "+ Style.RESET_ALL + "(leave blank to skip): ").lower()
     adopted_query = input(Fore.GREEN + "\nEnter adoption status " + Style.RESET_ALL + "(True/False, leave blank to skip): ").lower()
     clear_screen()
 
     filtered_animals = {}
     # Iterate through animals and apply filters
     for name, data in animals.items():
-        if (not species_query or species_query == data['species'].lower()) and \
-           (not breed_query or breed_query == data['breed'].lower()) and \
-           (not gender_query or gender_query == data['gender'].lower()) and \
-           (not adopted_query or adopted_query == str(data['adopted']).lower()):
+        if (not species_query or any(species_query.lower() in data['species'].lower() for species in species_query.split(','))) and \
+           (not breed_query or any(breed_query.lower() in data['breed'].lower() for breed in breed_query.split(','))) and \
+           (not gender_query or any(gender_query.lower() in data['gender'].lower() for gender in gender_query.split(','))) and \
+           (not adopted_query or any(adopted_query.lower() in str(data['adopted']).lower() for adopted in adopted_query.split(','))):
             filtered_animals[name] = data
 
     if filtered_animals:
