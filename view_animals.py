@@ -1,9 +1,8 @@
-# Import necessary libraries and modules
 import time
 from colorama import Fore, Style
 from common_functions import clear_screen, load_animal_data, log_action
 from view_animal_profile import view_animal_profile
-from sudo_user import sudo_user
+from sudo_user_level_1 import sudo_user
 from pymongo import MongoClient
 from config import mongodb_uri
 
@@ -23,44 +22,60 @@ def print_animal_table(animals):
     """
     # Print table header
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
-    print("---------------------------------------------------------------------------------------------")
+    print("+-------------------------------------------------------------------------------------------+")
     print("| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(8) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| " + Fore.YELLOW + "Gender".ljust(15) + Style.RESET_ALL + "| " + Fore.YELLOW + "Age".ljust(1) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(7) + Style.RESET_ALL + " |")
-    print("---------------------------------------------------------------------------------------------")
+    print("+-------------------------------------------------------------------------------------------+")
 
     # Print each animal's data row by row
-    for name, data in animals.items():
-        name_column = f"| {name.ljust(20)}"
-        species_column = f"| {data['species'].ljust(8)}"
-        breed_column = f"| {data['breed'].ljust(25)}"
-        gender_column = f"| {data['gender'].ljust(15)}"
-        age_column = f"|  {str(data['age']).ljust(3)}"
-        adopted_column = f"| {str(data['adopted']).ljust(7)} |"
+    for animal in animals:
+        name_column = f"| {animal['name'].ljust(20)}"
+        species_column = f"| {animal['species'].ljust(8)}"
+        breed_column = f"| {animal['breed'].ljust(25)}"
+        gender_column = f"| {animal['gender'].ljust(15)}"
+        age_column = f"|  {str(animal['age']).ljust(3)}"
+        adopted_column = f"| {str(animal['adopted']).ljust(7)} |"
         print(name_column + species_column + breed_column + gender_column + age_column + adopted_column)
 
     # Print table footer
-    print("---------------------------------------------------------------------------------------------")
+    print("+-------------------------------------------------------------------------------------------+")
 
 # Function to filter animals based on user input
 def filter_animals(animals):
     """
     Filter animals based on user-defined criteria.
     Args:
-        animals (dict): Dictionary containing animal data.
+        animals (list): List containing animal data as dictionaries.
     """
-    species_query = input(Fore.GREEN + "\nEnter species" + Style.RESET_ALL + " (leave blank to skip): ").lower()
-    breed_query = input(Fore.GREEN + "\nEnter breed " + Style.RESET_ALL + "(leave blank to skip): ").lower()
-    gender_query = input(Fore.GREEN + "\nEnter gender "+ Style.RESET_ALL + "(leave blank to skip): ").lower()
-    adopted_query = input(Fore.GREEN + "\nEnter adoption status " + Style.RESET_ALL + "(True/False, leave blank to skip): ").lower()
-    clear_screen()
+    # Initialize variables
+    species_query = None
+    breed_query = None
+    gender_query = None
+    adopted_query = None
 
-    filtered_animals = {}
+    clear_filters = input(Fore.LIGHTYELLOW_EX + "\nClear filters? (Y/N): " + Style.RESET_ALL).lower()
+
+    if clear_filters == 'y':
+        # Clear filters
+        clear_screen()
+        print_animal_table(animals)
+        return
+    
+    elif clear_filters == 'n':
+        # Print filter options
+        species_query = input(Fore.GREEN + "\nEnter species" + Style.RESET_ALL + " (leave blank to skip): ").lower()
+        breed_query = input(Fore.GREEN + "\nEnter breed " + Style.RESET_ALL + "(leave blank to skip): ").lower()
+        gender_query = input(Fore.GREEN + "\nEnter gender "+ Style.RESET_ALL + "(leave blank to skip): ").lower()
+        adopted_query = input(Fore.GREEN + "\nEnter adoption status " + Style.RESET_ALL + "(True/False, leave blank to skip): ").lower()
+        clear_screen()
+
+    filtered_animals = []
     # Iterate through animals and apply filters
-    for name, data in animals.items():
-        if (not species_query or any(species_query.lower() in data['species'].lower() for species in species_query.split(','))) and \
-           (not breed_query or any(breed_query.lower() in data['breed'].lower() for breed in breed_query.split(','))) and \
-           (not gender_query or any(gender_query.lower() in data['gender'].lower() for gender in gender_query.split(','))) and \
-           (not adopted_query or any(adopted_query.lower() in str(data['adopted']).lower() for adopted in adopted_query.split(','))):
-            filtered_animals[name] = data
+    for animal in animals:
+        if (not species_query or any(species_query.lower() in animal['species'].lower() for species in species_query.split(','))) and \
+           (not breed_query or any(breed_query.lower() in animal['breed'].lower() for breed in breed_query.split(','))) and \
+           (not gender_query or any(gender_query.lower() in animal['gender'].lower() for gender in gender_query.split(','))) and \
+           (not adopted_query or any(adopted_query.lower() in str(animal['adopted']).lower() for adopted in adopted_query.split(','))):
+            filtered_animals.append(animal)
 
     if filtered_animals:
         clear_screen()
@@ -76,29 +91,44 @@ def search_animals(animals, current_user):
     """
     Search animals based on user input criteria.
     Args:
-        animals (dict): Dictionary containing animal data.
+        animals (list): List of dictionaries containing animal data.
         current_user (str): Username of the current user.
     """
     while True:
         clear_screen()
-        search_query = input("\nEnter (name/species/breed/gender/age): ").lower()
+        print(Fore.LIGHTCYAN_EX + "\n🔎 SEARCH ANIMALS 🔍" + Style.RESET_ALL)
+        print("\nEnter any of the following criteria to search:")
+        print(Fore.GREEN + "\n - Name")
+        print(" - Species")
+        print(" - Breed")
+        print(" - Gender (Male/Female)")
+        print(" - Age" + Style.RESET_ALL)
+        print("\nOr type 'exit' to return to the main menu.")
+
+        search_query = input(Fore.LIGHTCYAN_EX + "\nSearch: " + Style.RESET_ALL).lower()
+
+        if search_query == 'exit':
+            clear_screen()
+            print_animal_table(animals)
+            return
 
         log_action(current_user, f"Searched for {search_query}")
 
-        found_results = {}
+        found_results = []
 
         if search_query.strip():
-            for name, data in animals.items():
-                if search_query in name.lower() or \
-                search_query in data['species'].lower() or \
-                search_query in data['breed'].lower() or \
-                (search_query == 'male' and data['gender'].lower() == 'male') or \
-                (search_query == 'female' and data['gender'].lower() == 'female') or \
-                search_query == str(data['age']):
-                    found_results[name] = data
+            for animal in animals:
+                if (search_query in animal['name'].lower() or
+                    search_query in animal['species'].lower() or
+                    search_query in animal['breed'].lower() or
+                    (search_query == 'male' and animal['gender'].lower() == 'male') or
+                    (search_query == 'female' and animal['gender'].lower() == 'female') or
+                    search_query == str(animal['age'])):
+                    found_results.append(animal)
 
             if found_results:
                 clear_screen()
+                print(Fore.LIGHTYELLOW_EX + "SEARCH RESULTS" + Style.RESET_ALL)
                 print_animal_table(found_results)
                 print("\n1. " + Fore.GREEN + "Search for another animal" + Style.RESET_ALL)
                 print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
@@ -121,7 +151,7 @@ def search_animals(animals, current_user):
                 clear_screen()
                 print_animal_table(animals)
         else:
-            print(Fore.RED + "Invalid input. Please choose one of the options." + Style.RESET_ALL)
+            print(Fore.RED + "Invalid input. Please enter a search query or type 'exit'." + Style.RESET_ALL)
             time.sleep(2)
             clear_screen()
 
@@ -130,32 +160,104 @@ def sort_animals(animals, key='name', reverse=False):
     """
     Sort animals based on a specified key.
     Args:
-        animals (dict): Dictionary containing animal data.
+        animals (list): List of dictionaries containing animal data.
         key (str): Key to sort the animals by (default is 'name').
         reverse (bool): Whether to sort in reverse order (default is False).
     Returns:
-        dict: Sorted dictionary of animals.
+        list: Sorted list of dictionaries containing animal data.
     """
     if key == 'name':
-        sorted_animals = sorted(animals.items(), key=lambda x: x[0], reverse=reverse)
+        sorted_animals = sorted(animals, key=lambda x: x['name'], reverse=reverse)
     elif key == 'age':
-        sorted_animals = sorted(animals.items(), key=lambda x: int(x[1]['age']), reverse=reverse)
+        sorted_animals = sorted(animals, key=lambda x: x['age'], reverse=reverse)
     else:
         print("Invalid key for sorting.")
-        return
+        return animals
     
-    return dict(sorted_animals)
+    return sorted_animals
+
+def delete_animal(animal_name):
+    """
+    Delete an animal from the database.
+    Args:
+        animal_name (str): The name of the animal to delete.
+    """
+    try:
+        # Check if there are multiple animals with the same name
+        animal_count = animals_collection.count_documents({"name": animal_name})
+        
+        if animal_count == 0:
+            print(f"Animal {animal_name} not found in the database.")
+            time.sleep(2)
+            clear_screen()
+            return False
+        
+        elif animal_count == 1:
+            result = animals_collection.delete_one({"name": animal_name})
+            if result.deleted_count == 1:
+                print(Fore.GREEN + f"\nSuccessfully deleted {animal_name} from the database." + Style.RESET_ALL)
+                time.sleep(2)
+                clear_screen()
+                return True
+            else:
+                print(f"Failed to delete {animal_name} from the database.")
+                time.sleep(2)
+                clear_screen()
+                return False
+        
+        else:  # Multiple animals with the same name
+            print(Fore.YELLOW + f"Multiple animals found with the name '{animal_name}'. Please select the index of the animal you want to delete:" + Style.RESET_ALL)
+            
+            # Find all animals with the same name and print their indices
+            cursor = animals_collection.find({"name": animal_name})
+            index = 1
+            for animal in cursor:
+                print(f"{index}. Name: {animal['name']}, Species: {animal['species']}, Breed: {animal['breed']}")
+                index += 1
+            
+            # Prompt the user to select the index of the animal to delete
+            selected_index = input("\nEnter the index of the animal to delete: ")
+            try:
+                selected_index = int(selected_index)
+                if 1 <= selected_index <= animal_count:
+                    cursor.rewind()  # Reset cursor to the beginning
+                    selected_animal = cursor[selected_index - 1]
+                    result = animals_collection.delete_one({"_id": selected_animal["_id"]})
+                    if result.deleted_count == 1:
+                        print(Fore.GREEN + f"\nSuccessfully deleted {selected_animal['name']} from the database." + Style.RESET_ALL)
+                        time.sleep(2)
+                        clear_screen()
+                        return True
+                    else:
+                        print(f"Failed to delete {selected_animal['name']} from the database.")
+                        time.sleep(2)
+                        clear_screen()
+                        return False
+                else:
+                    print(Fore.RED + "Invalid index. Please enter a valid index." + Style.RESET_ALL)
+                    time.sleep(2)
+                    clear_screen()
+                    return False
+            except ValueError:
+                print(Fore.RED + "Invalid index. Please enter a valid index." + Style.RESET_ALL)
+                time.sleep(2)
+                clear_screen()
+                return False
+
+    except Exception as e:
+        print(f"An error occurred: {e}")
+        return False  
 
 # Function to view animals and interact with options
 def view_animals():
     """
     View animals and interact with different options.
     """
-    clear_screen()
     current_user = sudo_user()
 
-    clear_screen()
+    # Load animal data
     animals = load_animal_data(animals_collection)
+
     print_animal_table(animals)
 
     while True:
@@ -164,8 +266,13 @@ def view_animals():
         print("2. " + Fore.GREEN + "Sort animals" + Style.RESET_ALL)
         print("3. " + Fore.GREEN + "Filter animals" + Style.RESET_ALL)
         print("4. " + Fore.GREEN + "View animal profile" + Style.RESET_ALL)
-        print("5. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
         
+        if current_user['level'] >= 2:
+            print("5. " + Fore.GREEN+ "Delete animal" + Style.RESET_ALL)
+            print("6. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+        else:
+            print("5. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+
         user_input = input("\nPlease select an option: ")
 
         if user_input == '1':
@@ -179,28 +286,46 @@ def view_animals():
             print("1." + Fore.GREEN + " Name (A-Z)" + Style.RESET_ALL)
             print("2." + Fore.GREEN + " Name (Z-A)" + Style.RESET_ALL)
             print("3." + Fore.GREEN + " Age (Youngest to Oldest)" + Style.RESET_ALL)
+            print("4." + Fore.GREEN + " Age (Oldest to Youngest)" + Style.RESET_ALL)
             sort_option = input("\nPlease select an option: ")
-            if sort_option in ['1', '2', '3']:
+            if sort_option in ['1', '2', '3', '4']:
                 sort_key = 'name' if sort_option in ['1', '2'] else 'age'
-                reverse_sort = True if sort_option == '2' else False
+                reverse_sort = True if sort_option in ['2', '4'] else False
                 animals = sort_animals(animals, key=sort_key, reverse=reverse_sort)
                 clear_screen()
                 print_animal_table(animals)
             else:
                 print("\nInvalid option.")
+                time.sleep(2)
                 clear_screen()
                 print_animal_table(animals)
+
         elif user_input == '3':
             filter_animals(animals)
         elif user_input == '4':
             view_animal_profile()
         elif user_input == '5':
+            if current_user['level'] >= 2:
+                animal_name = input("\nEnter the name of the animal to delete: ")
+                if delete_animal(animal_name):
+                    log_action(current_user, f"Deleted {animal_name} from the database")
+                    continue  # Continue to the next iteration if deletion was successful
+                else:
+                    log_action(current_user, f"Failed to delete {animal_name} from the database")
+            else:
+                log_action(current_user, "Exited 'View Animal Database'")
+                print("\nExiting...")
+                time.sleep(2)
+                clear_screen()
+                return       
+        elif user_input == '6' and current_user['level'] >= 2:
             log_action(current_user, "Exited 'View Animal Database'")
             print("\nExiting...")
             time.sleep(2)
             clear_screen()
             return
         else:
+            time.sleep(2)
             print("\nInvalid input. Please choose one of the options.")
             clear_screen()
             print_animal_table(animals)

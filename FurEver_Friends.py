@@ -3,14 +3,12 @@ import time
 from colorama import Fore, Style
 from view_animals import view_animals
 from add_animal import add_animal
-from change_adopted_status import change_adopted_status
+from customer_adoption_form import view_available_animals
 from common_functions import clear_screen, log_action, generate_salt, hash_password, load_animal_data
 from login import login
 from edit_animal_entries import modify_animal
 from pymongo import MongoClient
 from config import mongodb_uri
-
-
 
 # Check if config.py exists, if not, prompt the user to enter MongoDB URI and create it
 if os.path.isfile('config.py'):
@@ -101,7 +99,7 @@ def main():
                             print(f"{option_counter}. " + Fore.GREEN + "🐶 Add a new animal" + Style.RESET_ALL)
                             option_counter += 1
                         if user_level >= 3:
-                            print(f"{option_counter}. " + Fore.GREEN + "🏡 Change animal adoption status" + Style.RESET_ALL)
+                            print(f"{option_counter}. " + Fore.GREEN + "🏡 Customer Adoption Form" + Style.RESET_ALL)
                             option_counter += 1
                         if user_level >= 3:
                             print(f"{option_counter}. " + Fore.GREEN + "🗒️ Edit animal entries" + Style.RESET_ALL)
@@ -121,7 +119,7 @@ def main():
                             add_animal()
                         elif option == '3' and user_level >= 3:
                             time.sleep(1)
-                            change_adopted_status()
+                            view_available_animals()
                         elif option == '4' and user_level >= 3:
                             time.sleep(1)
                             modify_animal()
@@ -145,7 +143,7 @@ def main():
                 time.sleep(2)
                 clear_screen()
     except KeyboardInterrupt:
-        print("\nExiting...")
+        print("\n\nExiting...")
         time.sleep(2)
 
 if __name__ == "__main__":
