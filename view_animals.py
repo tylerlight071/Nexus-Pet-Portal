@@ -47,11 +47,21 @@ def filter_animals(animals):
     Args:
         animals (dict): Dictionary containing animal data.
     """
-    species_query = input(Fore.GREEN + "\nEnter species" + Style.RESET_ALL + " (leave blank to skip): ").lower()
-    breed_query = input(Fore.GREEN + "\nEnter breed " + Style.RESET_ALL + "(leave blank to skip): ").lower()
-    gender_query = input(Fore.GREEN + "\nEnter gender "+ Style.RESET_ALL + "(leave blank to skip): ").lower()
-    adopted_query = input(Fore.GREEN + "\nEnter adoption status " + Style.RESET_ALL + "(True/False, leave blank to skip): ").lower()
-    clear_screen()
+    clear_filters = input(Fore.LIGHTYELLOW_EX + "\nClear filters? (Y/N): " + Style.RESET_ALL).lower()
+
+    if clear_filters == 'y':
+        # Clear filters
+        clear_screen()
+        print_animal_table(animals)
+        return
+    
+    elif clear_filters == 'n':
+        # Print filter options
+        species_query = input(Fore.GREEN + "\nEnter species" + Style.RESET_ALL + " (leave blank to skip): ").lower()
+        breed_query = input(Fore.GREEN + "\nEnter breed " + Style.RESET_ALL + "(leave blank to skip): ").lower()
+        gender_query = input(Fore.GREEN + "\nEnter gender "+ Style.RESET_ALL + "(leave blank to skip): ").lower()
+        adopted_query = input(Fore.GREEN + "\nEnter adoption status " + Style.RESET_ALL + "(True/False, leave blank to skip): ").lower()
+        clear_screen()
 
     filtered_animals = {}
     # Iterate through animals and apply filters
