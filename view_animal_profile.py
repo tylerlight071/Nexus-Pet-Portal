@@ -3,7 +3,7 @@ import time
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from colorama import Fore, Style
-from common_functions import clear_screen, load_animal_data, save_data, log_action
+from common_functions import clear_screen, load_animal_data, log_action
 from sudo_user import sudo_user
 from pymongo import MongoClient
 from config import mongodb_uri
@@ -115,8 +115,9 @@ def view_animal_profile():
             def upload_image():
                 file_path = filedialog.askopenfilename()
                 if file_path:
-                    animal['image'] = file_path
-                    save_data(animals)
+                    # Save the image to the database
+                    animals_collection.update_one({'name': animal['name']}, {'$set': {'image': file_path}})
+
 
             upload_button = tk.Button(root, text="Upload Image", command=upload_image, width=15, height=2)
             upload_button.pack(pady=10)

@@ -57,14 +57,17 @@ def log_action(username, action_description):
         print(f"Error occurred while writing to log file: {e}")
 
 def generate_salt():
-    return os.urandom(16)  # Generate a 16-byte (128-bit) random salt
+    # Generate a 16-byte (128-bit) random salt
+    return os.urandom(16)  
 
 def hash_password(password, salt):
+    # Combine the password and salt together and hash them
     combined_value = password.encode('utf-8') + salt
     hashed_password = hashlib.sha256(combined_value).hexdigest()
     return hashed_password
 
 def hash_animal_data(animals, salt):
+    # Serialize the animal data and hash it
     animal_data_string = json.dumps(animals, sort_keys=True)
     combined_value = animal_data_string.encode('utf-8') + salt
     hashed_animal_data = hashlib.sha256(combined_value).hexdigest()
