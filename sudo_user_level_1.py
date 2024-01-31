@@ -17,11 +17,11 @@ db = client['animal_rescue']
 users_collection = db['users']
 
 def sudo_user():
-    
-    clear_screen()
-
     # Continuous loop for sudo user authentication
     attempts = 0 
+
+    clear_screen()
+
     while attempts < MAX_ATTEMPTS:
         print(Fore.LIGHTMAGENTA_EX + "\n👤 Sudo Login 👤" + Style.RESET_ALL)
         print("\nPlease enter your credentials")
@@ -46,12 +46,12 @@ def sudo_user():
                         sudo_user()
                         return username
                     
-                    # Notify about user verification for high level users
-                    elif user_level >= 2:        
+                    # Notify about user verification
+                    elif user_level >= 1:        
                             print(Fore.GREEN +"\nUser Verified..." + Style.RESET_ALL)
                             time.sleep(2)
                             clear_screen()
-                            return username
+                            return user
 
                     # Notify insufficient clearance
                     else:
