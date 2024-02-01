@@ -92,9 +92,13 @@ def update_user_information():
             else:
                 print(Fore.RED + f"\nUsername '{new_username}' already exists. Please choose a different username." + Style.RESET_ALL)
         elif option == '2':
-            new_level = int(input("Enter the new user level: "))
-            users_collection.update_one({'username': username}, {'$set': {'level': new_level}})
-            print(Fore.GREEN + f"\nUser level updated successfully for '{username}'!" + Style.RESET_ALL)
+            new_level = input("Enter the new user level: ")
+            if new_level.isdigit():  # Check if the input is a valid integer
+                new_level = int(new_level)
+                users_collection.update_one({'username': username}, {'$set': {'level': new_level}})
+                print(Fore.GREEN + f"\nUser level updated successfully for '{username}'!" + Style.RESET_ALL)
+            else:
+                print(Fore.RED + "\nInvalid user level. Please enter a valid level." + Style.RESET_ALL)
         elif option == '3':
             print("\nOperation canceled.")
         else:
