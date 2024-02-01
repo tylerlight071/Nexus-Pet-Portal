@@ -7,11 +7,6 @@ def clear_screen():
     # Clears the terminal screen based on the OS type
     os.system('cls' if os.name == 'nt' else 'clear')
 
-def load_data(file_name):
-    # Load data from a JSON file
-    with open(file_name, 'r') as f:
-        return json.load(f)
-
 def load_animal_data(animals_collection):
     animals = []
     try:
@@ -22,11 +17,6 @@ def load_animal_data(animals_collection):
     except Exception as e:
         print(f"Error loading animal data: {e}")
     return animals
-
-def save_data(data, file_name):
-    # Save data to the JSON file with indentation for readability
-    with open(file_name, 'w') as f:
-        json.dump(data, f, indent=4)
 
 def log_action(username, action_description):
     # Get the current timestamp
