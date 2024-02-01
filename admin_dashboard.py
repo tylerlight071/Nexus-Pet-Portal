@@ -4,9 +4,6 @@ from common_functions import clear_screen, log_action
 from register import register
 from user_management import user_management
 
-
-USER_DATA_FILE = "users.json"
-
 def admin_dashboard():
     # Continuous loop for admin dashboard
     while True:

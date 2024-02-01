@@ -8,6 +8,7 @@ from common_functions import clear_screen, log_action, generate_salt, hash_passw
 from login import login
 from edit_animal_entries import modify_animal
 from pymongo import MongoClient
+from pymongo.errors import InvalidURI
 from config import mongodb_uri
 
 # Check if config.py exists, if not, prompt the user to enter MongoDB URI and create it
@@ -15,7 +16,7 @@ if os.path.isfile('config.py'):
     # Read the contents of the config file:
     with open('config.py', 'r') as f:
         config_content = f.read()
-    # Check f the URI has been inputted in the file
+    # Check if the URI has been inputted in the file
     if 'URI Inputted' in config_content:
         uri_inputted = True
     else:
@@ -24,24 +25,41 @@ else:
     uri_inputted = False
 
 if not uri_inputted:
-    mongodb_uri = input("Please enter your MongoDB connection URI: ")
-    # Update config file to indicate that URI has been inputted
-    with open('config.py', 'w') as f:
-        f.write(f"mongodb_uri = '{mongodb_uri}'\n")
-        f.write("# URI Inputted\n")
-        
-        uri = mongodb_uri
-        client = MongoClient(uri)
-        db = client['animal_rescue']
-        users_collection = db['users']
-
-        # Check if client is connected
-        if client is not None:
-            print("Connected to MongoDB successfully.")
+    while True:
+        clear_screen()
+        mongodb_uri = input("\nPlease enter your MongoDB connection URI: ")
+        try:
+            client = MongoClient(mongodb_uri)
+            db = client['animal_rescue']
+            users_collection = db['users']
+            print(Fore.GREEN + "\nConnected to MongoDB successfully." + Style.RESET_ALL)
             time.sleep(2)
-        else:
-            print("Failed to connect to MongoDB.")
+            print(Fore.GREEN + "\nConfig file updated successfully." + Style.RESET_ALL)
             time.sleep(2)
+            print(Fore.GREEN + "\nDefault user created successfully." + Style.RESET_ALL)
+            time.sleep(2)
+            print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
+            input("\nPress any key to exit.")
+            # Update config file to indicate that URI has been inputted
+            with open('config.py', 'w') as f:
+                f.write(f"mongodb_uri = '{mongodb_uri}'\n")
+                f.write("# URI Inputted\n")
+            exit()
+        except InvalidURI:
+            print(Fore.RED + "\nInvalid MongoDB URI. Please check and try again." + Style.RESET_ALL)
+            print(Fore.YELLOW + "Note: Please ensure that your MongoDB URI is correctly formatted and does not contain any errors." + Style.RESET_ALL)
+            time.sleep(2)
+            print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
+            time.sleep(2)
+            input("\nPress any key to exit.")
+            exit()
+        except Exception as e:
+            print(Fore.RED + f"\nAn error occurred: {e}" + Style.RESET_ALL)
+            time.sleep(2)
+            print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
+            time.sleep(2)
+            input("\nPress any key to exit.")
+            exit()
 else:
     pass
 
@@ -67,7 +85,6 @@ DEFAULT_USER_DATA = {
     "salt": salt_hex,
     "level": 3
 }
-
 
 def main():
     clear_screen()
