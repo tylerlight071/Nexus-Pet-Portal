@@ -77,7 +77,6 @@ def adopt_animal(selected_animal):
             client_consent = input("\nDo they consent? (yes/no): ").strip().lower()
 
             if client_consent == 'yes':
-
                 # Prompt user for input
                 customer_name = input("\nYour full name: ").strip()
                 customer_email = input("Your email address: ").strip()
@@ -89,42 +88,59 @@ def adopt_animal(selected_animal):
                     print(Fore.RED + "\nPlease fill in all fields." + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
+                    continue  # Continue to the next iteration of the loop if any field is empty
+
+                # Check email format
+                if '@' not in customer_email or '.' not in customer_email:
+                    print(Fore.RED + "\nPlease enter a valid email address." + Style.RESET_ALL)
+                    time.sleep(2)
+                    clear_screen()
+                    continue
+
+                # Check phone number format
+                if not customer_phone.isdigit() or len(customer_phone) < 10:
+                    print(Fore.RED + "\nPlease enter a valid phone number." + Style.RESET_ALL)
+                    time.sleep(2)
+                    clear_screen()
+                    continue
+
+                # Check consent to terms
+                consent = input("\nBy adopting an animal, you agree to take full responsibility for its welfare and care, including providing a suitable living environment, regular veterinary check-ups, and necessary vaccinations. Do you consent to these terms? (yes/no): ").strip().lower()
+
+                if consent == 'yes':
+                    try:
+                        # Mark the animal as adopted
+                        animals_collection.update_one({"_id": selected_animal["_id"]}, {"$set": {"adopted": True}})
+
+                        # Save customer's information to the "customers" collection
+                        customer_data = {
+                            "name": customer_name,
+                            "email": customer_email,
+                            "phone": customer_phone,
+                            "address": customer_address,
+                            "adopted_animal": selected_animal["_id"]
+                        }
+                        customers_collection.insert_one(customer_data)
+
+                        print(Fore.GREEN + "\nCongratulations! You have successfully adopted {}.".format(selected_animal["name"]) + Style.RESET_ALL)
+                        print("\nThank you for your adoption! You will now return to the main menu.")
+                        time.sleep(2)
+                        clear_screen()
+                        return  # Exit the function after successful adoption
+                    except Exception as e:
+                        print(Fore.RED + f"An error occurred during adoption: {str(e)}" + Style.RESET_ALL)
+                        time.sleep(2)
+                        clear_screen()
                 else:
-                    break  # Exit the loop if all fields are filled
+                    print(Fore.RED + "\nAdoption cannot proceed without consent to the terms." + Style.RESET_ALL)
+                    input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
+                    clear_screen()
+                    return
             else:
                 print(Fore.RED + "\nAdoption cannot proceed without consent to the terms." + Style.RESET_ALL)
                 input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
                 clear_screen()
                 return
-
-            # Legal prompt
-            print("\nBy adopting an animal, you agree to take full responsibility for its welfare and care, including providing a suitable living environment, regular veterinary check-ups, and necessary vaccinations.")
-            consent = input("Do you consent to these terms? (yes/no): ").strip().lower()
-
-            if consent == 'yes':
-                try:
-                    # Mark the animal as adopted
-                    animals_collection.update_one({"_id": selected_animal["_id"]}, {"$set": {"adopted": True}})
-
-                    # Save customer's information to the "customers" collection
-                    customer_data = {
-                        "name": customer_name,
-                        "email": customer_email,
-                        "phone": customer_phone,
-                        "address": customer_address,
-                        "adopted_animal": selected_animal["_id"]
-                    }
-                    customers_collection.insert_one(customer_data)
-
-                    print(Fore.GREEN + "\nCongratulations! You have successfully adopted {}.".format(selected_animal["name"]) + Style.RESET_ALL)
-                except Exception as e:
-                    print(Fore.RED + f"An error occurred during adoption: {str(e)}" + Style.RESET_ALL)
-                    time.sleep(2)
-                    clear_screen()
-            else:
-                print(Fore.RED + "\nAdoption cannot proceed without consent to the terms." + Style.RESET_ALL)
-                input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
-                clear_screen()
     else:
         print(Fore.RED + "Invalid index! Please select a valid animal." + Style.RESET_ALL)
         time.sleep(2)
@@ -194,3 +210,4 @@ def view_available_animals():
             print("\nInvalid input. Please choose one of the options.")
             time.sleep(2)
             clear_screen()
+

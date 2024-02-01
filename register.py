@@ -28,8 +28,23 @@ def register():
         # Continuous loop for user registration
         while True:
             # Prompt user to enter and confirm a password
-            password = getpass.getpass("Enter a password: ")
-            confirm_password = getpass.getpass("Confirm your password: ")
+            while True:
+                password = getpass.getpass("Enter a password: ")
+                if not password.strip():
+                    clear_screen()
+                    print(Fore.RED + "\nPassword cannot be empty. Please try again." + Style.RESET_ALL)
+                    continue
+                else:
+                    break
+            
+            while True:
+                confirm_password = getpass.getpass("Confirm your password: ")
+                if not confirm_password.strip():
+                    clear_screen()
+                    print(Fore.RED + "\nPassword cannot be empty. Please try again." + Style.RESET_ALL)
+                    continue
+                else:
+                    break
 
             # Check if passwords match
             if password == confirm_password:

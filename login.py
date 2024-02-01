@@ -21,7 +21,15 @@ def change_admin_password(username):
     print(Fore.YELLOW + "\nYour password must be changed from the default 'ADMIN' for security reasons." + Style.RESET_ALL)
 
     # Prompt user for a new password and confirmation
-    new_password = getpass.getpass("\nEnter a new password for ADMIN: ")
+    while True:
+        new_password = getpass.getpass("\nEnter a new password for ADMIN: ")
+        if not new_password.strip():
+            clear_screen()
+            print(Fore.RED + "\nPassword cannot be empty. Please try again." + Style.RESET_ALL)
+            continue
+        else:
+            break
+
     confirm_password = getpass.getpass("Confirm the new password: ")
 
     # Check if passwords match
@@ -58,7 +66,15 @@ def reset_password(username):
     print(Fore.YELLOW + f"\nYour password must be changed for security reasons." + Style.RESET_ALL)
 
     # Prompt user for a new password and confirmation
-    new_password = getpass.getpass("\nEnter a new password: ")
+    while True:
+        new_password = getpass.getpass("\nEnter a new password: ")
+        if not new_password.strip():
+            clear_screen()
+            print(Fore.RED + "\nPassword cannot be empty. Please try again." + Style.RESET_ALL)
+            continue
+        else:
+            break
+
     confirm_password = getpass.getpass("Confirm the new password: ")
 
     # Check if passwords match
