@@ -102,7 +102,7 @@ def main():
                             print(f"{option_counter}. " + Fore.GREEN + "🏡 Customer Adoption Form" + Style.RESET_ALL)
                             option_counter += 1
                         if user_level >= 3:
-                            print(f"{option_counter}. " + Fore.GREEN + "🗒️ Edit animal entries" + Style.RESET_ALL)
+                            print(f"{option_counter}. " + Fore.GREEN + "🗒️  Edit animal entries" + Style.RESET_ALL)
                             option_counter += 1
 
                         # Display Logout option with the correct number
