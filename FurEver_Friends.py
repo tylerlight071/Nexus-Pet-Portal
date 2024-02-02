@@ -1,5 +1,6 @@
 import os
 import time
+from sys import exit
 from colorama import Fore, Style
 from view_animals import view_animals
 from add_animal import add_animal
@@ -37,12 +38,15 @@ if not uri_inputted:
             print(Fore.GREEN + "\nDefault user created successfully." + Style.RESET_ALL)
             time.sleep(2)
             print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
-            input("\nPress any key to exit.")
+            exit_key = input("\nPress any key to exit.")
             # Update config file to indicate that URI has been inputted
             with open('config.py', 'w') as f:
                 f.write(f"mongodb_uri = '{mongodb_uri}'\n")
                 f.write("# URI Inputted\n")
-            exit()
+            if exit_key == "":
+                exit()
+            else:
+                exit()
         except InvalidURI:
             print(Fore.RED + "\nInvalid MongoDB URI. Please check and try again." + Style.RESET_ALL)
             print(Fore.YELLOW + "Note: Please ensure that your MongoDB URI is correctly formatted and does not contain any errors." + Style.RESET_ALL)
