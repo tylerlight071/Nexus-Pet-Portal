@@ -3,6 +3,7 @@ from colorama import Fore, Style
 from common_functions import clear_screen, generate_salt, hash_password
 from pymongo import MongoClient
 from config import mongodb_uri
+from sudo_admin import sudo_admin
 
 # Connect to MongoDB
 uri = mongodb_uri
@@ -40,6 +41,7 @@ def user_management():
 def reset_user_password():
     # Prompt for username and new password
     username = input("\nEnter the username to change the password: ")
+    sudo_admin()
 
     # Change password if the user exists and is not ADMIN
     user = users_collection.find_one({'username': username})
@@ -70,10 +72,11 @@ def update_user_information():
     username = input("\nEnter the username to update information: ")
 
     user = users_collection.find_one({'username': username})
-    if user and username != "ADMIN":  
-        print("\nCurrent user information:")
-        print(f"\nUsername: {username}")
-        print(f"User Level: {user['level']}")
+    if user and username != "ADMIN":
+        clear_screen()  
+        print(Fore.CYAN + "\nCurrent user information:" + Style.RESET_ALL)
+        print(Fore.GREEN + f"\nUsername: {username}" + Style.RESET_ALL)
+        print(Fore.GREEN + f"User Level: {user['level']}" + Style.RESET_ALL)
         
         # Prompt for the information to be updated
         print("\nSelect the information you want to update:")
