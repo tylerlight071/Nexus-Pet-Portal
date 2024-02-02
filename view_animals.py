@@ -187,9 +187,10 @@ def delete_animal(animal_name):
         animal_count = animals_collection.count_documents({"name": animal_name})
         
         if animal_count == 0:
-            print(f"Animal {animal_name} not found in the database.")
+            print(f"{animal_name} not found in the database.")
             time.sleep(2)
             clear_screen()
+            print_animal_table(load_animal_data(animals_collection))
             return False
         
         elif animal_count == 1:

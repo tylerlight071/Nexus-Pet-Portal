@@ -3,6 +3,7 @@ from common_functions import clear_screen
 from colorama import Fore, Style
 from pymongo import MongoClient
 from config import mongodb_uri
+from sudo_user import sudo_user
 
 # Connect to MongoDB
 uri = mongodb_uri
@@ -13,17 +14,18 @@ animals_collection = db['animals']
 
 def modify_animal():
     clear_screen()
+    sudo_user()
     print(Fore.CYAN + "\n🐾 Modify Animal 🐾\n" + Style.RESET_ALL)
 
     # Input the name of the animal to modify
-    animal_name = input(Fore.CYAN + "Enter the name of the animal to modify: " + Style.RESET_ALL).strip()
+    animal_name = input(Fore.CYAN + "Enter the name of the animal to modify: " + Style.RESET_ALL).strip().capitalize()
 
     # Search for the animal in the database
     animal = animals_collection.find_one({'name': animal_name})
 
     if animal:
-        print(Fore.GREEN + "\nAnimal found. You can modify the following fields:")
-        print("1. Name")
+        print(Fore.LIGHTMAGENTA_EX + "\nAnimal found. You can modify the following fields:" + Style.RESET_ALL)
+        print("\n1. Name")
         print("2. Species")
         print("3. Breed")
         print("4. Gender")
@@ -41,30 +43,48 @@ def modify_animal():
             field_choice = int(field_choice)
             if field_choice == 1:
                 new_value = input("Enter new name: ").strip()
-                animals_collection.update_one({'name': animal_name}, {'$set': {'name': new_value}})
+                if new_value != animal['name']:
+                    animals_collection.update_one({'name': animal_name}, {'$set': {'name': new_value}})
+                    print(Fore.GREEN + "\nName updated successfully." + Style.RESET_ALL)
+                else:
+                    print(Fore.YELLOW + "\nNew name is the same as the current one. No update performed." + Style.RESET_ALL)
             elif field_choice == 2:
                 new_value = input("Enter new species: ").strip()
-                animals_collection.update_one({'name': animal_name}, {'$set': {'species': new_value}})
+                if new_value != animal['species']:
+                    animals_collection.update_one({'name': animal_name}, {'$set': {'species': new_value}})
+                    print(Fore.GREEN + "\nSpecies updated successfully." + Style.RESET_ALL)
+                else:
+                    print(Fore.YELLOW + "\nNew species is the same as the current one. No update performed." + Style.RESET_ALL)
             elif field_choice == 3:
                 new_value = input("Enter new breed: ").strip()
-                animals_collection.update_one({'name': animal_name}, {'$set': {'breed': new_value}})
-            elif field_choice == 4:
-                new_value = input("Enter new gender: ").strip()
-                if new_value in ['male', 'female']:
-                    animals_collection.update_one({'name': animal_name}, {'$set': {'gender': new_value}})
+                if new_value != animal['breed']:
+                    animals_collection.update_one({'name': animal_name}, {'$set': {'breed': new_value}})
+                    print(Fore.GREEN + "\nBreed updated successfully." + Style.RESET_ALL)
                 else:
+                    print(Fore.YELLOW + "\nNew breed is the same as the current one. No update performed." + Style.RESET_ALL)
+            elif field_choice == 4:
+                new_value = input("Enter new gender: ").strip().lower()
+                if new_value in ['male', 'female'] and new_value != animal['gender']:
+                    animals_collection.update_one({'name': animal_name}, {'$set': {'gender': new_value}})
+                    print(Fore.GREEN + "\nGender updated successfully." + Style.RESET_ALL)
+                elif new_value not in ['male', 'female']:
                     print(Fore.RED + "\nInvalid input. Gender must be 'Male' or 'Female'." + Style.RESET_ALL)
+                else:
+                    print(Fore.YELLOW + "\nNew gender is the same as the current one. No update performed." + Style.RESET_ALL)
             elif field_choice == 5:
                 new_value = input("Enter new age: ").strip()
-                if new_value.isdigit() and int(new_value) > 0:
+                if new_value.isdigit() and int(new_value) > 0 and int(new_value) != animal['age']:
                     animals_collection.update_one({'name': animal_name}, {'$set': {'age': int(new_value)}})
+                    print(Fore.GREEN + "\nAge updated successfully." + Style.RESET_ALL)
+                elif not new_value.isdigit() or int(new_value) <= 0:
+                    print(Fore.RED + "Invalid age. Please enter a positive integer." + Style.RESET_ALL)
                 else:
-                    print(Fore.RED + "Invalid age. Please enter a positive integer.")
-                    
+                    print(Fore.YELLOW + "\nNew age is the same as the current one. No update performed." + Style.RESET_ALL)
             else:
-                print(Fore.RED + "Invalid choice.")
+                print(Fore.RED + "Invalid choice." + Style.RESET_ALL)
 
     else:
-        print(Fore.RED + "Animal not found.")
+        print(Fore.RED + "Animal not found." + Style.RESET_ALL)
+        time.sleep(2)
 
-    input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
+    input("Press Enter to continue...")

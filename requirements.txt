@@ -83,7 +83,7 @@ pymongo==4.6.1
 pyparsing==3.1.1
 pypiwin32==223
 pyttsx3==2.90
-pywin32==306
+pywin32
 pywin32-ctypes==0.2.2
 requests==2.31.0
 rsa==4.9
