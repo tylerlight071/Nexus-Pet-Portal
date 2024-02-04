@@ -2,8 +2,7 @@
 
 ## Supported Versions
 
-Use this section to tell people about which versions of your project are
-currently being supported with security updates.
+Right now, only the latest release is being patched for security and performance updates as they are pre-released versions.
 
 | Version | Supported          |
 | ------- | ------------------ |
@@ -14,8 +13,8 @@ currently being supported with security updates.
 
 ## Reporting a Vulnerability
 
-Use this section to tell people how to report a vulnerability.
+If you discover a minor security vulnerability, please submit it to our GitHub issues with a clear header. You can [submit issues here](https://github.com/tylerlight071/FurEver_Friends/issues).
 
-Tell them where to go, how often they can expect to get an update on a
-reported vulnerability, what to expect if the vulnerability is accepted or
-declined, etc.
+For major vulnerabilities or if you prefer, you can also email me directly at tylerlightwood071@gmail.com with "SECURITY VULNERABILITY" in the subject line. Please include the vulnerability details and, if applicable, the issue number in the subject line.
+
+We will strive to acknowledge your report promptly and keep you informed of its progress and resolution.
