@@ -1,12 +1,11 @@
 import time
-from common_functions import clear_screen 
+from common_functions import clear_screen, get_mongodb_uri
 from colorama import Fore, Style
 from pymongo import MongoClient
-from config import mongodb_uri
 from sudo_user import sudo_user
 
 # Connect to MongoDB
-uri = mongodb_uri
+uri = get_mongodb_uri()
 client = MongoClient(uri)
 
 db = client['animal_rescue']

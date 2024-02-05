@@ -1,12 +1,13 @@
 import time
+import json
 from colorama import Fore, Style
-from common_functions import clear_screen, generate_salt, hash_password
+from common_functions import clear_screen, hash_password, get_mongodb_uri
 from pymongo import MongoClient
-from config import mongodb_uri
 from sudo_admin import sudo_admin
 
+
 # Connect to MongoDB
-uri = mongodb_uri
+uri = get_mongodb_uri()
 client = MongoClient(uri)
 db = client['animal_rescue']
 users_collection = db['users']

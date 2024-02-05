@@ -161,4 +161,4 @@ cython_debug/
 
 # User Files
 audit_log.txt
-config.py
+config.ini
