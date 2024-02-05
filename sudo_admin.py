@@ -2,7 +2,7 @@ import getpass
 import time
 import hashlib
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action
+from common_functions import clear_screen, log_action, verify_password
 from pymongo import MongoClient
 from config import mongodb_uri
 
@@ -29,50 +29,48 @@ def sudo_admin():
         user = users_collection.find_one({'username': username})
 
         if user:
-                stored_password = user['hashed_password']
-                salt = bytes.fromhex(user['salt'])
+            stored_password = user['hashed_password']
 
-                # Hash the entered password with the stored salt
-                entered_password_hash = hashlib.sha256(password.encode('utf-8') + salt).hexdigest()
+            # Verify the entered password with the stored password hash
+            if verify_password(stored_password, password):
+                user_level = user['level']
 
-                if stored_password == entered_password_hash:
-                    # Throw error if user is logging in with ADMIN account
-                    if username == "ADMIN":
-                        print(Fore.GREEN +"\nUser Verified..." + Style.RESET_ALL)
-                        time.sleep(2)
-                        clear_screen()
-                        return username
-                    # Notify insufficient clearance
-                    else:
-                        print(Fore.RED + "\nYou do not have clearance to do this." + Style.RESET_ALL)
-                        time.sleep(1)
-                        print(Fore.RED + "\nADMIN user will be alerted." + Style.RESET_ALL)
-                        time.sleep(1)
-                        print(Fore.RED + "\nExiting..." + Style.RESET_ALL)
-                        time.sleep(1)
-
-                        # Log user's username and add it to audit log
-                        log_action(username, f"Tried to access without clearance")
-                        exit()
                 
-                # Notify about incorrect password 
-                else:
-                    print(Fore.RED + "\nIncorrect password." + Style.RESET_ALL)
-                    attempts += 1
-                    time.sleep(2)
-                    print(Fore.RED + f"\nRemaining attempts: {MAX_ATTEMPTS - attempts}" + Style.RESET_ALL)
-                    log_action(username, "Failed attempted access via sudo")
+                # Throw error if user is logging in with ADMIN account
+                if username == "ADMIN":
+                    print(Fore.GREEN +"\nUser Verified..." + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
+                    return username
+                # Notify insufficient clearance
+                else:
+                    print(Fore.RED + "\nYou do not have clearance to do this." + Style.RESET_ALL)
+                    time.sleep(1)
+                    print(Fore.RED + "\nADMIN user will be alerted." + Style.RESET_ALL)
+                    time.sleep(1)
+                    print(Fore.RED + "\nExiting..." + Style.RESET_ALL)
+                    time.sleep(1)
 
-            
+                    # Log user's username and add it to audit log
+                    log_action(username, f"Tried to access without clearance")
+                    exit()
+                
+            # Notify about incorrect password 
+            else:
+                print(Fore.RED + "\nIncorrect password." + Style.RESET_ALL)
+                attempts += 1
+                time.sleep(2)
+                print(Fore.RED + f"\nRemaining attempts: {MAX_ATTEMPTS - attempts}" + Style.RESET_ALL)
+                log_action(username, "Failed attempted access via sudo")
+                time.sleep(2)
+                clear_screen()
+
         # Notify about non-existing username
         else:
             print(Fore.RED + "\nUsername not found. Please try again." + Style.RESET_ALL)
             time.sleep(2)
             clear_screen()
         
-    
     print(Fore.RED + "\nMaximum login attempts reached" + Style.RESET_ALL)
     time.sleep(1)
     print("\nExiting...")

@@ -4,12 +4,11 @@ from colorama import Fore, Style
 from view_animals import view_animals
 from add_animal import add_animal
 from customer_adoption_form import view_available_animals
-from common_functions import clear_screen, log_action, generate_salt, hash_password, load_animal_data
+from common_functions import clear_screen, log_action, hash_password
 from login import login
 from edit_animal_entries import modify_animal
 from pymongo import MongoClient
-from pymongo.errors import InvalidURI
-from pymongo.errors import ConfigurationError
+from pymongo.errors import InvalidURI, ConfigurationError
 from config import mongodb_uri
 
 # Check if config.py exists, if not, prompt the user to enter MongoDB URI and create it
@@ -78,17 +77,14 @@ users_collection = db['users']
 # Default password
 default_password = "ADMIN"
 
-# Generate salt and hash password
-salt = generate_salt()
-hashed_password = hash_password(default_password, salt)
+# Generate salt and hash the default password
+hashed_password = hash_password(default_password)
 
-salt_hex = salt.hex()
 
 # Default user data if collection do not exist
 DEFAULT_USER_DATA = {
     "username": "ADMIN",
     "hashed_password": hashed_password,
-    "salt": salt_hex,
     "level": 3
 }
 
