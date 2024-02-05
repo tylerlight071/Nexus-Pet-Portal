@@ -2,6 +2,7 @@ import os
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 import datetime
+import configparser
 
 def clear_screen():
     # Clears the terminal screen based on the OS type
@@ -61,5 +62,16 @@ def verify_password(stored_password, entered_password):
     except VerifyMismatchError:
         return False
     
-def generate_salt():
-    pass
+def get_mongodb_uri():
+    # Read the configuration file
+    config = configparser.ConfigParser()
+    config_file = 'config.ini'
+    if os.path.exists(config_file):
+        config.read(config_file)
+        return config['DEFAULT']['mongodb_uri']
+    else:
+        uri = input("Please enter your MongoDB URI: ")
+        config['DEFAULT'] = {'mongodb_uri': uri}
+        with open(config_file, 'w') as configfile:
+            config.write(configfile)
+        return uri

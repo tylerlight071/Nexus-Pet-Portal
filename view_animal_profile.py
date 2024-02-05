@@ -1,15 +1,15 @@
 import tkinter as tk
+import json
 import time
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from colorama import Fore, Style
-from common_functions import clear_screen, load_animal_data, log_action
+from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri
 from sudo_user import sudo_user
 from pymongo import MongoClient
-from config import mongodb_uri
 
 # Connect to MongoDB
-uri = mongodb_uri
+uri = get_mongodb_uri()
 client = MongoClient(uri)
 
 db = client['animal_rescue']

@@ -1,79 +1,20 @@
-import os
 import time
+import os
+import configparser
 from sys import exit
 from colorama import Fore, Style
 from view_animals import view_animals
 from add_animal import add_animal
 from customer_adoption_form import view_available_animals
-from common_functions import clear_screen, log_action, hash_password
+from common_functions import clear_screen, log_action, hash_password, get_mongodb_uri
 from login import login
 from edit_animal_entries import modify_animal
 from pymongo import MongoClient
-from pymongo.errors import InvalidURI, ConfigurationError
-from config import mongodb_uri
 
-# Check if config.py exists, if not, prompt the user to enter MongoDB URI and create it
-if not os.path.isfile('config.py'):
-    uri_inputted = False
-else:
-    # Read the contents of the config file:
-    with open('config.py', 'r') as f:
-        config_content = f.read()
-    # Check if the URI has been inputted in the file
-    uri_inputted = 'URI Inputted' in config_content
-
-if not uri_inputted:
-    while True:
-        clear_screen()
-        mongodb_uri = input("\nPlease enter your MongoDB connection URI: ")
-        try:
-            # Attempt to connect to the MongoDB URI to check its validity
-            client = MongoClient(mongodb_uri, serverSelectionTimeoutMS=2000)
-            client.server_info()  # Attempt to query the server
-            print(Fore.GREEN + "\nConnected to MongoDB successfully." + Style.RESET_ALL)
-            time.sleep(2)
-            print(Fore.GREEN + "\nConfig file updated successfully." + Style.RESET_ALL)
-            time.sleep(2)
-            print(Fore.GREEN + "\nDefault user created successfully." + Style.RESET_ALL)
-            time.sleep(2)
-            print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
-            exit_key = input("\nPress any key to exit.")
-            # Update config file to indicate that URI has been inputted
-            with open('config.py', 'w') as f:
-                f.write(f"mongodb_uri = '{mongodb_uri}'\n")
-                f.write("# URI Inputted\n")
-            if exit_key == "":
-                exit()
-            else:
-                exit()
-        except InvalidURI:
-            print(Fore.RED + "\nInvalid MongoDB URI. Please check and try again." + Style.RESET_ALL)
-            print(Fore.YELLOW + "Note: Please ensure that your MongoDB URI is correctly formatted and does not contain any errors." + Style.RESET_ALL)
-            time.sleep(2)
-            print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
-            time.sleep(2)
-            input("\nPress any key to exit.")
-            exit()
-        except ConfigurationError:
-            print(Fore.RED + "\nInvalid MongoDB URI. Please check and try again." + Style.RESET_ALL)
-            print(Fore.YELLOW + "Note: Please ensure that your MongoDB URI is correctly formatted and does not contain any errors." + Style.RESET_ALL)
-            time.sleep(2)
-            print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
-            time.sleep(2)
-            input("\nPress any key to exit.")
-            exit()
-        except Exception as e:
-            print(Fore.RED + f"\nAn error occurred: {e}" + Style.RESET_ALL)
-            time.sleep(2)
-            print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
-            time.sleep(2)
-            input("\nPress any key to exit.")
-            exit()
-else:
-    pass
+get_mongodb_uri()
 
 # Connect to MongoDB
-uri = mongodb_uri
+uri = get_mongodb_uri()
 client = MongoClient(uri)
 db = client['animal_rescue']
 users_collection = db['users']
