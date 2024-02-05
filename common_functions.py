@@ -46,7 +46,7 @@ def log_action(username, action_description):
 
 def hash_password(password: str):
     # Hash the password using Argon2
-    ph = PasswordHasher(time_cost=2, memory_cost=102400, parallelism=8, hash_len=16, salt_len=16, encoding='utf-8')
+    ph = PasswordHasher(time_cost=10, memory_cost=409600, parallelism=16, hash_len=256, salt_len=256, encoding='utf-8')
     hashed_password = ph.hash(password)
     return hashed_password
 
