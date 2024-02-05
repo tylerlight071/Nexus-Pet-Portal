@@ -1,3 +1,5 @@
+# ! Change this on Monday to work with, when modifying, animal profile 
+
 import tkinter as tk
 from tkinter import ttk
 from tkcalendar import DateEntry  # For date picker

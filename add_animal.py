@@ -1,6 +1,6 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, hash_animal_data, generate_salt
+from common_functions import clear_screen, log_action
 from sudo_user import sudo_user
 from pymongo import MongoClient
 from config import mongodb_uri
@@ -16,6 +16,8 @@ def add_animal():
     # Continuous loop for adding animals
     while True:
         clear_screen()
+
+        sudo_user()
 
         # Display header 
         print(Fore.CYAN + "\n🐾 Add Animal 🐾\n" + Style.RESET_ALL)
@@ -60,22 +62,6 @@ def add_animal():
         # Make the user verify their identity
         current_user = sudo_user() 
 
-        # Generate salt
-        salt = generate_salt()
-
-        # Hash the new animal data with the salt
-        hashed_animal_data = hash_animal_data({
-            'name': name,
-            'species': species,
-            'breed': breed,
-            'gender': gender,
-            'age': age,
-            'adopted': False
-        }, salt)
-
-        # Store the salt in hexadecimal format
-        salt_hex = salt.hex()
-
         # Add hashed animal data to the animals collection
         animals_collection.insert_one ({
             'name': name,
@@ -84,8 +70,6 @@ def add_animal():
             'gender': gender,
             'age': age,
             'adopted': False,
-            'salt': salt_hex,
-            'hashed_animal_data': hashed_animal_data,
         })
 
         # Log the action of adding the animal into the audit file

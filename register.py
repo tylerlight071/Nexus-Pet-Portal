@@ -1,7 +1,7 @@
 import getpass
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, generate_salt, hash_password
+from common_functions import clear_screen, hash_password
 from pymongo import MongoClient
 from config import mongodb_uri
 
@@ -53,18 +53,13 @@ def register():
                 
                 # Validate user level input
                 if user_level.isdigit() and 1 <= int(user_level) <= 3:
-                    # Generate salt and hash password
-                    salt = generate_salt()
-                    hashed_password = hash_password(password, salt)
-
-                    # Convert salt to hexadecimal string for serialization
-                    salt_hex = salt.hex()
+                    # Hash the password
+                    hashed_password = hash_password(password)
 
                     # Insert user data into the MongoDB collection
                     users_collection.insert_one({
                         'username': username,
                         'hashed_password': hashed_password,
-                        'salt': salt_hex,
                         'level': int(user_level)
                     })
 
@@ -75,7 +70,5 @@ def register():
                 else:
                     print(Fore.RED + "\nInvalid user level. Please enter a number between 1 and 3." + Style.RESET_ALL)
             else:
+                clear_screen()
                 print(Fore.RED + "\nPasswords do not match. Please try again." + Style.RESET_ALL)
-
-if __name__ == "__main__":
-    register()

@@ -38,7 +38,7 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
     cd FurEver_Friends
     ```
 
-3. **Install the required dependancies**
+3. **Install the required dependencies**
     '''
     pip install -r requirements.txt
     '''
@@ -118,6 +118,10 @@ We welcome contributions from compassionate individuals who share our mission! I
 5. Push to the branch (`git push origin feature-name`).
 6. Create a new Pull Request filled with love and dedication!
 
+## Issues ⚠️
+
+Please submit any issues via the issues portal in this repo or email me at:
+tylerlightwood071@gmail.com
 
 ## License 📝
 

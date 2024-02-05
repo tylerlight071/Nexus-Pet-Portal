@@ -1,15 +1,15 @@
 import os
 import time
+from sys import exit
 from colorama import Fore, Style
 from view_animals import view_animals
 from add_animal import add_animal
 from customer_adoption_form import view_available_animals
-from common_functions import clear_screen, log_action, generate_salt, hash_password, load_animal_data
+from common_functions import clear_screen, log_action, hash_password
 from login import login
 from edit_animal_entries import modify_animal
 from pymongo import MongoClient
-from pymongo.errors import InvalidURI
-from pymongo.errors import ConfigurationError
+from pymongo.errors import InvalidURI, ConfigurationError
 from config import mongodb_uri
 
 # Check if config.py exists, if not, prompt the user to enter MongoDB URI and create it
@@ -37,12 +37,15 @@ if not uri_inputted:
             print(Fore.GREEN + "\nDefault user created successfully." + Style.RESET_ALL)
             time.sleep(2)
             print(Fore.YELLOW + "\nThe application will now close. Please restart to begin." + Style.RESET_ALL)
-            input("\nPress any key to exit.")
+            exit_key = input("\nPress any key to exit.")
             # Update config file to indicate that URI has been inputted
             with open('config.py', 'w') as f:
                 f.write(f"mongodb_uri = '{mongodb_uri}'\n")
                 f.write("# URI Inputted\n")
-            exit()
+            if exit_key == "":
+                exit()
+            else:
+                exit()
         except InvalidURI:
             print(Fore.RED + "\nInvalid MongoDB URI. Please check and try again." + Style.RESET_ALL)
             print(Fore.YELLOW + "Note: Please ensure that your MongoDB URI is correctly formatted and does not contain any errors." + Style.RESET_ALL)
@@ -78,17 +81,14 @@ users_collection = db['users']
 # Default password
 default_password = "ADMIN"
 
-# Generate salt and hash password
-salt = generate_salt()
-hashed_password = hash_password(default_password, salt)
+# Generate salt and hash the default password
+hashed_password = hash_password(default_password)
 
-salt_hex = salt.hex()
 
 # Default user data if collection do not exist
 DEFAULT_USER_DATA = {
     "username": "ADMIN",
     "hashed_password": hashed_password,
-    "salt": salt_hex,
     "level": 3
 }
 
