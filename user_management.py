@@ -49,15 +49,11 @@ def reset_user_password():
         new_password = "password"
 
         # Generate salt and hash password
-        salt = generate_salt()
-        hashed_password = hash_password(new_password, salt)
-
-        # Convert salt to hexadecimal string for serialization
-        salt_hex = salt.hex()
+        hashed_password = hash_password(new_password)
         
         # Update user's password and salt
         users_collection.update_one({'username': username}, 
-                                    {'$set': {'hashed_password': hashed_password, 'salt': salt_hex}})
+                                    {'$set': {'hashed_password': hashed_password}})
         print(Fore.GREEN + f"\nPassword for user '{username}' reset successfully!" + Style.RESET_ALL)
     
     elif username == "ADMIN":  

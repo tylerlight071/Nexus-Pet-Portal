@@ -1,6 +1,6 @@
-import json
 import os
-import hashlib
+from argon2 import PasswordHasher
+from argon2.exceptions import VerifyMismatchError
 import datetime
 
 def clear_screen():
@@ -44,19 +44,22 @@ def log_action(username, action_description):
     except Exception as e:
         print(f"Error occurred while writing to log file: {e}")
 
-def generate_salt():
-    # Generate a 16-byte (128-bit) random salt
-    return os.urandom(16)  
-
-def hash_password(password, salt):
-    # Combine the password and salt together and hash them
-    combined_value = password.encode('utf-8') + salt
-    hashed_password = hashlib.sha256(combined_value).hexdigest()
+def hash_password(password: str):
+    # Hash the password using Argon2
+    ph = PasswordHasher(time_cost=2, memory_cost=102400, parallelism=8, hash_len=16, salt_len=16, encoding='utf-8')
+    hashed_password = ph.hash(password)
     return hashed_password
 
-def hash_animal_data(animals, salt):
-    # Serialize the animal data and hash it
-    animal_data_string = json.dumps(animals, sort_keys=True)
-    combined_value = animal_data_string.encode('utf-8') + salt
-    hashed_animal_data = hashlib.sha256(combined_value).hexdigest()
-    return hashed_animal_data
+def verify_password(stored_password, entered_password):
+    # Create a PasswordHasher instance
+    ph = PasswordHasher(time_cost=2, memory_cost=102400, parallelism=8, hash_len=16, salt_len=16, encoding='utf-8')
+
+    try:
+        # Verify the entered password against the stored password hash
+        ph.verify(stored_password, entered_password)
+        return True
+    except VerifyMismatchError:
+        return False
+    
+def generate_salt():
+    pass

@@ -1,7 +1,7 @@
 import getpass
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, hash_password, generate_salt
+from common_functions import clear_screen, log_action, hash_password, verify_password
 from admin_dashboard import admin_dashboard
 from pymongo import MongoClient
 from config import mongodb_uri
@@ -35,16 +35,15 @@ def change_admin_password(username):
     # Check if passwords match
     if new_password == confirm_password:
         # Generate salt and hash password
-        salt = generate_salt()
-        hashed_password = hash_password(new_password, salt)
 
-        # Convert salt to hexadecimal string for serialization
-        salt_hex = salt.hex()
+        hashed_password = hash_password(new_password)
+
+        # Convert salt to hexadecimal string for serialization   
 
         # Update the password in the MongoDB collection for ADMIN
         users_collection.update_one(
             {'username': 'ADMIN'},
-            {'$set': {'hashed_password': hashed_password, 'salt': salt_hex}}
+            {'$set': {'hashed_password': hashed_password}}
         )
 
         log_action(username, f"Admin Password has been changed")
@@ -79,17 +78,12 @@ def reset_password(username):
 
     # Check if passwords match
     if new_password == confirm_password:
-        # Generate salt and hash password
-        salt = generate_salt()
-        hashed_password = hash_password(new_password, salt)
-
-        # Convert salt to hexadecimal string for serialization
-        salt_hex = salt.hex()
+        hashed_password = hash_password(new_password)
 
         # Update the password in the MongoDB collection
         users_collection.update_one(
             {'username': username},
-            {'$set': {'hashed_password': hashed_password, 'salt': salt_hex}}
+            {'$set': {'hashed_password': hashed_password}}
         )
 
         log_action(username, f"Password has been reset for user {username}")
@@ -117,14 +111,11 @@ def login():
 
         if user:
             stored_password = user['hashed_password']
-            salt = bytes.fromhex(user['salt'])
 
-            # Hash the entered password with the stored salt
-            entered_password_hash = hash_password(password, salt)
-
-            if stored_password == entered_password_hash:
+            # Verify the entered password with the stored password hash
+            if verify_password(stored_password, password):
                 user_level = user['level'] 
-                
+
                 if username == "ADMIN" and password == "ADMIN":
                     print("\nLogging In...")
                     time.sleep(2)
