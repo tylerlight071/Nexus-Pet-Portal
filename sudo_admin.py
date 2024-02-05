@@ -1,6 +1,5 @@
 import getpass
 import time
-import hashlib
 from colorama import Fore, Style
 from common_functions import clear_screen, log_action, verify_password
 from pymongo import MongoClient
@@ -32,10 +31,7 @@ def sudo_admin():
             stored_password = user['hashed_password']
 
             # Verify the entered password with the stored password hash
-            if verify_password(stored_password, password):
-                user_level = user['level']
-
-                
+            if verify_password(stored_password, password):             
                 # Throw error if user is logging in with ADMIN account
                 if username == "ADMIN":
                     print(Fore.GREEN +"\nUser Verified..." + Style.RESET_ALL)
