@@ -1,6 +1,5 @@
 import getpass
 import time
-import hashlib
 from colorama import Fore, Style
 from common_functions import clear_screen, log_action, verify_password
 from pymongo import MongoClient
