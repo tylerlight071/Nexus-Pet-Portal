@@ -32,10 +32,7 @@ def sudo_admin():
             stored_password = user['hashed_password']
 
             # Verify the entered password with the stored password hash
-            if verify_password(stored_password, password):
-                user_level = user['level']
-
-                
+            if verify_password(stored_password, password):             
                 # Throw error if user is logging in with ADMIN account
                 if username == "ADMIN":
                     print(Fore.GREEN +"\nUser Verified..." + Style.RESET_ALL)
