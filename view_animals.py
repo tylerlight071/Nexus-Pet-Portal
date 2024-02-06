@@ -1,7 +1,7 @@
 import time
 from colorama import Fore, Style
 from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri
-from view_animal_profile import view_animal_profile
+from view_animal_profile import view_animals_full
 from sudo_user_level_1 import sudo_user
 from edit_animal_entries import modify_animal
 from add_animal import add_animal
@@ -328,7 +328,7 @@ def view_animals():
         # View Animal Profile
         elif user_input == '3':
             if current_user['level'] >= 2:
-                view_animal_profile()
+                view_animals_full()
             else:
                 log_action(current_user, "Exited 'View Animal Database'")
                 print("\nExiting...")
