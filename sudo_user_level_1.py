@@ -17,12 +17,19 @@ def sudo_user():
     attempts = 0 
 
     clear_screen()
+    
 
     while attempts < MAX_ATTEMPTS:
         print(Fore.LIGHTMAGENTA_EX + "\n👤 Sudo Login 👤" + Style.RESET_ALL)
         print("\nPlease enter your credentials")
         username = input("\nEnter your username: ")
         password = getpass.getpass("Enter your password: ")
+
+        if not username or not password:
+            print(Fore.RED + "\nUsername and password are required." + Style.RESET_ALL)
+            time.sleep(2)
+            clear_screen()
+            continue
 
         user = users_collection.find_one({'username': username})
 
