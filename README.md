@@ -1,12 +1,12 @@
-# 🐾 FurEver Friends 🐾
+# 🐾 Nexus Pet Portal 🐾
 
-Welcome to FurEver Friends, your ultimate destination for managing animals in the shelter and finding them loving homes! 🏠🐶🐱
+Welcome to Nexus Pet Portal, your ultimate destination for managing animals in the shelter and finding them loving homes! 🏠🐶🐱
 
-FurEver Friends is a heartwarming Animal Shelter Management System designed to simplify the process of caring for and finding homes for shelter animals. Our system provides a seamless platform for shelter administrators to manage animals, update their adoption statuses, and maintain records efficiently.
+Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to simplify the process of caring for and finding homes for shelter animals. Our system provides a seamless platform for shelter administrators to manage animals, update their adoption statuses, and maintain records efficiently.
 
 # Table of Contents
 
-- [FurEver Friends 🐾](#-furever-friends-)
+- [Nexus Pet Portal 🐾](#-nexus-pet-portal-)
 - [Features 🌟](#features-)
 - [Installation 🚀](#installation-)
 - [Setting Up MongoDB 🍃](#setting-up-mongodb-)
@@ -29,13 +29,13 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
 1. **Clone the Repository**:
 
     ```
-    git clone https://github.com/tylerlight071/FurEver-Friends.git
+    git clone https://github.com/tylerlight071/Nexus-Pet-Portal.git
     ```
 
 2. **Navigate to the Repository**:
 
     ```
-    cd FurEver_Friends
+    cd Nexus_Pet_Portal
     ```
 
 3. **Install the required dependencies**
@@ -46,7 +46,7 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
 4. **Run the Application**:
 
     ```
-    python FurEver_Friends.py
+    python N_P_P.py
     ```  
 **or download the latest release**
 
