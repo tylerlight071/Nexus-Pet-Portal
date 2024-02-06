@@ -39,15 +39,16 @@ Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to 
     ```
 
 3. **Install the required dependencies**
-    '''
+    ```
     pip install -r requirements.txt
-    '''
+    ```
     
 4. **Run the Application**:
 
     ```
     python N_P_P.py
     ```  
+
 **or download the latest release**
 
 1. **Go to releases**
