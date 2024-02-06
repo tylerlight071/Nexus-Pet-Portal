@@ -200,11 +200,13 @@ def delete_animal(animal_name):
                 print(Fore.GREEN + f"\nSuccessfully deleted {animal_name} from the database." + Style.RESET_ALL)
                 time.sleep(2)
                 clear_screen()
+                print_animal_table(load_animal_data(animals_collection))
                 return True
             else:
                 print(f"Failed to delete {animal_name} from the database.")
                 time.sleep(2)
                 clear_screen()
+                print_animal_table(load_animal_data(animals_collection))
                 return False
         
         else:  # Multiple animals with the same name
