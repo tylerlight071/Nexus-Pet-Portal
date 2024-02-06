@@ -63,9 +63,11 @@ def main():
                             option_counter += 1
                         
                         # Display Notifications option with the correct number
+                        notifications_option = option_counter
                         print(f"{option_counter}. " + Fore.GREEN + "🔔 Notifications" + Style.RESET_ALL)
                         option_counter += 1
 
+                        logout_option = option_counter
                         # Display Logout option with the correct number
                         print (f"{option_counter}. " + Fore.YELLOW + "🔐 Logout" + Style.RESET_ALL)
                         option = input("\nPlease select an option: ")
@@ -79,31 +81,26 @@ def main():
                             # Client Database
                         elif option == '2' and user_level >= 2:
                             log_action(current_user, "Entered 'Client Database'")
-                            time.sleep(2)
                             print("This feature is coming soon.")
+                            time.sleep(2)
                             
                             # Staff Portal
-                        elif option == '3' and user_level >= 3:
+                        elif option == '3' and user_level == 3:
                             log_action(current_user, "Entered 'Staff Portal'")
-                            time.sleep(2)
                             print("This feature is coming soon.")
+                            time.sleep(2)
                             
                             # Notifications
-                        elif option == '4' and user_level >= 3:
-                            log_action(current_user, "Entered 'Notifications'")
-                            time.sleep(2)
-                            print("This feature is coming soon.")
-
-                        elif option == '2' and user_level == 1:
+                        elif option == str(notifications_option):
                             log_action(current_user, "Entered 'Notifications'")
                             print("This feature is coming soon.")
                             time.sleep(2)
 
                             # Logout
-                        elif option == str(option_counter) and user_level >= 1:
+                        elif option == str(logout_option):
+                            log_action(current_user, "Logged out")
                             print("\nLogging out...")
                             time.sleep(2)
-                            log_action(current_user, f"Logged Out")
                             clear_screen()
                             break
                         
