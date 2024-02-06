@@ -209,4 +209,3 @@ def view_available_animals():
             print("\nInvalid input. Please choose one of the options.")
             time.sleep(2)
             clear_screen()
-
