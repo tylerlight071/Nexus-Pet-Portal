@@ -133,4 +133,3 @@ def delete_user():
             print(Fore.RED + f"\nUser '{username}' not found." + Style.RESET_ALL)
 
         time.sleep(2)
-

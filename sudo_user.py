@@ -92,4 +92,3 @@ def sudo_user():
     print("\nExiting...")
     time.sleep(2)
     exit()
-           
