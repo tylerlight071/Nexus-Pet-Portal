@@ -34,7 +34,7 @@ def main():
     try:
         while True:
             # Display main menu options
-            print(Fore.CYAN + "\n🐕 Welcome to FurEver Friends Management System! 🐈" + Style.RESET_ALL)
+            print(Fore.CYAN + "\n🐕 Welcome to Nexus Pet Portal! 🐈" + Style.RESET_ALL)
             print("\n1. " + Fore.GREEN + "Login" + Style.RESET_ALL)
             print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
             choice = input("\nPlease select an option: ")
