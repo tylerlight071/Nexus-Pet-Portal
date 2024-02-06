@@ -18,14 +18,14 @@ def print_animal_table_with_index(animals):
     # Displays the table of animals with index numbers
     clear_screen()
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
-    print("+------------------------------------------------------------------------------+")
-    print("| " + Fore.YELLOW + "Index " + Style.RESET_ALL + "| " + Fore.YELLOW + "Name                 " + Style.RESET_ALL +                  "| " + Fore.YELLOW + "Species " + Style.RESET_ALL +  "| " + Fore.YELLOW + "Breed                " + Style.RESET_ALL +                "| " + Fore.YELLOW + "Gender " + Style.RESET_ALL + "| " + Fore.YELLOW + "Age" + Style.RESET_ALL + " |")
-    print("+------------------------------------------------------------------------------+")
+    print("+---------------------------------------------------------------------------------+")
+    print("| " + Fore.YELLOW + "Index    " + Style.RESET_ALL + "| " + Fore.YELLOW + "Name                 " + Style.RESET_ALL +                  "| " + Fore.YELLOW + "Species " + Style.RESET_ALL +  "| " + Fore.YELLOW + "Breed                " + Style.RESET_ALL +                "| " + Fore.YELLOW + "Gender " + Style.RESET_ALL + "| " + Fore.YELLOW + "Age" + Style.RESET_ALL + " |")
+    print("+---------------------------------------------------------------------------------+")
 
     for i, animal in enumerate(animals, 1):
-        print(f"| {i}     | {animal['name'].ljust(20)} | {animal['species'].ljust(7)} | {animal['breed'].ljust(20)} | {animal['gender'].ljust(6)} | {str(animal['age']).ljust(3)} |")
+        print(f"| {i}        | {animal['name'].ljust(20)} | {animal['species'].ljust(7)} | {animal['breed'].ljust(20)} | {animal['gender'].ljust(6)} | {str(animal['age']).ljust(3)} |")
 
-    print("+------------------------------------------------------------------------------+")
+    print("+---------------------------------------------------------------------------------+")
 
 def search_animal_by_name():
     # Asks the user for the name of the animal to search for
