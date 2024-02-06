@@ -1,15 +1,15 @@
 import getpass
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, hash_password, verify_password
+from common_functions import clear_screen, log_action, hash_password, verify_password, get_mongodb_uri
 from admin_dashboard import admin_dashboard
 from pymongo import MongoClient
-from config import mongodb_uri
+
 
 MAX_ATTEMPTS = 3
 
 # Connect to MongoDB
-uri = mongodb_uri
+uri = get_mongodb_uri()
 client = MongoClient(uri)
 db = client['animal_rescue']
 users_collection = db['users']

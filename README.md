@@ -1,12 +1,12 @@
-# 🐾 FurEver Friends 🐾
+# 🐾 Nexus Pet Portal 🐾
 
-Welcome to FurEver Friends, your ultimate destination for managing animals in the shelter and finding them loving homes! 🏠🐶🐱
+Welcome to Nexus Pet Portal, your ultimate destination for managing animals in the shelter and finding them loving homes! 🏠🐶🐱
 
-FurEver Friends is a heartwarming Animal Shelter Management System designed to simplify the process of caring for and finding homes for shelter animals. Our system provides a seamless platform for shelter administrators to manage animals, update their adoption statuses, and maintain records efficiently.
+Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to simplify the process of caring for and finding homes for shelter animals. Our system provides a seamless platform for shelter administrators to manage animals, update their adoption statuses, and maintain records efficiently.
 
 # Table of Contents
 
-- [FurEver Friends 🐾](#-furever-friends-)
+- [Nexus Pet Portal 🐾](#-nexus-pet-portal-)
 - [Features 🌟](#features-)
 - [Installation 🚀](#installation-)
 - [Setting Up MongoDB 🍃](#setting-up-mongodb-)
@@ -29,29 +29,37 @@ FurEver Friends is a heartwarming Animal Shelter Management System designed to s
 1. **Clone the Repository**:
 
     ```
-    git clone https://github.com/tylerlight071/FurEver-Friends.git
+    git clone https://github.com/tylerlight071/Nexus-Pet-Portal.git
     ```
 
 2. **Navigate to the Repository**:
 
     ```
-    cd FurEver_Friends
+    cd Nexus_Pet_Portal
     ```
 
 3. **Install the required dependencies**
-    '''
+    ```
     pip install -r requirements.txt
-    '''
+    ```
     
 4. **Run the Application**:
 
     ```
-    python FurEver_Friends.py
-    ```
+    python N_P_P.py
+    ```  
+
+**or download the latest release**
+
+1. Go to **releases**
+2. Click on the latest version
+3. Download the exe file or the entire zip folder
+4. Extract the zip file if downloaded
+5. Run the exe file
 
 ## Setting Up MongoDB 🍃
 
-To use FurEver Friends, you need to have a MongoDB database. Here's how you can set it up:
+To use Nexus Pet Portal, you need to have a MongoDB database. Here's how you can set it up:
 
 1. **Create a MongoDB Account**:
 
@@ -82,7 +90,7 @@ To use FurEver Friends, you need to have a MongoDB database. Here's how you can 
 
 Remember to replace `<password>` in the MongoDB URI with the password of the database user you created.
 
-You can now use this MongoDB URI to connect to your MongoDB database from FurEver Friends! Everything else is automatically set up so you don't need to do anything past that point.
+You can now use this MongoDB URI to connect to your MongoDB database from Nexus Pet Portal! Everything else is automatically set up so you don't need to do anything past that point.
 
 ## First-Time Login ⚙️
 
@@ -92,14 +100,14 @@ You can now use this MongoDB URI to connect to your MongoDB database from FurEve
 
 ## System Requirements 💻
 
-FurEver Friends is developed using Python. To run this application from the source code, you need:
+Nexus Pet Portal is developed using Python. To run this application from the source code, you need:
 
 - Python 3.12 or higher
 - pip (Python Package Installer)
 
 ## Future Plans 🚀
 
-We're constantly working to improve FurEver Friends and add new features. Here are some of the updates we're planning:
+We're constantly working to improve Nexus Pet Portal and add new features. Here are some of the updates we're planning:
 
 - Animal medical records
 - User schedule for hours and events
@@ -110,7 +118,7 @@ Stay tuned for these exciting updates and more!
 
 ## Contributing 💖
 
-We welcome contributions from compassionate individuals who share our mission! If you'd like to contribute to FurEver Friends, follow these steps:
+We welcome contributions from compassionate individuals who share our mission! If you'd like to contribute to Nexus Pet Portal, follow these steps:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-name`).
@@ -126,5 +134,3 @@ tylerlightwood071@gmail.com
 ## License 📝
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-Together, let's make a difference in the lives of shelter animals and help them find their FurEver homes! 🐾✨

@@ -75,3 +75,4 @@ def get_mongodb_uri():
         with open(config_file, 'w') as configfile:
             config.write(configfile)
         return uri
+
