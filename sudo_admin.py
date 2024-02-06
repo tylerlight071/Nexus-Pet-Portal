@@ -76,5 +76,4 @@ def sudo_admin():
     time.sleep(1)
     print("\nExiting...")
     time.sleep(2)
-    exit()
-           
+    exit()    
