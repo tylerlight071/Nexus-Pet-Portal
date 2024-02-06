@@ -19,7 +19,7 @@ Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to 
 
 ## Features 🌟
 
-- **Secure Login**: Administrators can log in securely with the username `ADMIN` and password `ADMIN` on first start to access the system.
+- **Secure Login**: 
 - **Animal Management**: Add new animals to the shelter, update their information, and change adoption statuses with ease.
 - **Adoption Records**: Keep track of animals' adoption statuses and manage adoption processes seamlessly.
 - **Administrative Dashboard**: Access additional features for managing users, animals, and shelter operations effectively.
@@ -72,21 +72,26 @@ To use Nexus Pet Portal, you need to have a MongoDB database. Here's how you can
 
 3. **Create a New Cluster**:
 
-   - In your project, create a new cluster.
+   - In your project, create a deployment by clicking the '+ Create' button.
    - Choose a provider and a region.
-   - Choose a cluster tier. The free tier, M0 Sandbox, is sufficient for this project.
-   - Give your cluster a name and create it.
+   - Choose a cluster tier. The free tier, M0 Sandbox, is sufficient for this project but if you need/want to use another then you are free to.
+   - Give your cluster a name (should you wish to) and create it.
 
 4. **Create a Database User**:
 
-   - In the Database Access tab, add a new database user.
-   - Choose a username and a password. Remember these credentials as you'll need them to connect to your database.
+    - In the Security Quickstart, you are prompted to authenticate your connection.
+    - Click on 'Username and Password' and enter your username and click 'Autogenerate Secure Password'.
+    - (They may be prefilled by MongoDB using your Cloud Registration Info in which use that)
+    - Make sure you make a note of your password as you will need this in just a moment.
+    - Click 'Create User' and scroll down to the 'IP Access List' and click, 'Add My Current IP Address'.
+    - (Again, if this is prefilled, you can leave it.)
+    - Then click 'Finish and Close'
 
 5. **Get Your MongoDB URI**:
 
    - In your cluster, click on the CONNECT button.
-   - Choose "Connect your application".
-   - Copy the provided connection string (MongoDB URI).
+   - Choose 'Drivers' and under 'Driver' choose Python, and use the latest version.
+   - Ignore the 'Install your driver' and simply copy the provided connection string (MongoDB URI).
 
 Remember to replace `<password>` in the MongoDB URI with the password of the database user you created.
 
@@ -94,9 +99,11 @@ You can now use this MongoDB URI to connect to your MongoDB database from Nexus 
 
 ## First-Time Login ⚙️
 
-- To access the system for the first time, use the following credentials:
+- To access the system for the first time, use the following default credentials:
   - Username: `ADMIN`
   - Password: `ADMIN`
+
+(You will set the password to your own on first login)
 
 ## System Requirements 💻
 
@@ -109,10 +116,9 @@ Nexus Pet Portal is developed using Python. To run this application from the sou
 
 We're constantly working to improve Nexus Pet Portal and add new features. Here are some of the updates we're planning:
 
-- Animal medical records
-- User schedule for hours and events
-- Notifications in app
-- Website intergration
+- User Schedules / Calendar to list upcoming events like appointments
+- GUI instead of terminal-based
+- Integrated Local Host Website 
 
 Stay tuned for these exciting updates and more!
 
