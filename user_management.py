@@ -1,5 +1,4 @@
 import time
-import json
 from colorama import Fore, Style
 from common_functions import clear_screen, hash_password, get_mongodb_uri
 from pymongo import MongoClient

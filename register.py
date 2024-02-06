@@ -1,5 +1,4 @@
 import getpass
-import json
 import time
 from colorama import Fore, Style
 from common_functions import clear_screen, hash_password, get_mongodb_uri

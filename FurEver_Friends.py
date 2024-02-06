@@ -1,6 +1,4 @@
 import time
-import os
-import configparser
 from sys import exit
 from colorama import Fore, Style
 from view_animals import view_animals
