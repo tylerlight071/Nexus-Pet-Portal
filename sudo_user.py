@@ -24,6 +24,12 @@ def sudo_user():
         username = input("\nEnter your username: ")
         password = getpass.getpass("Enter your password: ")
 
+        if not username or not password:
+            print(Fore.RED + "\nUsername and password are required." + Style.RESET_ALL)
+            time.sleep(2)
+            clear_screen()
+            continue
+
         user = users_collection.find_one({'username': username})
 
         if user:
@@ -37,7 +43,12 @@ def sudo_user():
                 if username == "ADMIN":
                     print("\nNot a valid username")
                     clear_screen()
-                    sudo_user()
+                    return username
+                
+                elif username == None:
+                    print("\nNot a valid username")
+                    clear_screen()
+                    sudo_user
                     return username
 
                 # Notify about user verification for high level users
