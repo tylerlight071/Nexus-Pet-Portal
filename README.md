@@ -10,7 +10,7 @@ Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to 
 - [Features 🌟](#features-)
 - [Installation 🚀](#installation-)
 - [Setting Up MongoDB 🍃](#setting-up-mongodb-)
-- [First-Time Login ⚙️](#first-time-login-)
+- [First-Time Login ⚙️](#first-time-login-%EF%B8%8F)
 - [System Requirements 💻](#system-requirements-)
 - [Future Plans 🚀](#future-plans-)
 - [Contributing 💖](#contributing-)
