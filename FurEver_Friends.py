@@ -1,14 +1,9 @@
 import time
-import os
-import configparser
 from sys import exit
 from colorama import Fore, Style
 from view_animals import view_animals
-from add_animal import add_animal
-from customer_adoption_form import view_available_animals
 from common_functions import clear_screen, log_action, hash_password, get_mongodb_uri
 from login import login
-from edit_animal_entries import modify_animal
 from pymongo import MongoClient
 
 get_mongodb_uri()
@@ -53,46 +48,66 @@ def main():
                         clear_screen()
                         # Display main menu after successful login
                         print(Fore.CYAN + "\n📖 Main Menu 📖" + Style.RESET_ALL)
-                        print("\n1. " + Fore.GREEN + "🔎 View all animals" + Style.RESET_ALL)
+                        print("\n1. " + Fore.GREEN + "🐶 Animal Database" + Style.RESET_ALL)
 
                         # Initialize option counter
                         option_counter = 2
 
                         # Adjust options based on user level
                         if user_level >= 2:
-                            print(f"{option_counter}. " + Fore.GREEN + "🐶 Add a new animal" + Style.RESET_ALL)
+                            print(f"{option_counter}. " + Fore.GREEN + "🧑 Client Database" + Style.RESET_ALL)
                             option_counter += 1
+                            
                         if user_level >= 3:
-                            print(f"{option_counter}. " + Fore.GREEN + "🏡 Customer Adoption Form" + Style.RESET_ALL)
+                            print(f"{option_counter}. " + Fore.GREEN + "👤 Staff Portal" + Style.RESET_ALL)
                             option_counter += 1
-                        if user_level >= 3:
-                            print(f"{option_counter}. " + Fore.GREEN + "🗒️ Edit animal entries" + Style.RESET_ALL)
-                            option_counter += 1
+                        
+                        # Display Notifications option with the correct number
+                        print(f"{option_counter}. " + Fore.GREEN + "🔔 Notifications" + Style.RESET_ALL)
+                        option_counter += 1
 
                         # Display Logout option with the correct number
                         print (f"{option_counter}. " + Fore.YELLOW + "🔐 Logout" + Style.RESET_ALL)
                         option = input("\nPlease select an option: ")
 
+                        # Animal Database
                         if option == '1':
-                            time.sleep(1)
                             log_action(current_user, "Entered, 'Animal Database" )
+                            time.sleep(2)
                             view_animals()
+                            
+                            # Client Database
                         elif option == '2' and user_level >= 2:
-                            time.sleep(1)
-                            log_action(current_user, "Entered 'Add an animal'")
-                            add_animal()
+                            log_action(current_user, "Entered 'Client Database'")
+                            time.sleep(2)
+                            print("This feature is coming soon.")
+                            
+                            # Staff Portal
                         elif option == '3' and user_level >= 3:
-                            time.sleep(1)
-                            view_available_animals()
+                            log_action(current_user, "Entered 'Staff Portal'")
+                            time.sleep(2)
+                            print("This feature is coming soon.")
+                            
+                            # Notifications
                         elif option == '4' and user_level >= 3:
-                            time.sleep(1)
-                            modify_animal()
+                            log_action(current_user, "Entered 'Notifications'")
+                            time.sleep(2)
+                            print("This feature is coming soon.")
+
+                        elif option == '2' and user_level == 1:
+                            log_action(current_user, "Entered 'Notifications'")
+                            print("This feature is coming soon.")
+                            time.sleep(2)
+
+                            # Logout
                         elif option == str(option_counter) and user_level >= 1:
                             print("\nLogging out...")
                             time.sleep(2)
                             log_action(current_user, f"Logged Out")
                             clear_screen()
                             break
+                        
+                            # Invalid option
                         else:
                             print(Fore.RED + "\nInvalid option. Please try again.")
                             time.sleep(2)
@@ -102,10 +117,12 @@ def main():
                 print("\nExiting...")
                 time.sleep(2)
                 exit()
+    
             else:
                 print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
                 time.sleep(2)
                 clear_screen()
+    
     except KeyboardInterrupt:
         print("\n\nExiting...")
         time.sleep(2)
