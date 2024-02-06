@@ -59,7 +59,7 @@ Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to 
 
 ## Setting Up MongoDB 🍃
 
-To use FurEver Friends, you need to have a MongoDB database. Here's how you can set it up:
+To use Nexus Pet Portal, you need to have a MongoDB database. Here's how you can set it up:
 
 1. **Create a MongoDB Account**:
 
@@ -90,7 +90,7 @@ To use FurEver Friends, you need to have a MongoDB database. Here's how you can 
 
 Remember to replace `<password>` in the MongoDB URI with the password of the database user you created.
 
-You can now use this MongoDB URI to connect to your MongoDB database from FurEver Friends! Everything else is automatically set up so you don't need to do anything past that point.
+You can now use this MongoDB URI to connect to your MongoDB database from Nexus Pet Portal! Everything else is automatically set up so you don't need to do anything past that point.
 
 ## First-Time Login ⚙️
 
@@ -100,14 +100,14 @@ You can now use this MongoDB URI to connect to your MongoDB database from FurEve
 
 ## System Requirements 💻
 
-FurEver Friends is developed using Python. To run this application from the source code, you need:
+Nexus Pet Portal is developed using Python. To run this application from the source code, you need:
 
 - Python 3.12 or higher
 - pip (Python Package Installer)
 
 ## Future Plans 🚀
 
-We're constantly working to improve FurEver Friends and add new features. Here are some of the updates we're planning:
+We're constantly working to improve Nexus Pet Portal and add new features. Here are some of the updates we're planning:
 
 - Animal medical records
 - User schedule for hours and events
@@ -118,7 +118,7 @@ Stay tuned for these exciting updates and more!
 
 ## Contributing 💖
 
-We welcome contributions from compassionate individuals who share our mission! If you'd like to contribute to FurEver Friends, follow these steps:
+We welcome contributions from compassionate individuals who share our mission! If you'd like to contribute to Nexus Pet Portal, follow these steps:
 
 1. Fork the repository.
 2. Create a new branch (`git checkout -b feature-name`).
@@ -134,5 +134,3 @@ tylerlightwood071@gmail.com
 ## License 📝
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-Together, let's make a difference in the lives of shelter animals and help them find their FurEver homes! 🐾✨
