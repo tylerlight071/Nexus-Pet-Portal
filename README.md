@@ -51,11 +51,11 @@ Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to 
 
 **or download the latest release**
 
-1. **Go to releases**
-2. **Click on the latest version**
-3. **Download the exe file or the entire zip folder**
-4. **Extract the zip file if downloaded**
-5. **Run the exe file**
+1. Go to **releases**
+2. Click on the latest version
+3. Download the exe file or the entire zip folder
+4. Extract the zip file if downloaded
+5. Run the exe file
 
 ## Setting Up MongoDB 🍃
 
