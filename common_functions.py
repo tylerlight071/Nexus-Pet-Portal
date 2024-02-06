@@ -3,10 +3,14 @@ from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 import datetime
 import configparser
+import subprocess
 
 def clear_screen():
     # Clears the terminal screen based on the OS type
-    os.system('cls' if os.name == 'nt' else 'clear')
+    if os.name == 'nt':
+        subprocess.run('cls', shell=True, check=True)
+    else:
+        subprocess.run('clear', shell=True, check=True)
 
 def load_animal_data(animals_collection):
     animals = []
