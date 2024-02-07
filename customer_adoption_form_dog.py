@@ -103,12 +103,7 @@ def adopt_dog_form():
                     garden_fenced = get_input("Is your garden fully fenced? (yes/no): " + Style.RESET_ALL).strip().lower()
                     garden_access = get_input("How is the garden accessed? " + Style.RESET_ALL).strip()
                 
-                elif garden == "communal":
-                    garden_size = "N/A"
-                    garden_fenced = "N/A"
-                    garden_access = "N/A"
-                
-                elif garden == "no":
+                elif garden == "communal" or garden == "no":
                     garden_size = "N/A"
                     garden_fenced = "N/A"
                     garden_access = "N/A"
