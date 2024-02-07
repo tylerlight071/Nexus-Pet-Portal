@@ -72,7 +72,7 @@ def print_insufficient_clearance(username):
     time.sleep(1)
     print(Fore.RED + "\nExiting..." + Style.RESET_ALL)
     time.sleep(1)
-    log_action(username, f"Tried to access without clearance")
+    log_action(username, "Tried to access without clearance")
 
 def print_incorrect_password(username, attempts):
     print(Fore.RED + "\nIncorrect password." + Style.RESET_ALL)
