@@ -5,6 +5,7 @@ from view_animal_profile import view_animals_full
 from sudo_user_level_1 import sudo_user
 from edit_animal_entries import modify_animal
 from add_animal import add_animal
+from tables import print_animal_table
 from pymongo import MongoClient
 
 # Connect to MongoDB
@@ -13,29 +14,6 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 animals_collection = db['animals']
-
-
-
-# Function to print the table of animals
-def print_animal_table(animals):
-    # Print table header
-    print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
-    print("+-------------------------------------------------------------------------------------------+")
-    print("| " + Fore.YELLOW + "Name".ljust(20) + Style.RESET_ALL + "| " + Fore.YELLOW + "Species".ljust(8) + Style.RESET_ALL + "| " + Fore.YELLOW + "Breed".ljust(25) + Style.RESET_ALL + "| " + Fore.YELLOW + "Gender".ljust(15) + Style.RESET_ALL + "| " + Fore.YELLOW + "Age".ljust(1) + Style.RESET_ALL + " | " + Fore.YELLOW + "Adopted".ljust(7) + Style.RESET_ALL + " |")
-    print("+-------------------------------------------------------------------------------------------+")
-
-    # Print each animal's data row by row
-    for animal in animals:
-        name_column = f"| {animal['name'].ljust(20)}"
-        species_column = f"| {animal['species'].ljust(8)}"
-        breed_column = f"| {animal['breed'].ljust(25)}"
-        gender_column = f"| {animal['gender'].ljust(15)}"
-        age_column = f"|  {str(animal['age']).ljust(3)}"
-        adopted_column = f"| {str(animal['adopted']).ljust(7)} |"
-        print(name_column + species_column + breed_column + gender_column + age_column + adopted_column)
-
-    # Print table footer
-    print("+-------------------------------------------------------------------------------------------+")
 
 # Function to filter animals based on user input
 def filter_animals(animals):

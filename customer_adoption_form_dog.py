@@ -11,7 +11,12 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 customers_collection = db['customers']
- 
+
+def section_clear():
+    print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
+    time.sleep(2)
+    clear_screen()
+
 def adopt_dog_form():
         # Input validation loop
         while True:
@@ -72,9 +77,7 @@ def adopt_dog_form():
                 elif chosen_animal == 'no':
                     chosen_animal = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nHousing Details" + Style.RESET_ALL)                
                 own_rent = get_input("\nDo you own or rent your home? ").strip()
@@ -110,9 +113,7 @@ def adopt_dog_form():
                     garden_fenced = "N/A"
                     garden_access = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nHousehold Details" + Style.RESET_ALL)
 
@@ -146,9 +147,7 @@ def adopt_dog_form():
                 elif visiting_children == 'no':
                     visiting_children_age = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nOther Pets" + Style.RESET_ALL)
 
@@ -188,9 +187,7 @@ def adopt_dog_form():
                 elif other_animals == 'yes':
                     other_animals_type = get_input(Fore.YELLOW + "What type of animals do you have? " + Style.RESET_ALL).strip()
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nExercise and Routine" + Style.RESET_ALL)
                 weekday_exercise = get_input("\nHow often will the dog be exercised on weekdays? ").strip()
@@ -199,9 +196,7 @@ def adopt_dog_form():
                 how_often_alone = get_input("How often will the dog be left alone? ").strip()
                 alone_time = get_input("How long will the dog be left alone each day? ").strip()
                 
-                print(Fore.GREEN + "Section Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nFuture Plans" + Style.RESET_ALL)
                 moving_plans = get_input("\nDo you have any plans to move in the next 6 months? (yes/no): ").strip().lower()
@@ -232,9 +227,7 @@ def adopt_dog_form():
                 elif holiday_plans == 'no':
                     holiday_timeframe = "N/A"
 
-                print(Fore.GREEN + "Section Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nIdeal Dog" + Style.RESET_ALL)
                 print(Fore.GREEN + "\nWhat type of dog are you looking for? " + Style.RESET_ALL)
@@ -258,9 +251,7 @@ def adopt_dog_form():
                 ideal_dog_training = get_input("Training Needs: ").strip()
                 ideal_dog_health = get_input("Health Needs: ").strip()
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nOther Requirements" + Style.RESET_ALL)
 
@@ -302,9 +293,7 @@ def adopt_dog_form():
                 elif experience == 'no':
                     experience = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nConsent to Terms" + Style.RESET_ALL)
                 signature = get_input("\nPlease enter your full name as a signature: ").strip()

@@ -1,7 +1,8 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, get_mongodb_uri, print_animal_table, load_animal_data
+from common_functions import clear_screen, log_action, get_mongodb_uri, load_animal_data
 from sudo_user import sudo_user
+from tables import print_animal_table
 from pymongo import MongoClient
 
 # Connect to MongoDB

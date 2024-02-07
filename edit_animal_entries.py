@@ -1,5 +1,6 @@
 import time
-from common_functions import clear_screen, get_mongodb_uri, print_animal_table, load_animal_data
+from common_functions import clear_screen, get_mongodb_uri, load_animal_data
+from tables import print_animal_table
 from colorama import Fore, Style
 from pymongo import MongoClient
 from sudo_user import sudo_user
@@ -11,17 +12,44 @@ client = MongoClient(uri)
 db = client['animal_rescue']
 animals_collection = db['animals']
 
+FIELDS = {
+    1: "name",
+    2: "species",
+    3: "breed",
+    4: "gender",
+    5: "age"
+}
+
+def get_animal_name():
+    return input(Fore.CYAN + "Enter the name of the animal to modify (enter 'exit' to leave): " + Style.RESET_ALL).strip().capitalize()
+
+def get_field_choice():
+    return input("Enter the number of the field to modify or 'exit' to cancel: ")
+
+def get_new_value(field):
+    return input(f"Enter new {field}: ").strip().capitalize()
+
+def update_animal_field(animal, field, new_value):
+    if new_value != animal[field]:
+        animals_collection.update_one({'name': animal['name']}, {'$set': {field: new_value}})
+        print(Fore.GREEN + f"\n{field.capitalize()} updated successfully." + Style.RESET_ALL)
+        time.sleep(2)
+        clear_screen()
+        print_animal_table(load_animal_data(animals_collection))
+    else:
+        print(Fore.YELLOW + f"\nNew {field} is the same as the current one. No update performed." + Style.RESET_ALL)
+        time.sleep(2)
+        clear_screen()
+        print_animal_table(load_animal_data(animals_collection))
 
 def modify_animal():
-    
     animals = load_animal_data(animals_collection)
 
     clear_screen()
     sudo_user()
     print(Fore.CYAN + "\n🐾 Modify Animal 🐾\n" + Style.RESET_ALL)
 
-    # Input the name of the animal to modify
-    animal_name = input(Fore.CYAN + "Enter the name of the animal to modify (enter 'exit' to leave): " + Style.RESET_ALL).strip().capitalize()
+    animal_name = get_animal_name()
 
     if animal_name.lower() == 'exit':
         print(Fore.YELLOW + "\nExiting..." + Style.RESET_ALL)
@@ -29,8 +57,7 @@ def modify_animal():
         clear_screen()
         print_animal_table(animals)
         return
-
-    # Search for the animal in the database
+    
     animal = animals_collection.find_one({'name': animal_name})
 
     if animal:
@@ -42,7 +69,7 @@ def modify_animal():
         print("5. Age")
         print(Style.RESET_ALL)
 
-        field_choice = input("Enter the number of the field to modify or 'exit' to cancel: ")
+        field_choice = get_field_choice()
 
         if field_choice.lower() == 'exit':
             print(Fore.YELLOW + "\nExiting..." + Style.RESET_ALL)
@@ -51,52 +78,11 @@ def modify_animal():
         
         if field_choice.isdigit():
             field_choice = int(field_choice)
-            if field_choice == 1:
-                new_value = input("Enter new name: ").strip()
-                if new_value != animal['name']:
-                    animals_collection.update_one({'name': animal_name}, {'$set': {'name': new_value}})
-                    print(Fore.GREEN + "\nName updated successfully." + Style.RESET_ALL)
-                else:
-                    print(Fore.YELLOW + "\nNew name is the same as the current one. No update performed." + Style.RESET_ALL)
-            elif field_choice == 2:
-                new_value = input("Enter new species: ").strip()
-                if new_value != animal['species']:
-                    animals_collection.update_one({'name': animal_name}, {'$set': {'species': new_value}})
-                    print(Fore.GREEN + "\nSpecies updated successfully." + Style.RESET_ALL)
-                else:
-                    print(Fore.YELLOW + "\nNew species is the same as the current one. No update performed." + Style.RESET_ALL)
-            elif field_choice == 3:
-                new_value = input("Enter new breed: ").strip()
-                if new_value != animal['breed']:
-                    animals_collection.update_one({'name': animal_name}, {'$set': {'breed': new_value}})
-                    print(Fore.GREEN + "\nBreed updated successfully." + Style.RESET_ALL)
-                else:
-                    print(Fore.YELLOW + "\nNew breed is the same as the current one. No update performed." + Style.RESET_ALL)
-            elif field_choice == 4:
-                new_value = input("Enter new gender: ").strip().lower()
-                if new_value in ['male', 'female'] and new_value != animal['gender']:
-                    animals_collection.update_one({'name': animal_name}, {'$set': {'gender': new_value}})
-                    print(Fore.GREEN + "\nGender updated successfully." + Style.RESET_ALL)
-                elif new_value not in ['male', 'female']:
-                    print(Fore.RED + "\nInvalid input. Gender must be 'Male' or 'Female'." + Style.RESET_ALL)
-                else:
-                    print(Fore.YELLOW + "\nNew gender is the same as the current one. No update performed." + Style.RESET_ALL)
-            elif field_choice == 5:
-                new_value = input("Enter new age: ").strip()
-                if new_value.isdigit() and int(new_value) > 0 and int(new_value) != animal['age']:
-                    animals_collection.update_one({'name': animal_name}, {'$set': {'age': int(new_value)}})
-                    print(Fore.GREEN + "\nAge updated successfully." + Style.RESET_ALL)
-                elif not new_value.isdigit() or int(new_value) <= 0:
-                    print(Fore.RED + "Invalid age. Please enter a positive integer." + Style.RESET_ALL)
-                else:
-                    print(Fore.YELLOW + "\nNew age is the same as the current one. No update performed." + Style.RESET_ALL)
+            if field_choice in FIELDS:
+                field = FIELDS[field_choice]
+                new_value = get_new_value(field)
+                update_animal_field(animal, field, new_value)
             else:
-                print(Fore.RED + "Invalid choice." + Style.RESET_ALL)
-
-    else:
-        print(Fore.RED + "Animal not found." + Style.RESET_ALL)
-        time.sleep(2)
-        clear_screen()
-        modify_animal()
-
-    input("Press Enter to continue...")
+                print(Fore.RED + "Invalid input! Please enter a valid number." + Style.RESET_ALL)
+                time.sleep(2)
+                modify_animal()
