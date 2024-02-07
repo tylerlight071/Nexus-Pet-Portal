@@ -3,8 +3,9 @@ import time
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from colorama import Fore, Style
-from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri, print_animal_table
+from common_functions import clear_screen, log_action, get_mongodb_uri
 from sudo_user import sudo_user
+from tables import print_animal_table_with_index
 from pymongo import MongoClient
 
 # Connect to MongoDB
@@ -13,19 +14,8 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 animals_collection = db['animals']
-    
-def print_animal_table_with_index(animals):
-    # Displays the table of animals with index numbers
-    clear_screen()
-    print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
-    print("+---------------------------------------------------------------------------------+")
-    print("| " + Fore.YELLOW + "Index    " + Style.RESET_ALL + "| " + Fore.YELLOW + "Name                 " + Style.RESET_ALL +                  "| " + Fore.YELLOW + "Species " + Style.RESET_ALL +  "| " + Fore.YELLOW + "Breed                " + Style.RESET_ALL +                "| " + Fore.YELLOW + "Gender " + Style.RESET_ALL + "| " + Fore.YELLOW + "Age" + Style.RESET_ALL + " |")
-    print("+---------------------------------------------------------------------------------+")
 
-    for i, animal in enumerate(animals, 1):
-        print(f"| {i}        | {animal['name'].ljust(20)} | {animal['species'].ljust(7)} | {animal['breed'].ljust(20)} | {animal['gender'].ljust(6)} | {str(animal['age']).ljust(3)} |")
-
-    print("+---------------------------------------------------------------------------------+")
+invalid_input = "Invalid input! Please enter a valid index."
 
 def search_animal_by_name():
     # Asks the user for the name of the animal to search for
@@ -47,7 +37,7 @@ def search_animal_by_name():
             print("\nExiting search...")
             time.sleep(2)
             clear_screen()
-            view_animal_profile()
+            view_animal_profile(selected_index, selected_animal)
 
         try:
             selected_index = int(selected_index)
@@ -55,13 +45,13 @@ def search_animal_by_name():
                 selected_animal = animals[selected_index - 1]
                 view_animal_profile(selected_index, selected_animal)
             else:
-                print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+                print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
                 time.sleep(2)
-                view_animal_profile()
+                view_animal_profile(selected_index, selected_animal)
         except ValueError:
-            print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+            print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
             time.sleep(2)
-            view_animal_profile()
+            view_animal_profile(selected_index, selected_animal)
 
 def view_animal_profile(selected_index, selected_animal):
     clear_screen()
@@ -135,13 +125,13 @@ def view_animal_profile(selected_index, selected_animal):
 
             root.mainloop()
         else:
-            print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+            print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
             time.sleep(2)
-            view_animal_profile()
+            view_animal_profile(selected_index, selected_animal)
     except ValueError:
-        print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+        print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
         time.sleep(2)
-        view_animal_profile()
+        view_animal_profile(selected_index, selected_animal)
 
 def view_animals_full():
     clear_screen()

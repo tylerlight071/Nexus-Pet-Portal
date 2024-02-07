@@ -59,60 +59,64 @@ def reset_user_password(username):
         print(Fore.RED + f"\nUser '{username}' not found." + Style.RESET_ALL)
     time.sleep(2)
 
-def update_user_information():
-    # Prompt for username to update information
-    username = input("\nEnter the username to update information: ")
+def get_username():
+    return input("\nEnter the username to update information: ")
 
-    user = users_collection.find_one({'username': username})
+def get_user(username):
+    return users_collection.find_one({'username': username})
+
+def print_user_info(username, user):
+    clear_screen()  
+    print(Fore.CYAN + "\nCurrent user information:" + Style.RESET_ALL)
+    print(Fore.GREEN + f"\nUsername: {username}" + Style.RESET_ALL)
+    print(Fore.GREEN + f"User Level: {user['level']}" + Style.RESET_ALL)
+
+def get_option():
+    print("\nSelect the information you want to update:")
+    print("\n1. Username")
+    print("2. User Level")
+    print("3. Reset Password")
+    print("4. Cancel")
+    return input("\nEnter your choice: ")
+
+def update_username(username):
+    new_username = input("Enter the new username: ")
+    if not users_collection.find_one({'username': new_username}):  
+        users_collection.update_one({'username': username}, {'$set': {'username': new_username}})
+        print(Fore.GREEN + f"\nUsername updated successfully to '{new_username}'!" + Style.RESET_ALL)
+    else:
+        print(Fore.RED + f"\nUsername '{new_username}' already exists. Please choose a different username." + Style.RESET_ALL)
+
+def update_user_level(username):
+    new_level = input("Enter the new user level: ")
+    if new_level.isdigit():  # Check if the input is a valid integer
+        new_level = int(new_level)
+        users_collection.update_one({'username': username}, {'$set': {'level': new_level}})
+        print(Fore.GREEN + f"\nUser level updated successfully for '{username}'!" + Style.RESET_ALL)
+    else:
+        print(Fore.RED + "\nInvalid user level. Please enter a valid level." + Style.RESET_ALL)
+
+def update_user_information():
+    username = get_username()
+    user = get_user(username)
+
     if user and username != "ADMIN":
-        clear_screen()  
-        print(Fore.CYAN + "\nCurrent user information:" + Style.RESET_ALL)
-        print(Fore.GREEN + f"\nUsername: {username}" + Style.RESET_ALL)
-        print(Fore.GREEN + f"User Level: {user['level']}" + Style.RESET_ALL)
+        print_user_info(username, user)
+        option = get_option()
         
-        # Prompt for the information to be updated
-        print("\nSelect the information you want to update:")
-        print("\n1. Username")
-        print("2. User Level")
-        print("3. Reset Password")
-        print("4. Cancel")
-        
-        option = input("\nEnter your choice: ")
-        
-        # New Username
         if option == '1':
-            new_username = input("Enter the new username: ")
-            if not users_collection.find_one({'username': new_username}):  
-                users_collection.update_one({'username': username}, {'$set': {'username': new_username}})
-                print(Fore.GREEN + f"\nUsername updated successfully to '{new_username}'!" + Style.RESET_ALL)
-            else:
-                print(Fore.RED + f"\nUsername '{new_username}' already exists. Please choose a different username." + Style.RESET_ALL)
-        
-        # New User Level
+            update_username(username)
         elif option == '2':
-            new_level = input("Enter the new user level: ")
-            if new_level.isdigit():  # Check if the input is a valid integer
-                new_level = int(new_level)
-                users_collection.update_one({'username': username}, {'$set': {'level': new_level}})
-                print(Fore.GREEN + f"\nUser level updated successfully for '{username}'!" + Style.RESET_ALL)
-            else:
-                print(Fore.RED + "\nInvalid user level. Please enter a valid level." + Style.RESET_ALL)
-        
-        # Reset Password
+            update_user_level(username)
         elif option == '3':
             time.sleep(2)
             reset_user_password(username)
-
-        # Cancel
         elif option == '4':
             print("\nOperation canceled.")
         else:
             print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
-    
-    # Throw error if user does not exist or is ADMIN
     elif username == "ADMIN": 
         print(Fore.RED + "\nYou cannot update information for the ADMIN user." + Style.RESET_ALL)
-    
     else:
         print(Fore.RED + f"\nUser '{username}' not found." + Style.RESET_ALL)
 

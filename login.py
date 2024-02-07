@@ -1,7 +1,7 @@
 import getpass
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, hash_password, verify_password, get_mongodb_uri
+from common_functions import clear_screen, log_action, hash_password, verify_password, get_mongodb_uri, get_input
 from admin_dashboard import admin_dashboard
 from pymongo import MongoClient
 
@@ -46,14 +46,14 @@ def change_admin_password(username):
             {'$set': {'hashed_password': hashed_password}}
         )
 
-        log_action(username, f"Admin Password has been changed")
+        log_action("ADMIN", "ADMIN Password has been changed")
         print(Fore.GREEN + "\nPassword changed successfully!" + Style.RESET_ALL)
         time.sleep(2)
         clear_screen()
     else:
         # Notify the user about mismatching passwords and prompt again
         print(Fore.RED + "\nPasswords do not match. Please try again." + Style.RESET_ALL)
-        log_action("Failed attempt to access ADMIN")
+        log_action(username, "Failed attempt to access ADMIN")
         time.sleep(2)
         clear_screen()
         change_admin_password(username)
@@ -62,7 +62,7 @@ def reset_password(username):
     clear_screen()
 
     # Notify the user about changing the password
-    print(Fore.YELLOW + f"\nYour password must be changed for security reasons." + Style.RESET_ALL)
+    print(Fore.YELLOW + "\nYour password must be changed for security reasons." + Style.RESET_ALL)
 
     # Prompt user for a new password and confirmation
     while True:
@@ -109,54 +109,52 @@ def login():
         # Query user credentials from MongoDB
         user = users_collection.find_one({'username': username})
 
-        if user:
-            stored_password = user['hashed_password']
-
-            # Verify the entered password with the stored password hash
-            if verify_password(stored_password, password):
-                user_level = user['level'] 
-
-                if username == "ADMIN" and password == "ADMIN":
-                    print("\nLogging In...")
-                    time.sleep(2)
-                    change_admin_password(username)
-                    admin_dashboard()
-                    return username, user_level
-                
-                elif username == "ADMIN":
-                    log_action(username, f"ADMIN Logged In")
-                    print("\nLogging In...")
-                    time.sleep(2)
-                    admin_dashboard()
-                    return username, user_level
-                
-                elif password == "password":
-                    print("\nLogging In...")
-                    # Pass username to the reset_password function
-                    reset_password(username) 
-
-                else:
-                    print("\nLogging in...")
-                    time.sleep(2)
-                    log_action(username, f"Logged In")
-                    return username, user_level 
-                
-            else:
-                print(Fore.RED + "\nIncorrect password." + Style.RESET_ALL)
-                attempts += 1
-                time.sleep(2)
-                print(Fore.RED + f"\nRemaining attempts: {MAX_ATTEMPTS - attempts}" + Style.RESET_ALL)
-                log_action(username, "Failed login attempt")
-                time.sleep(2)
-                clear_screen()
-
+        if user and verify_password(user['hashed_password'], password):
+            return handle_successful_login(user, username, password)
         else:
-            print(Fore.RED + "\nUsername not found. Please try again." + Style.RESET_ALL)
-            time.sleep(2)
-            clear_screen()
-
-    print(Fore.RED + "\nMaximum login attempts reached" + Style.RESET_ALL)
+            handle_failed_login(username, password, attempts)
+            attempts += 1
+        
+    # If user exceeds maximum login attempts
+    print(Fore.RED + "\nYou have exceeded the maximum number of login attempts." + Style.RESET_ALL)
     time.sleep(1)
-    print("\nExiting...")
+    log_action(username, "Failed to login")
+    print("Exiting...")
     time.sleep(2)
     exit()
+
+def get_user_credentials():
+    print("\n👤 User Login 👤")
+    username = input("\nEnter your username: ")
+    password = getpass.getpass("Enter your password: ")
+    return username, password
+
+def handle_successful_login(user, username, password):
+    user_level = user['level']
+    print("\nLogging in...")
+    time.sleep(2)
+
+    if username == "ADMIN":
+        if password == "ADMIN":
+            change_admin_password(username)
+            admin_dashboard()
+        else:
+            admin_dashboard()
+    elif password == "password":
+        reset_password(username)
+    else:
+        log_action(username, "Logged in")
+
+    return username, user_level
+
+def handle_failed_login(user, username, attempts):
+    if user:
+        print(Fore.RED + "\nInvalid password. Please try again." + Style.RESET_ALL)
+        log_action(username, "Failed to login")
+    else:
+        print(Fore.RED + "\nUser not found. Please try again." + Style.RESET_ALL)
+        log_action(username, "Failed to be found")
+    
+    time.sleep(2)
+    print(Fore.RED + f"\nYou have {MAX_ATTEMPTS - attempts} attempts remaining." + Style.RESET_ALL)
+    clear_screen()
