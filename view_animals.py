@@ -14,13 +14,10 @@ client = MongoClient(uri)
 db = client['animal_rescue']
 animals_collection = db['animals']
 
+
+
 # Function to print the table of animals
 def print_animal_table(animals):
-    """
-    Print a formatted table of animals with their attributes.
-    Args:
-        animals (dict): Dictionary containing animal data.
-    """
     # Print table header
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
     print("+-------------------------------------------------------------------------------------------+")
@@ -42,11 +39,7 @@ def print_animal_table(animals):
 
 # Function to filter animals based on user input
 def filter_animals(animals):
-    """
-    Filter animals based on user-defined criteria.
-    Args:
-        animals (list): List containing animal data as dictionaries.
-    """
+    
     # Initialize variables
     species_query = None
     breed_query = None
@@ -89,12 +82,7 @@ def filter_animals(animals):
 
 # Function to search animals based on user input
 def search_animals(animals, current_user):
-    """
-    Search animals based on user input criteria.
-    Args:
-        animals (list): List of dictionaries containing animal data.
-        current_user (str): Username of the current user.
-    """
+   
     while True:
         clear_screen()
         print(Fore.LIGHTCYAN_EX + "\n🔎 SEARCH ANIMALS 🔍" + Style.RESET_ALL)
@@ -158,15 +146,7 @@ def search_animals(animals, current_user):
 
 # Function to sort animals based on user input
 def sort_animals(animals, key='name', reverse=False):
-    """
-    Sort animals based on a specified key.
-    Args:
-        animals (list): List of dictionaries containing animal data.
-        key (str): Key to sort the animals by (default is 'name').
-        reverse (bool): Whether to sort in reverse order (default is False).
-    Returns:
-        list: Sorted list of dictionaries containing animal data.
-    """
+
     if key == 'name':
         sorted_animals = sorted(animals, key=lambda x: x['name'], reverse=reverse)
     elif key == 'age':
@@ -178,11 +158,7 @@ def sort_animals(animals, key='name', reverse=False):
     return sorted_animals
 
 def delete_animal(animal_name):
-    """
-    Delete an animal from the database.
-    Args:
-        animal_name (str): The name of the animal to delete.
-    """
+
     try:
         # Check if there are multiple animals with the same name
         animal_count = animals_collection.count_documents({"name": animal_name})
@@ -252,16 +228,66 @@ def delete_animal(animal_name):
         print(f"An error occurred: {e}")
         return False  
 
+def modify_animal_database():
+
+    animals = load_animal_data(animals_collection)
+
+    print(Fore.CYAN + "\n🐶 Modify Animal Database 🐶" + Style.RESET_ALL)
+    print("\n1. " + Fore.GREEN + "Add Animal" + Style.RESET_ALL)
+    print("2. " + Fore.GREEN + "Update Animal Entry" + Style.RESET_ALL)
+    print("3. " + Fore.GREEN + "Delete Animal" + Style.RESET_ALL)
+    print("4. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+
+    choice = input("\nPlease select an option: ")
+
+    # Add Animal
+    if choice == '1':
+        time.sleep(2)
+        add_animal()
+    
+    # Update Animal Entry
+    elif choice == '2':
+        time.sleep(2)
+        modify_animal()
+    
+    # Delete Animal
+    elif choice == '3':
+        current_user = sudo_user()
+        
+        clear_screen()
+        print_animal_table(animals)
+        animal_name = input("\nEnter the name of the animal to delete: ")
+        if delete_animal(animal_name):
+            log_action(current_user, f"Deleted {animal_name} from the database")
+            return 
+        
+        else:
+            log_action(current_user, f"Failed to delete {animal_name} from the database")
+            return
+
+    # Exit   
+    elif choice == '4':
+        print("\nExiting Modify Database...")
+        time.sleep(1)
+        clear_screen()
+        return
+    
+    else:
+        print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
+        time.sleep(2)
+        clear_screen()
+        print_animal_table(animals)
+
+    
+
 # Function to view animals and interact with options
 def view_animals():
-    """
-    View animals and interact with different options.
-    """
+    
+    animals = load_animal_data(animals_collection)
+
     current_user = sudo_user()
 
     # Load animal data
-    animals = load_animal_data(animals_collection)
-
     print_animal_table(animals)
 
     while True:
@@ -272,10 +298,8 @@ def view_animals():
         
         if current_user['level'] >= 2:
             print("3. " + Fore.GREEN + "View animal profile" + Style.RESET_ALL)
-            print("4. " + Fore.GREEN + "Add animal" + Style.RESET_ALL)
-            print("5. " + Fore.GREEN + "Update animal entry" + Style.RESET_ALL)
-            print("6. " + Fore.GREEN + "Delete animal" + Style.RESET_ALL)
-            print("7. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+            print("4. " + Fore.GREEN + "Modify Database" + Style.RESET_ALL)
+            print("5. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
         else:
             print("3. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
 
@@ -326,7 +350,6 @@ def view_animals():
                 clear_screen()
                 print_animal_table(animals)
 
-
         # View Animal Profile
         elif user_input == '3':
             if current_user['level'] >= 2:
@@ -338,46 +361,15 @@ def view_animals():
                 clear_screen()
                 return
 
-        # Add Animal
         elif user_input == '4':
             if current_user['level'] >= 2:
-                add_animal()
-            else:
-                print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
+                log_action(current_user, "Entered 'Modify Animal Database'")
                 time.sleep(2)
                 clear_screen()
-                print_animal_table(animals)
-            
-        # Update Animal Entry    
-        elif user_input == '5':
-            if current_user['level'] >= 2:
-                modify_animal()
-            else:
-                print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
-                print_animal_table(animals)
-                
-        # Delete Animal
-        elif user_input == '6':
-            if current_user['level'] >= 2:
-                sudo_user()
-                clear_screen()
-                print_animal_table(animals)
-                animal_name = input("\nEnter the name of the animal to delete: ")
-                if delete_animal(animal_name):
-                    log_action(current_user, f"Deleted {animal_name} from the database")
-                    continue  # Continue to the next iteration if deletion was successful
-                else:
-                    log_action(current_user, f"Failed to delete {animal_name} from the database")
-            else:
-                print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
-                print_animal_table(animals) 
+                modify_animal_database()
             
         # Exit Database 
-        elif user_input == '7' and current_user['level'] >= 2:
+        elif user_input == '5' and current_user['level'] >= 2:
             log_action(current_user, "Exited 'View Animal Database'")
             print("\nExiting...")
             time.sleep(2)

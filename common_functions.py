@@ -4,6 +4,7 @@ from argon2.exceptions import VerifyMismatchError
 import datetime
 import configparser
 import subprocess
+import time
 from colorama import Fore, Style
 
 def clear_screen():
@@ -80,15 +81,21 @@ def get_mongodb_uri():
         with open(config_file, 'w') as configfile:
             config.write(configfile)
         return uri
+    
+def get_input(prompt):
+    while True:
+        value = input(prompt)
+        if value:  # if the string is not empty
+            return value
+        else:
+            print(Fore.RED + "\nThis field cannot be left blank. Please try again." + Style.RESET_ALL)
+            time.sleep(2)
+
 
 #! One time use until proper implementation
 # Function to print the table of animals
 def print_animal_table(animals):
-    """
-    Print a formatted table of animals with their attributes.
-    Args:
-        animals (dict): Dictionary containing animal data.
-    """
+    
     # Print table header
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
     print("+-------------------------------------------------------------------------------------------+")
