@@ -123,7 +123,7 @@ def login():
     time.sleep(2)
     exit()
 
-def get_user_credentials(username, password):
+def get_user_credentials():
     print("\n👤 User Login 👤")
     username = input("\nEnter your username: ")
     password = getpass.getpass("Enter your password: ")
