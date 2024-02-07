@@ -13,9 +13,7 @@ animals_collection = db['animals']
 customers_collection = db['customers']
 
 def display_available_animals():
-    """
-    Display a formatted table of available animals for adoption.
-    """
+    
     clear_screen()
     print("\n🐾 " + Fore.CYAN + "Available Animals for Adoption" + Style.RESET_ALL + " 🐾")
     print("+------------------------------------------------------------------------------+")
@@ -30,9 +28,7 @@ def display_available_animals():
     print("+------------------------------------------------------------------------------+")
 
 def search_animals_by_name(name):
-    """
-    Search for animals by name and display them with their original index numbers.
-    """
+  
     clear_screen()
     print("\n🐾 " + Fore.CYAN + "Available Animals for Adoption" + Style.RESET_ALL + " 🐾")
     print("+------------------------------------------------------------------------------+")
@@ -57,9 +53,7 @@ def search_animals_by_name(name):
     return animals
 
 def adopt_animal(selected_animal):
-    """
-    Allow staff to assist customers in adopting an available animal.
-    """
+    
     if selected_animal:
         print("\nPlease provide the following information for adoption:")
         # Input validation loop
@@ -146,9 +140,7 @@ def adopt_animal(selected_animal):
         clear_screen()
 
 def view_available_animals():
-    """
-    Display available animals and provide options to assist customers in adoption.
-    """
+    
     clear_screen()
     sudo_user()
 
