@@ -149,75 +149,87 @@ def sort_animals(animals, key='name', reverse=False):
     return sorted_animals
 
 def delete_animal(animal_name):
-
     try:
-        # Check if there are multiple animals with the same name
         animal_count = animals_collection.count_documents({"name": animal_name})
-        
+
         if animal_count == 0:
-            print(f"{animal_name} not found in the database.")
-            time.sleep(2)
-            clear_screen()
-            print_animal_table(load_animal_data(animals_collection))
-            return False
-        
+            handle_no_animal_found(animal_name)
         elif animal_count == 1:
-            result = animals_collection.delete_one({"name": animal_name})
-            if result.deleted_count == 1:
-                print(Fore.GREEN + f"\nSuccessfully deleted {animal_name} from the database." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
-                print_animal_table(load_animal_data(animals_collection))
-                return True
-            else:
-                print(f"Failed to delete {animal_name} from the database.")
-                time.sleep(2)
-                clear_screen()
-                print_animal_table(load_animal_data(animals_collection))
-                return False
-        
-        else:  # Multiple animals with the same name
-            print(Fore.YELLOW + f"Multiple animals found with the name '{animal_name}'. Please select the index of the animal you want to delete:" + Style.RESET_ALL)
-            
-            # Find all animals with the same name and print their indices
-            cursor = animals_collection.find({"name": animal_name})
-            index = 1
-            for animal in cursor:
-                print(f"{index}. Name: {animal['name']}, Species: {animal['species']}, Breed: {animal['breed']}")
-                index += 1
-            
-            # Prompt the user to select the index of the animal to delete
-            selected_index = input("\nEnter the index of the animal to delete: ")
-            try:
-                selected_index = int(selected_index)
-                if 1 <= selected_index <= animal_count:
-                    cursor.rewind()  # Reset cursor to the beginning
-                    selected_animal = cursor[selected_index - 1]
-                    result = animals_collection.delete_one({"_id": selected_animal["_id"]})
-                    if result.deleted_count == 1:
-                        print(Fore.GREEN + f"\nSuccessfully deleted {selected_animal['name']} from the database." + Style.RESET_ALL)
-                        time.sleep(2)
-                        clear_screen()
-                        return True
-                    else:
-                        print(f"Failed to delete {selected_animal['name']} from the database.")
-                        time.sleep(2)
-                        clear_screen()
-                        return False
-                else:
-                    print(Fore.RED + "Invalid index. Please enter a valid index." + Style.RESET_ALL)
-                    time.sleep(2)
-                    clear_screen()
-                    return False
-            except ValueError:
-                print(Fore.RED + "Invalid index. Please enter a valid index." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
-                return False
+            delete_single_animal(animal_name)
+        else:
+            delete_multiple_animals(animal_name, animal_count)
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        return False  
+        return False
+
+def handle_no_animal_found(animal_name):
+    print(f"{animal_name} not found in the database.")
+    time.sleep(2)
+    clear_screen_and_print_animals()
+    return False
+
+def delete_single_animal(animal_name):
+    result = animals_collection.delete_one({"name": animal_name})
+    if result.deleted_count == 1:
+        print(Fore.GREEN + f"\nSuccessfully deleted {animal_name} from the database." + Style.RESET_ALL)
+        time.sleep(2)
+        clear_screen_and_print_animals()
+        return True
+    else:
+        print(f"Failed to delete {animal_name} from the database.")
+        time.sleep(2)
+        clear_screen_and_print_animals()
+        return False
+
+def delete_multiple_animals(animal_name, animal_count):
+    print(Fore.YELLOW + f"Multiple animals found with the name '{animal_name}'. Please select the index of the animal you want to delete:" + Style.RESET_ALL)
+    cursor = animals_collection.find({"name": animal_name})
+    print_animals_with_indices(cursor)
+    selected_index = get_selected_index()
+
+    if 1 <= selected_index <= animal_count:
+        delete_selected_animal(cursor, selected_index)
+    else:
+        print_invalid_index()
+
+def print_animals_with_indices(cursor):
+    index = 1
+    for animal in cursor:
+        print(f"{index}. Name: {animal['name']}, Species: {animal['species']}, Breed: {animal['breed']}")
+        index += 1
+
+def get_selected_index():
+    selected_index = input("\nEnter the index of the animal to delete: ")
+    try:
+        return int(selected_index)
+    except ValueError:
+        print_invalid_index()
+
+def delete_selected_animal(cursor, selected_index):
+    cursor.rewind()  # Reset cursor to the beginning
+    selected_animal = cursor[selected_index - 1]
+    result = animals_collection.delete_one({"_id": selected_animal["_id"]})
+    if result.deleted_count == 1:
+        print(Fore.GREEN + f"\nSuccessfully deleted {selected_animal['name']} from the database." + Style.RESET_ALL)
+        time.sleep(2)
+        clear_screen()
+        return True
+    else:
+        print(f"Failed to delete {selected_animal['name']} from the database.")
+        time.sleep(2)
+        clear_screen()
+        return False
+
+def print_invalid_index():
+    print(Fore.RED + "Invalid index. Please enter a valid index." + Style.RESET_ALL)
+    time.sleep(2)
+    clear_screen()
+    return False
+
+def clear_screen_and_print_animals():
+    clear_screen()
+    print_animal_table(load_animal_data(animals_collection))
 
 def modify_animal_database():
 
