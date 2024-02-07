@@ -47,7 +47,7 @@ def search_animal_by_name():
             print("\nExiting search...")
             time.sleep(2)
             clear_screen()
-            view_animal_profile()
+            view_animal_profile(selected_index, selected_animal)
 
         try:
             selected_index = int(selected_index)
@@ -57,11 +57,11 @@ def search_animal_by_name():
             else:
                 print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
                 time.sleep(2)
-                view_animal_profile()
+                view_animal_profile(selected_index, selected_animal)
         except ValueError:
             print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
             time.sleep(2)
-            view_animal_profile()
+            view_animal_profile(selected_index, selected_animal)
 
 def view_animal_profile(selected_index, selected_animal):
     clear_screen()
@@ -137,11 +137,11 @@ def view_animal_profile(selected_index, selected_animal):
         else:
             print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
             time.sleep(2)
-            view_animal_profile()
+            view_animal_profile(selected_index, selected_animal)
     except ValueError:
         print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
         time.sleep(2)
-        view_animal_profile()
+        view_animal_profile(selected_index, selected_animal)
 
 def view_animals_full():
     clear_screen()
