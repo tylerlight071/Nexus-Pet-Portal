@@ -3,13 +3,20 @@ from colorama import Fore, Style
 from common_functions import clear_screen, get_mongodb_uri, get_input
 from pymongo import MongoClient
 
+NON_VALID_INPUT = "Please enter a valid option."
+
 # Connect to MongoDB
 uri = get_mongodb_uri()
 client = MongoClient(uri)
 
 db = client['animal_rescue']
 customers_collection = db['customers']
- 
+
+def section_clear():
+    print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
+    time.sleep(2)
+    clear_screen()
+
 def adopt_dog_form():
         # Input validation loop
         while True:
@@ -32,7 +39,7 @@ def adopt_dog_form():
                 customer_title = get_input("\nTitle (Mr/Mrs/Ms/Dr): ").strip()
                 # Check title
                 if customer_title not in ['Mr', 'Mrs', 'Ms', 'Dr']:
-                    print(Fore.RED + "\nPlease enter a valid title." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -40,14 +47,14 @@ def adopt_dog_form():
                 customer_email = get_input("Your email address: ").strip()
                 # Check email format
                 if '@' not in customer_email or '.' not in customer_email:
-                    print(Fore.RED + "\nPlease enter a valid email address." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
                 customer_phone = get_input("Your phone number: ").strip()
                 # Check phone number format
                 if not customer_phone.isdigit() or len(customer_phone) < 10:
-                    print(Fore.RED + "\nPlease enter a valid phone number." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -57,7 +64,7 @@ def adopt_dog_form():
 
                 chosen_animal = get_input("\nDo you know which animal are you interested in adopting? ").strip()
                 if chosen_animal not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -70,15 +77,13 @@ def adopt_dog_form():
                 elif chosen_animal == 'no':
                     chosen_animal = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nHousing Details" + Style.RESET_ALL)                
                 own_rent = get_input("\nDo you own or rent your home? ").strip()
                 
                 if own_rent not in ['own', 'rent']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -88,7 +93,7 @@ def adopt_dog_form():
                 
                 garden = get_input("\nDo you have a garden? (yes/no/communal): ").strip().lower()
                 if garden not in ['yes', 'no', 'communal']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -108,9 +113,7 @@ def adopt_dog_form():
                     garden_fenced = "N/A"
                     garden_access = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nHousehold Details" + Style.RESET_ALL)
 
@@ -119,7 +122,7 @@ def adopt_dog_form():
                 children_at_address = get_input("Do you have children living at your address? (yes/no): ").strip().lower()
                 
                 if children_at_address not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -133,7 +136,7 @@ def adopt_dog_form():
                 visiting_children = get_input("Do children visit your home? (yes/no): ").strip().lower()
                 
                 if visiting_children not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -144,16 +147,14 @@ def adopt_dog_form():
                 elif visiting_children == 'no':
                     visiting_children_age = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nOther Pets" + Style.RESET_ALL)
 
                 other_dogs = get_input("\nDo you have any other dogs? (yes/no): ").strip().lower()
                 
                 if other_dogs not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -175,7 +176,7 @@ def adopt_dog_form():
                 other_animals = get_input("Do you have any other animals? (yes/no): ").strip().lower()
                 
                 if other_animals not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -186,9 +187,7 @@ def adopt_dog_form():
                 elif other_animals == 'yes':
                     other_animals_type = get_input(Fore.YELLOW + "What type of animals do you have? " + Style.RESET_ALL).strip()
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nExercise and Routine" + Style.RESET_ALL)
                 weekday_exercise = get_input("\nHow often will the dog be exercised on weekdays? ").strip()
@@ -197,15 +196,13 @@ def adopt_dog_form():
                 how_often_alone = get_input("How often will the dog be left alone? ").strip()
                 alone_time = get_input("How long will the dog be left alone each day? ").strip()
                 
-                print(Fore.GREEN + "Section Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nFuture Plans" + Style.RESET_ALL)
                 moving_plans = get_input("\nDo you have any plans to move in the next 6 months? (yes/no): ").strip().lower()
                 
                 if moving_plans not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -219,7 +216,7 @@ def adopt_dog_form():
                 holiday_plans = get_input("Do you have any holiday plans in the near future? (yes/no): ").strip().lower()
                 
                 if holiday_plans not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -230,9 +227,7 @@ def adopt_dog_form():
                 elif holiday_plans == 'no':
                     holiday_timeframe = "N/A"
 
-                print(Fore.GREEN + "Section Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nIdeal Dog" + Style.RESET_ALL)
                 print(Fore.GREEN + "\nWhat type of dog are you looking for? " + Style.RESET_ALL)
@@ -256,9 +251,7 @@ def adopt_dog_form():
                 ideal_dog_training = get_input("Training Needs: ").strip()
                 ideal_dog_health = get_input("Health Needs: ").strip()
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nOther Requirements" + Style.RESET_ALL)
 
@@ -275,7 +268,7 @@ def adopt_dog_form():
 
                 other_requirements = get_input(Fore.YELLOW + "\nDo you have any other requirements? (yes/no) " + Style.RESET_ALL).strip()
                 if other_requirements not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -289,7 +282,7 @@ def adopt_dog_form():
                 experience = get_input("\nDo you have any experience with dogs? (yes/no) ").strip()
                 
                 if experience not in ['yes', 'no']:
-                    print(Fore.RED + "\nPlease enter a valid option." + Style.RESET_ALL)
+                    print(Fore.RED + f"\n{NON_VALID_INPUT}" + Style.RESET_ALL)
                     time.sleep(2)
                     clear_screen()
                     continue
@@ -300,9 +293,7 @@ def adopt_dog_form():
                 elif experience == 'no':
                     experience = "N/A"
 
-                print(Fore.GREEN + "\nSection Completed." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
+                section_clear()
 
                 print(Fore.LIGHTMAGENTA_EX + "\nConsent to Terms" + Style.RESET_ALL)
                 signature = get_input("\nPlease enter your full name as a signature: ").strip()

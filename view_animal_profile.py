@@ -3,8 +3,9 @@ import time
 from PIL import Image, ImageTk
 from tkinter import filedialog
 from colorama import Fore, Style
-from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri, print_animal_table
+from common_functions import clear_screen, log_action, get_mongodb_uri
 from sudo_user import sudo_user
+from tables import print_animal_table_with_index
 from pymongo import MongoClient
 
 # Connect to MongoDB
@@ -13,19 +14,6 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 animals_collection = db['animals']
-    
-def print_animal_table_with_index(animals):
-    # Displays the table of animals with index numbers
-    clear_screen()
-    print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
-    print("+---------------------------------------------------------------------------------+")
-    print("| " + Fore.YELLOW + "Index    " + Style.RESET_ALL + "| " + Fore.YELLOW + "Name                 " + Style.RESET_ALL +                  "| " + Fore.YELLOW + "Species " + Style.RESET_ALL +  "| " + Fore.YELLOW + "Breed                " + Style.RESET_ALL +                "| " + Fore.YELLOW + "Gender " + Style.RESET_ALL + "| " + Fore.YELLOW + "Age" + Style.RESET_ALL + " |")
-    print("+---------------------------------------------------------------------------------+")
-
-    for i, animal in enumerate(animals, 1):
-        print(f"| {i}        | {animal['name'].ljust(20)} | {animal['species'].ljust(7)} | {animal['breed'].ljust(20)} | {animal['gender'].ljust(6)} | {str(animal['age']).ljust(3)} |")
-
-    print("+---------------------------------------------------------------------------------+")
 
 def search_animal_by_name():
     # Asks the user for the name of the animal to search for

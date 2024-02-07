@@ -1,7 +1,8 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, get_mongodb_uri, print_animal_table, load_animal_data
+from common_functions import clear_screen, log_action, get_mongodb_uri, load_animal_data
 from sudo_user import sudo_user
+from tables import print_animal_table
 from pymongo import MongoClient
 
 # Connect to MongoDB
@@ -45,19 +46,19 @@ def add_animal():
         # Validate input fields
         if not all([name, species, breed, gender, age]):
             print(Fore.RED + "\nInvalid input. All fields are required." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
+            time.sleep(2)
             continue
 
         # Validate gender fields
         if gender.lower() not in ["male", "female"]:
             print(Fore.RED + "\nInvalid input. Gender must be 'Male' or 'Female'." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
+            time.sleep(2)
             continue
 
         # Validate age as positive integer
         if not age.isdigit() or int(age) <= 0:
             print(Fore.RED + "\nInvalid age. Please enter a positive integer." + Style.RESET_ALL)
-            input(Fore.GREEN + "Press Enter to continue..." + Style.RESET_ALL)
+            time.sleep(2)
             continue
 
         age = int(age)
@@ -81,7 +82,7 @@ def add_animal():
 
         # Confirm successful addition of the animal 
         print(Fore.GREEN + "\n✨ Animal added successfully! ✨" + Style.RESET_ALL)
-        log_action(current_user, f"Exited 'Add an animal'")
+        log_action(current_user, "Exited 'Add an animal'")
         time.sleep(2)
 
         # Ask if the user wants to add another animal
