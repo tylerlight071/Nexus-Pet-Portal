@@ -1,5 +1,5 @@
 import time
-from common_functions import clear_screen, get_mongodb_uri
+from common_functions import clear_screen, get_mongodb_uri, print_animal_table, load_animal_data
 from colorama import Fore, Style
 from pymongo import MongoClient
 from sudo_user import sudo_user
@@ -11,13 +11,24 @@ client = MongoClient(uri)
 db = client['animal_rescue']
 animals_collection = db['animals']
 
+
 def modify_animal():
+    
+    animals = load_animal_data(animals_collection)
+
     clear_screen()
     sudo_user()
     print(Fore.CYAN + "\n🐾 Modify Animal 🐾\n" + Style.RESET_ALL)
 
     # Input the name of the animal to modify
-    animal_name = input(Fore.CYAN + "Enter the name of the animal to modify: " + Style.RESET_ALL).strip().capitalize()
+    animal_name = input(Fore.CYAN + "Enter the name of the animal to modify (enter 'exit' to leave): " + Style.RESET_ALL).strip().capitalize()
+
+    if animal_name.lower() == 'exit':
+        print(Fore.YELLOW + "\nExiting..." + Style.RESET_ALL)
+        time.sleep(2)
+        clear_screen()
+        print_animal_table(animals)
+        return
 
     # Search for the animal in the database
     animal = animals_collection.find_one({'name': animal_name})
@@ -85,5 +96,7 @@ def modify_animal():
     else:
         print(Fore.RED + "Animal not found." + Style.RESET_ALL)
         time.sleep(2)
+        clear_screen()
+        modify_animal()
 
     input("Press Enter to continue...")
