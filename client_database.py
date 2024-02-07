@@ -1,4 +1,5 @@
 import time
+from sudo_user import sudo_user
 from colorama import Fore, Style
 from common_functions import clear_screen
 from customer_adoption_form_dog import adopt_dog_form
@@ -56,6 +57,11 @@ def modify_clint_database():
         modify_clint_database()
 
 def client_database():
+    
+    clear_screen()
+
+    sudo_user()
+
     print(Fore.CYAN + "\n🧑 Client Database 🧑" + Style.RESET_ALL)
     print("\n1. " + Fore.GREEN + "🔍 Search" + Style.RESET_ALL)
     print("2. " + Fore.GREEN + "📝 Modify Database" + Style.RESET_ALL)
