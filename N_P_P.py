@@ -4,6 +4,7 @@ from colorama import Fore, Style
 from view_animals import view_animals
 from common_functions import clear_screen, log_action, hash_password, get_mongodb_uri
 from login import login
+from client_database import client_database
 from pymongo import MongoClient
 
 get_mongodb_uri()
@@ -81,8 +82,10 @@ def main():
                             # Client Database
                         elif option == '2' and user_level >= 2:
                             log_action(current_user, "Entered 'Client Database'")
-                            print("This feature is coming soon.")
                             time.sleep(2)
+                            clear_screen()
+                            client_database()
+                            
                             
                             # Staff Portal
                         elif option == '3' and user_level == 3:
