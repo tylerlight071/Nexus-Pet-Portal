@@ -16,6 +16,7 @@ db = client['animal_rescue']
 animals_collection = db['animals']
 
 select_option = "\nPlease select an option: "
+invalid_input = "\nInvalid input! Please enter a valid index."
 
 # Function to filter animals based on user input
 def filter_animals(animals):
@@ -127,7 +128,7 @@ def handle_no_results(animals):
     clear_screen_and_print_animals(animals)
 
 def print_invalid_input(animals):
-    print(Fore.RED + "Invalid input. Please choose one of the options." + Style.RESET_ALL)
+    print(Fore.RED + invalid_input + Style.RESET_ALL)
     time.sleep(2)
     clear_screen_and_print_animals(animals)
 
@@ -276,7 +277,7 @@ def modify_animal_database():
         return
     
     else:
-        print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
+        print(Fore.RED + invalid_input + Style.RESET_ALL)
         time.sleep(2)
         clear_screen()
         print_animal_table(animals)
@@ -285,104 +286,106 @@ def modify_animal_database():
 
 # Function to view animals and interact with options
 def view_animals():
-    
     animals = load_animal_data(animals_collection)
-
     current_user = sudo_user()
 
     # Load animal data
     print_animal_table(animals)
 
     while True:
-        print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)
-        print("\n1. " + Fore.GREEN + "Search for animal" + Style.RESET_ALL)
-        print("2. " + Fore.GREEN + "Sort/Filter Animals" + Style.RESET_ALL)
-        
-        
-        if current_user['level'] >= 2:
-            print("3. " + Fore.GREEN + "View animal profile" + Style.RESET_ALL)
-            print("4. " + Fore.GREEN + "Modify Database" + Style.RESET_ALL)
-            print("5. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
-        else:
-            print("3. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
-
+        print_options(current_user)
         user_input = input(select_option)
 
-        # Search Database
         if user_input == '1':
-            time.sleep(1)
-            clear_screen()
-            search_animals(animals, current_user)
-        
-        # Sort Database
+            search_database(animals, current_user)
         elif user_input == '2':
-            sort_filter_option = input("\nSort or filter? (S/F): ").lower()
-            if sort_filter_option == 's':
-                clear_screen()
-                print_animal_table(animals)
-                print("\nSort by:")
-                print("1." + Fore.GREEN + " Name (A-Z)" + Style.RESET_ALL)
-                print("2." + Fore.GREEN + " Name (Z-A)" + Style.RESET_ALL)
-                print("3." + Fore.GREEN + " Age (Youngest to Oldest)" + Style.RESET_ALL)
-                print("4." + Fore.GREEN + " Age (Oldest to Youngest)" + Style.RESET_ALL)
-                sort_option = input(select_option)
-
-                # Sort animals based on user input
-                if sort_option in ['1', '2', '3', '4']:
-                    sort_key = 'name' if sort_option in ['1', '2'] else 'age'
-                    reverse_sort = True if sort_option in ['2', '4'] else False
-                    animals = sort_animals(animals, key=sort_key, reverse=reverse_sort)
-                    clear_screen()
-                    print_animal_table(animals)
-
-                 # Invalid option
-                else:
-                    print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
-                    time.sleep(2)
-                    clear_screen()
-                    print_animal_table(animals)
-
-            # Filter Database
-            elif sort_filter_option == 'f':
-                filter_animals(animals)
-
-            # Invalid option
-            else:
-                print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
-                print_animal_table(animals)
-
-        # View Animal Profile
+            sort_or_filter_database(animals)
         elif user_input == '3':
-            if current_user['level'] >= 2:
-                view_animals_full()
-            else:
-                log_action(current_user, "Exited 'View Animal Database'")
-                print("\nExiting...")
-                time.sleep(2)
-                clear_screen()
-                return
-
-        elif user_input == '4':
-            if current_user['level'] >= 2:
-                log_action(current_user, "Entered 'Modify Animal Database'")
-                time.sleep(2)
-                clear_screen()
-                modify_animal_database()
-            
-        # Exit Database 
+            view_animal_profile_or_exit(current_user)
+        elif user_input == '4' and current_user['level'] >= 2:
+            modify_database(current_user)
         elif user_input == '5' and current_user['level'] >= 2:
-            log_action(current_user, "Exited 'View Animal Database'")
-            print("\nExiting...")
-            time.sleep(2)
-            clear_screen()
-            return
+            exit_database(current_user)
         else:
-            print(Fore.RED + "\nInvalid input. Please choose one of the options." + Style.RESET_ALL)
-            time.sleep(2)
-            clear_screen()
-            print_animal_table(animals)
+            handle_invalid_input(animals)
+
+# Print options for the user
+def print_options(current_user):
+    print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)
+    print("\n1. " + Fore.GREEN + "Search for animal" + Style.RESET_ALL)
+    print("2. " + Fore.GREEN + "Sort/Filter Animals" + Style.RESET_ALL)
+
+    if current_user['level'] >= 2:
+        print("3. " + Fore.GREEN + "View animal profile" + Style.RESET_ALL)
+        print("4. " + Fore.GREEN + "Modify Database" + Style.RESET_ALL)
+        print("5. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+    else:
+        print("3. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+
+# Search the database
+def search_database(animals, current_user):
+    time.sleep(1)
+    clear_screen()
+    search_animals(animals, current_user)
+
+# Sort or filter the database
+def sort_or_filter_database(animals):
+    sort_filter_option = input("\nSort or filter? (S/F): ").lower()
+    if sort_filter_option == 's':
+        sort_database(animals)
+    elif sort_filter_option == 'f':
+        filter_animals(animals)
+    else:
+        handle_invalid_input(animals)
+
+# Sort the database
+def sort_database(animals):
+    clear_screen()
+    print_animal_table(animals)
+    print("\nSort by:")
+    print("1." + Fore.GREEN + " Name (A-Z)" + Style.RESET_ALL)
+    print("2." + Fore.GREEN + " Name (Z-A)" + Style.RESET_ALL)
+    print("3." + Fore.GREEN + " Age (Youngest to Oldest)" + Style.RESET_ALL)
+    print("4." + Fore.GREEN + " Age (Oldest to Youngest)" + Style.RESET_ALL)
+    sort_option = input(select_option)
+
+    # Sort animals based on user input
+    if sort_option in ['1', '2', '3', '4']:
+        sort_key = 'name' if sort_option in ['1', '2'] else 'age'
+        reverse_sort = True if sort_option in ['2', '4'] else False
+        animals = sort_animals(animals, key=sort_key, reverse=reverse_sort)
+        clear_screen()
+        print_animal_table(animals)
+    else:
+        handle_invalid_input(animals)
+
+# View animal profile or exit
+def view_animal_profile_or_exit(current_user):
+    if current_user['level'] >= 2:
+        view_animals_full()
+    else:
+        exit_database(current_user)
+
+# Modify the database
+def modify_database(current_user):
+    log_action(current_user, "Entered 'Modify Animal Database'")
+    time.sleep(2)
+    clear_screen()
+    modify_animal_database()
+
+# Exit the database
+def exit_database(current_user):
+    log_action(current_user, "Exited 'View Animal Database'")
+    print("\nExiting...")
+    time.sleep(2)
+    clear_screen()
+
+# Handle invalid input
+def handle_invalid_input(animals):
+    print(Fore.RED + invalid_input + Style.RESET_ALL)
+    time.sleep(2)
+    clear_screen()
+    print_animal_table(animals)
 
 if __name__ == "__main__":
     view_animals()
