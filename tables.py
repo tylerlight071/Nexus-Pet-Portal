@@ -1,7 +1,7 @@
 from colorama import Fore, Style
 from common_functions import clear_screen
 
-basic_animal_table = print("+-------------------------------------------------------------------------------------------+")
+basic_animal_table = ("+-------------------------------------------------------------------------------------------+")
 animal_table_with_index = ("+---------------------------------------------------------------------------------+")
 
 # Function to print the table of animals
