@@ -104,7 +104,7 @@ def login():
         # Display login prompt
         print("\n👤 User Login 👤")
         username = input("\nEnter your username: ")
-        password = getpass.getpass("Enter your password: ")  # No need for getpass as input is hidden in most consoles
+        password = getpass.getpass("Enter your password: ")
 
         # Query user credentials from MongoDB
         user = users_collection.find_one({'username': username})
