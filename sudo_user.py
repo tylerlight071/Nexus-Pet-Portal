@@ -44,12 +44,6 @@ def sudo_user():
                     print("\nNot a valid username")
                     clear_screen()
                     return username
-                
-                elif username == None:
-                    print("\nNot a valid username")
-                    clear_screen()
-                    sudo_user
-                    return username
 
                 # Notify about user verification for high level users
                 elif user_level >= 2:        

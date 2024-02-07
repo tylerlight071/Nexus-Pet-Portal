@@ -53,7 +53,7 @@ def change_admin_password(username):
     else:
         # Notify the user about mismatching passwords and prompt again
         print(Fore.RED + "\nPasswords do not match. Please try again." + Style.RESET_ALL)
-        log_action("Failed attempt to access ADMIN")
+        log_action(username, "Failed attempt to access ADMIN")
         time.sleep(2)
         clear_screen()
         change_admin_password(username)
