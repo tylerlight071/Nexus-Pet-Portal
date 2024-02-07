@@ -1,7 +1,8 @@
 import time
+from sudo_user import sudo_user
 from colorama import Fore, Style
 from common_functions import clear_screen
-from customer_adoption_form import view_available_animals
+from customer_adoption_form_dog import adopt_dog_form
 
 def modify_clint_database():
     clear_screen()
@@ -15,10 +16,23 @@ def modify_clint_database():
     choice = input("\nPlease select an option: ")
 
     if choice == '1':
-        print(Fore.GREEN + "\nOpening Customer Adoption Form..." + Style.RESET_ALL)
-        time.sleep(1)
-        clear_screen()
-        view_available_animals()
+        adoption_form = input("\nOpen adoption form for dogs or cats? ")
+        if adoption_form not in ['dogs', 'cats']:
+            print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)
+            time.sleep(2)
+            clear_screen()
+            modify_clint_database()
+
+        if adoption_form == 'dogs':
+            print("\n Opening dog adoption form...")
+            time.sleep(2)
+            clear_screen()
+            adopt_dog_form()
+        
+        elif adoption_form == 'cats':
+            print("\nThis feature is coming soon.")
+            time.sleep(2)
+            clear_screen()
     
     elif choice == '2':
         print("\nThis feature is coming soon.")
@@ -43,6 +57,11 @@ def modify_clint_database():
         modify_clint_database()
 
 def client_database():
+    
+    clear_screen()
+
+    sudo_user()
+
     print(Fore.CYAN + "\n🧑 Client Database 🧑" + Style.RESET_ALL)
     print("\n1. " + Fore.GREEN + "🔍 Search" + Style.RESET_ALL)
     print("2. " + Fore.GREEN + "📝 Modify Database" + Style.RESET_ALL)
