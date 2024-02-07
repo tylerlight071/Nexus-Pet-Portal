@@ -16,6 +16,11 @@ def register():
     while True:
         # Prompt user to enter a username
         username = input("\nEnter a username: ").strip()
+
+        if username == "":
+            clear_screen()
+            print(Fore.RED + "\nUsername cannot be empty. Please try again." + Style.RESET_ALL)
+            continue
         
         # Check if username already exists in the database
         if users_collection.find_one({'username': username}):
