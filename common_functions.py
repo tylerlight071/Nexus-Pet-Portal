@@ -84,11 +84,7 @@ def get_mongodb_uri():
 #! One time use until proper implementation
 # Function to print the table of animals
 def print_animal_table(animals):
-    """
-    Print a formatted table of animals with their attributes.
-    Args:
-        animals (dict): Dictionary containing animal data.
-    """
+    
     # Print table header
     print("\n🐾 " + Fore.CYAN + "List of Animals" + Style.RESET_ALL + " 🐾")
     print("+-------------------------------------------------------------------------------------------+")

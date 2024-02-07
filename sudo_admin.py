@@ -19,7 +19,7 @@ def sudo_admin():
     # Continuous loop for sudo user authentication
     attempts = 0 
     while attempts < MAX_ATTEMPTS:
-        print(Fore.LIGHTMAGENTA_EX + "\n👤 Sudo Login 👤" + Style.RESET_ALL)
+        print(Fore.LIGHTMAGENTA_EX + "\n👤 ADMIN Sudo Login 👤" + Style.RESET_ALL)
         print("\nPlease enter your credentials")
         username = input("\nEnter your username: ")
         password = getpass.getpass("Enter your password: ")

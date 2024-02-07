@@ -1,6 +1,6 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, get_mongodb_uri
+from common_functions import clear_screen, log_action, get_mongodb_uri, print_animal_table, load_animal_data
 from sudo_user import sudo_user
 from pymongo import MongoClient
 
@@ -12,6 +12,9 @@ db = client['animal_rescue']
 animals_collection = db['animals']
 
 def add_animal():
+
+    animals = load_animal_data(animals_collection)
+
     # Continuous loop for adding animals
     while True:
         clear_screen()
@@ -30,6 +33,8 @@ def add_animal():
         if name.lower() == 'exit':
             print("\nExiting..." + Style.RESET_ALL)
             time.sleep(2)
+            clear_screen()
+            print_animal_table(animals)
             break
 
         species = input(Fore.GREEN + "Species: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
