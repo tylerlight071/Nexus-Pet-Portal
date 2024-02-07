@@ -58,69 +58,80 @@ def filter_animals(animals):
         clear_screen()
         print_animal_table(animals)
 
-# Function to search animals based on user input
 def search_animals(animals, current_user):
-   
     while True:
-        clear_screen()
-        print(Fore.LIGHTCYAN_EX + "\n🔎 SEARCH ANIMALS 🔍" + Style.RESET_ALL)
-        print("\nEnter any of the following criteria to search:")
-        print(Fore.GREEN + "\n - Name")
-        print(" - Species")
-        print(" - Breed")
-        print(" - Gender (Male/Female)")
-        print(" - Age" + Style.RESET_ALL)
-        print("\nOr type 'exit' to return to the main menu.")
-
-        search_query = input(Fore.LIGHTCYAN_EX + "\nSearch: " + Style.RESET_ALL).lower()
+        print_search_prompt()
+        search_query = get_search_query()
 
         if search_query == 'exit':
-            clear_screen()
-            print_animal_table(animals)
+            clear_screen_and_print_animals(animals)
             return
 
         log_action(current_user, f"Searched for {search_query}")
 
-        found_results = []
+        found_results = search_animals_by_query(animals, search_query)
 
-        if search_query.strip():
-            for animal in animals:
-                if (search_query in animal['name'].lower() or
-                    search_query in animal['species'].lower() or
-                    search_query in animal['breed'].lower() or
-                    (search_query == 'male' and animal['gender'].lower() == 'male') or
-                    (search_query == 'female' and animal['gender'].lower() == 'female') or
-                    search_query == str(animal['age'])):
-                    found_results.append(animal)
-
-            if found_results:
-                clear_screen()
-                print(Fore.LIGHTYELLOW_EX + "SEARCH RESULTS" + Style.RESET_ALL)
-                print_animal_table(found_results)
-                print("\n1. " + Fore.GREEN + "Search for another animal" + Style.RESET_ALL)
-                print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
-                exit_input = input("\nPlease select an option: ")
-
-                if exit_input == '1':
-                    continue
-                elif exit_input == '2':
-                    clear_screen()
-                    print_animal_table(animals)
-                    return
-                else:
-                    print(Fore.RED + "Invalid input. Please choose one of the options." + Style.RESET_ALL)
-                    time.sleep(2)
-                    clear_screen()
-                    print_animal_table(animals)
-            else:
-                print(Fore.RED + "No animals found matching the search criteria" + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
-                print_animal_table(animals)
+        if found_results:
+            handle_found_results(animals, found_results)
         else:
-            print(Fore.RED + "Invalid input. Please enter a search query or type 'exit'." + Style.RESET_ALL)
-            time.sleep(2)
-            clear_screen()
+            handle_no_results(animals)
+
+def print_search_prompt():
+    clear_screen()
+    print(Fore.LIGHTCYAN_EX + "\n🔎 SEARCH ANIMALS 🔍" + Style.RESET_ALL)
+    print("\nEnter any of the following criteria to search:")
+    print(Fore.GREEN + "\n - Name")
+    print(" - Species")
+    print(" - Breed")
+    print(" - Gender (Male/Female)")
+    print(" - Age" + Style.RESET_ALL)
+    print("\nOr type 'exit' to return to the main menu.")
+
+def get_search_query():
+    return input(Fore.LIGHTCYAN_EX + "\nSearch: " + Style.RESET_ALL).lower()
+
+def search_animals_by_query(animals, search_query):
+    found_results = []
+    if search_query.strip():
+        for animal in animals:
+            if (search_query in animal['name'].lower() or
+                search_query in animal['species'].lower() or
+                search_query in animal['breed'].lower() or
+                (search_query == 'male' and animal['gender'].lower() == 'male') or
+                (search_query == 'female' and animal['gender'].lower() == 'female') or
+                search_query == str(animal['age'])):
+                found_results.append(animal)
+    return found_results
+
+def handle_found_results(animals, found_results):
+    clear_screen()
+    print(Fore.LIGHTYELLOW_EX + "SEARCH RESULTS" + Style.RESET_ALL)
+    print_animal_table(found_results)
+    print("\n1. " + Fore.GREEN + "Search for another animal" + Style.RESET_ALL)
+    print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+    exit_input = input("\nPlease select an option: ")
+
+    if exit_input == '1':
+        return
+    elif exit_input == '2':
+        clear_screen_and_print_animals(animals)
+        return
+    else:
+        print_invalid_input(animals)
+
+def handle_no_results(animals):
+    print(Fore.RED + "No animals found matching the search criteria" + Style.RESET_ALL)
+    time.sleep(2)
+    clear_screen_and_print_animals(animals)
+
+def print_invalid_input(animals):
+    print(Fore.RED + "Invalid input. Please choose one of the options." + Style.RESET_ALL)
+    time.sleep(2)
+    clear_screen_and_print_animals(animals)
+
+def clear_screen_and_print_animals(animals):
+    clear_screen()
+    print_animal_table(animals)
 
 # Function to sort animals based on user input
 def sort_animals(animals, key='name', reverse=False):

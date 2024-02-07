@@ -15,6 +15,8 @@ client = MongoClient(uri)
 db = client['animal_rescue']
 animals_collection = db['animals']
 
+invalid_input = "Invalid input! Please enter a valid index."
+
 def search_animal_by_name():
     # Asks the user for the name of the animal to search for
     search_name = input("\nEnter the name of the animal to search for: ")
@@ -43,11 +45,11 @@ def search_animal_by_name():
                 selected_animal = animals[selected_index - 1]
                 view_animal_profile(selected_index, selected_animal)
             else:
-                print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+                print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
                 time.sleep(2)
                 view_animal_profile(selected_index, selected_animal)
         except ValueError:
-            print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+            print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
             time.sleep(2)
             view_animal_profile(selected_index, selected_animal)
 
@@ -123,11 +125,11 @@ def view_animal_profile(selected_index, selected_animal):
 
             root.mainloop()
         else:
-            print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+            print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
             time.sleep(2)
             view_animal_profile(selected_index, selected_animal)
     except ValueError:
-        print(Fore.RED + "Invalid input! Please enter a valid index." + Style.RESET_ALL)
+        print(Fore.RED + f"{invalid_input}" + Style.RESET_ALL)
         time.sleep(2)
         view_animal_profile(selected_index, selected_animal)
 
