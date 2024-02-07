@@ -15,6 +15,8 @@ client = MongoClient(uri)
 db = client['animal_rescue']
 animals_collection = db['animals']
 
+select_option = "\nPlease select an option: "
+
 # Function to filter animals based on user input
 def filter_animals(animals):
     
@@ -109,7 +111,7 @@ def handle_found_results(animals, found_results):
     print_animal_table(found_results)
     print("\n1. " + Fore.GREEN + "Search for another animal" + Style.RESET_ALL)
     print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
-    exit_input = input("\nPlease select an option: ")
+    exit_input = input(select_option)
 
     if exit_input == '1':
         return
@@ -227,7 +229,7 @@ def modify_animal_database():
     print("3. " + Fore.GREEN + "Delete Animal" + Style.RESET_ALL)
     print("4. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
 
-    choice = input("\nPlease select an option: ")
+    choice = input(select_option)
 
     # Add Animal
     if choice == '1':
@@ -292,7 +294,7 @@ def view_animals():
         else:
             print("3. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
 
-        user_input = input("\nPlease select an option: ")
+        user_input = input(select_option)
 
         # Search Database
         if user_input == '1':
@@ -311,7 +313,7 @@ def view_animals():
                 print("2." + Fore.GREEN + " Name (Z-A)" + Style.RESET_ALL)
                 print("3." + Fore.GREEN + " Age (Youngest to Oldest)" + Style.RESET_ALL)
                 print("4." + Fore.GREEN + " Age (Oldest to Youngest)" + Style.RESET_ALL)
-                sort_option = input("\nPlease select an option: ")
+                sort_option = input(select_option)
 
                 # Sort animals based on user input
                 if sort_option in ['1', '2', '3', '4']:
