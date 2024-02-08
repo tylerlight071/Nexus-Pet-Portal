@@ -4,7 +4,7 @@ from colorama import Fore, Style
 from notifications import notifications
 from staff_portal import staff_portal
 from view_animals import view_animals
-from common_functions import clear_screen, log_action, hash_password, get_mongodb_uri, load_animal_data
+from common_functions import clear_screen, log_action, hash_password, get_mongodb_uri
 from login import login
 from client_database import client_database
 from pymongo import MongoClient

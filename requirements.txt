@@ -4,6 +4,7 @@ anyio==4.2.0
 argon2-cffi==23.1.0
 argon2-cffi-bindings==21.2.0
 asttokens==2.4.1
+Babel==2.14.0
 beautifulsoup4==4.12.2
 blinker==1.7.0
 bottle==0.12.25
@@ -96,6 +97,7 @@ sounddevice==0.4.6
 soupsieve==2.5
 SpeechRecognition==3.10.1
 stack-data==0.6.3
+tkcalendar==1.6.1
 tqdm==4.66.1
 traitlets==5.13.0
 transforms==0.2.1

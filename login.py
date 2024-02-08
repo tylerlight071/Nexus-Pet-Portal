@@ -1,7 +1,7 @@
 import getpass
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, log_action, hash_password, verify_password, get_mongodb_uri, get_input
+from common_functions import clear_screen, log_action, hash_password, verify_password, get_mongodb_uri
 from admin_dashboard import admin_dashboard
 from pymongo import MongoClient
 
@@ -34,10 +34,7 @@ def change_admin_password(username):
     # Check if passwords match
     if new_password == confirm_password:
         # Generate salt and hash password
-
         hashed_password = hash_password(new_password)
-
-        # Convert salt to hexadecimal string for serialization   
 
         # Update the password in the MongoDB collection for ADMIN
         users_collection.update_one(
@@ -121,12 +118,6 @@ def login():
     print("Exiting...")
     time.sleep(2)
     exit()
-
-def get_user_credentials():
-    print("\n👤 User Login 👤")
-    username = input("\nEnter your username: ")
-    password = getpass.getpass("Enter your password: ")
-    return username, password
 
 def handle_successful_login(user, username, password):
     user_level = user['level']
