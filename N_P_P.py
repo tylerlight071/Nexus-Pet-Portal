@@ -1,8 +1,10 @@
 import time
 from sys import exit
 from colorama import Fore, Style
+from notifications import notifications
+from staff_portal import staff_portal
 from view_animals import view_animals
-from common_functions import clear_screen, log_action, hash_password, get_mongodb_uri
+from common_functions import clear_screen, log_action, hash_password, get_mongodb_uri, load_animal_data
 from login import login
 from client_database import client_database
 from pymongo import MongoClient
@@ -14,6 +16,7 @@ uri = get_mongodb_uri()
 client = MongoClient(uri)
 db = client['animal_rescue']
 users_collection = db['users']
+animals_collection = db['animals']
 
 # Default password
 default_password = "ADMIN"
@@ -29,100 +32,72 @@ DEFAULT_USER_DATA = {
     "level": 3
 }
 
+def logout():
+    return True
+
+# Main menu
+def display_menu(options):
+    for i, option in enumerate(options, 1):
+        print(f"{i}. {option}")
+
+def handle_option(option, functions):
+    try:
+        # Convert the option to an integer
+        option = int(option)
+        # Call the function that corresponds to the selected option
+        function_choice = functions[option - 1]
+        result = function_choice()
+        return result
+    except (IndexError, ValueError):
+        print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
+        time.sleep(2)
+
+def main_menu():
+    options = [Fore.GREEN + "Login" + Style.RESET_ALL, Fore.YELLOW + "Exit" + Style.RESET_ALL]
+    functions = [login, exit]
+    while True:
+        clear_screen()
+        print(Fore.CYAN + "\n🐕 Welcome to Nexus Pet Portal! 🐈\n" + Style.RESET_ALL)
+        display_menu(options)
+        choice = input("\nPlease select an option: ")
+        user_details = handle_option(choice, functions)
+        if user_details is not None:
+            user_menu(user_details[0], user_details[1])
+
+def user_menu(current_user, user_level):
+    clear_screen()
+    options = [Fore.GREEN + "🐶 Animal Database" + Style.RESET_ALL]
+    functions = [view_animals]
+    # Add options and functions based on user level
+    if user_level >= 2:
+        options.append(Fore.GREEN + "🧑 Client Database" + Style.RESET_ALL)
+        functions.append(client_database)
+    if user_level >= 3:
+        options.append(Fore.GREEN + "👤 Staff Portal" + Style.RESET_ALL)
+        functions.append(staff_portal)
+    # Add common options and functions
+    options.append(Fore.GREEN + "🔔 Notifications" + Style.RESET_ALL)
+    options.append(Fore.YELLOW + "🔐 Logout" + Style.RESET_ALL)
+    functions.append(notifications)
+    functions.append(logout)
+    while True:
+        clear_screen()
+        print(Fore.CYAN + "\n📖 Main Menu 📖\n" + Style.RESET_ALL)
+        display_menu(options)
+        choice = input("\nPlease select an option: ")
+        # Logout option
+        if choice == str(len(options)):  
+            log_action(current_user, "Logged out")
+            print("\nLogging out...")
+            time.sleep(2)
+            clear_screen()
+            break
+        handle_option(choice, functions)
+
 def main():
     clear_screen()
-
     try:
-        while True:
-            # Display main menu options
-            print(Fore.CYAN + "\n🐕 Welcome to Nexus Pet Portal! 🐈" + Style.RESET_ALL)
-            print("\n1. " + Fore.GREEN + "Login" + Style.RESET_ALL)
-            print("2. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
-            choice = input("\nPlease select an option: ")
-
-            if choice == '1':
-                clear_screen()
-                # Pull the username and user level from the login function
-                current_user, user_level = login()
-                if current_user is not None:
-                    while True:
-                        clear_screen()
-                        # Display main menu after successful login
-                        print(Fore.CYAN + "\n📖 Main Menu 📖" + Style.RESET_ALL)
-                        print("\n1. " + Fore.GREEN + "🐶 Animal Database" + Style.RESET_ALL)
-
-                        # Initialize option counter
-                        option_counter = 2
-
-                        # Adjust options based on user level
-                        if user_level >= 2:
-                            print(f"{option_counter}. " + Fore.GREEN + "🧑 Client Database" + Style.RESET_ALL)
-                            option_counter += 1
-                            
-                        if user_level >= 3:
-                            print(f"{option_counter}. " + Fore.GREEN + "👤 Staff Portal" + Style.RESET_ALL)
-                            option_counter += 1
-                        
-                        # Display Notifications option with the correct number
-                        notifications_option = option_counter
-                        print(f"{option_counter}. " + Fore.GREEN + "🔔 Notifications" + Style.RESET_ALL)
-                        option_counter += 1
-
-                        logout_option = option_counter
-                        # Display Logout option with the correct number
-                        print (f"{option_counter}. " + Fore.YELLOW + "🔐 Logout" + Style.RESET_ALL)
-                        option = input("\nPlease select an option: ")
-
-                        # Animal Database
-                        if option == '1':
-                            log_action(current_user, "Entered, 'Animal Database" )
-                            time.sleep(2)
-                            view_animals()
-                            
-                            # Client Database
-                        elif option == '2' and user_level >= 2:
-                            log_action(current_user, "Entered 'Client Database'")
-                            time.sleep(2)
-                            clear_screen()
-                            client_database()
-                            
-                            
-                            # Staff Portal
-                        elif option == '3' and user_level == 3:
-                            log_action(current_user, "Entered 'Staff Portal'")
-                            print("This feature is coming soon.")
-                            time.sleep(2)
-                            
-                            # Notifications
-                        elif option == str(notifications_option):
-                            log_action(current_user, "Entered 'Notifications'")
-                            print("This feature is coming soon.")
-                            time.sleep(2)
-
-                            # Logout
-                        elif option == str(logout_option):
-                            log_action(current_user, "Logged out")
-                            print("\nLogging out...")
-                            time.sleep(2)
-                            clear_screen()
-                            break
-                        
-                            # Invalid option
-                        else:
-                            print(Fore.RED + "\nInvalid option. Please try again.")
-                            time.sleep(2)
-                            clear_screen()
-
-            elif choice == '2':
-                print("\nExiting...")
-                time.sleep(2)
-                exit()
-    
-            else:
-                print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
-                time.sleep(2)
-                clear_screen()
-    
+        main_menu()
     except KeyboardInterrupt:
         print("\n\nExiting...")
         time.sleep(2)
