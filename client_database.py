@@ -1,8 +1,19 @@
 import time
-from sudo_user import sudo_user
+from sudo_user_login import SudoUser
 from colorama import Fore, Style
-from common_functions import clear_screen
+from common_functions import clear_screen, get_mongodb_uri
 from customer_adoption_form_dog import adopt_dog_form
+from pymongo import MongoClient
+
+# Connect to MongoDB
+uri = get_mongodb_uri()
+client = MongoClient(uri)
+
+db = client['animal_rescue']
+animals_collection = db['animals']
+users_collection = db['users']
+
+new_feature_message = "\nThis feature is coming soon."
 
 def modify_clint_database():
     clear_screen()
@@ -30,7 +41,7 @@ def modify_clint_database():
             adopt_dog_form()
         
         elif adoption_form == 'cats':
-            print("\nThis feature is coming soon.")
+            print(new_feature_message)
             time.sleep(2)
             clear_screen()
     
@@ -40,7 +51,7 @@ def modify_clint_database():
         clear_screen()
     
     elif choice == '3':
-        print("\nThis feature is coming soon.")
+        print(new_feature_message)
         time.sleep(2)
         clear_screen()
 
@@ -48,7 +59,7 @@ def modify_clint_database():
         print("\nExiting Modify Database...")
         time.sleep(1)
         clear_screen()
-        return
+
     
     else:
         print(Fore.RED + "Invalid input. Please try again." + Style.RESET_ALL)
@@ -60,7 +71,7 @@ def client_database():
     
     clear_screen()
 
-    sudo_user()
+    SudoUser(users_collection.database).login()
 
     print(Fore.CYAN + "\n🧑 Client Database 🧑" + Style.RESET_ALL)
     print("\n1. " + Fore.GREEN + "🔍 Search" + Style.RESET_ALL)
@@ -70,7 +81,7 @@ def client_database():
     choice = input("\nPlease select an option: ")
 
     if choice == '1':
-        print("This feature is coming soon.")
+        print(new_feature_message)
         time.sleep(2)
         clear_screen()
     
@@ -80,15 +91,14 @@ def client_database():
         modify_clint_database()
     
     elif choice == '3':
-        print("This feature is coming soon.")
-        time.sleep(2)
+        print(new_feature_message)
+        time.sleep(1)
         clear_screen()
     
     elif choice == '4':
         print("Exiting Client Database...")
         time.sleep(1)
         clear_screen()
-        return
 
     else:
         print(Fore.RED + "\nInvalid input. Please try again." + Style.RESET_ALL)

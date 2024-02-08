@@ -2,7 +2,7 @@ import time
 from colorama import Fore, Style
 from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri
 from view_animal_profile import view_animals_full
-from sudo_user_level_1 import sudo_user
+from sudo_user_login import SudoUserLevel1, SudoUser
 from edit_animal_entries import modify_animal
 from add_animal import add_animal
 from tables import print_animal_table
@@ -14,6 +14,7 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 animals_collection = db['animals']
+users_collection = db['users']
 
 select_option = "\nPlease select an option: "
 invalid_input = "\nInvalid input! Please enter a valid index."
@@ -46,10 +47,10 @@ def filter_animals(animals):
     filtered_animals = []
     # Iterate through animals and apply filters
     for animal in animals:
-        if (not species_query or any(species_query.lower() in animal['species'].lower() for species in species_query.split(','))) and \
-           (not breed_query or any(breed_query.lower() in animal['breed'].lower() for breed in breed_query.split(','))) and \
-           (not gender_query or any(gender_query.lower() in animal['gender'].lower() for gender in gender_query.split(','))) and \
-           (not adopted_query or any(adopted_query.lower() in str(animal['adopted']).lower() for adopted in adopted_query.split(','))):
+        if (not species_query or any(species_query.lower() in animal['species'].lower() for species_query in species_query.split(','))) and \
+           (not breed_query or any(breed_query.lower() in animal['breed'].lower() for breed_query in breed_query.split(','))) and \
+           (not gender_query or gender_query.lower() == animal['gender'].lower()) and \
+           (not adopted_query or any(adopted_query.lower() in str(animal['adopted']).lower() for adopted_query in adopted_query.split(','))):
             filtered_animals.append(animal)
 
     if filtered_animals:
@@ -118,7 +119,6 @@ def handle_found_results(animals, found_results):
         return
     elif exit_input == '2':
         clear_screen_and_print_animals(animals)
-        return
     else:
         print_invalid_input(animals)
 
@@ -256,38 +256,34 @@ def modify_animal_database():
     
     # Delete Animal
     elif choice == '3':
-        current_user = sudo_user()
+        current_user = SudoUser(users_collection.database).login()
         
         clear_screen()
         print_animal_table(animals)
         animal_name = input("\nEnter the name of the animal to delete: ")
         if delete_animal(animal_name):
             log_action(current_user, f"Deleted {animal_name} from the database")
-            return 
+ 
         
         else:
             log_action(current_user, f"Failed to delete {animal_name} from the database")
-            return
 
     # Exit   
     elif choice == '4':
         print("\nExiting Modify Database...")
         time.sleep(1)
         clear_screen()
-        return
     
     else:
         print(Fore.RED + invalid_input + Style.RESET_ALL)
         time.sleep(2)
         clear_screen()
-        print_animal_table(animals)
-
-    
+        print_animal_table(animals)   
 
 # Function to view animals and interact with options
 def view_animals():
     animals = load_animal_data(animals_collection)
-    current_user = sudo_user()
+    current_user = SudoUserLevel1(users_collection.database).login()
 
     # Load animal data
     print_animal_table(animals)
@@ -305,7 +301,8 @@ def view_animals():
         elif user_input == '4' and current_user['level'] >= 2:
             modify_database(current_user)
         elif user_input == '5' and current_user['level'] >= 2:
-            exit_database(current_user)
+            if exit_database(current_user):
+                break
         else:
             handle_invalid_input(animals)
 
@@ -379,7 +376,8 @@ def exit_database(current_user):
     print("\nExiting...")
     time.sleep(2)
     clear_screen()
-
+    return True
+      
 # Handle invalid input
 def handle_invalid_input(animals):
     print(Fore.RED + invalid_input + Style.RESET_ALL)

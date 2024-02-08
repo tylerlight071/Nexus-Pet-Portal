@@ -27,8 +27,7 @@ def change_admin_password(username):
             clear_screen()
             print(Fore.RED + "\nPassword cannot be empty. Please try again." + Style.RESET_ALL)
             continue
-        else:
-            break
+        break
 
     confirm_password = getpass.getpass("Confirm the new password: ")
 
@@ -71,8 +70,7 @@ def reset_password(username):
             clear_screen()
             print(Fore.RED + "\nPassword cannot be empty. Please try again." + Style.RESET_ALL)
             continue
-        else:
-            break
+        break
 
     confirm_password = getpass.getpass("Confirm the new password: ")
 
@@ -98,6 +96,7 @@ def reset_password(username):
         reset_password(username)
 
 def login():
+    clear_screen()
     attempts = 0
     # Continuous loop for login
     while attempts < MAX_ATTEMPTS:
