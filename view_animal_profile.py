@@ -4,7 +4,7 @@ from PIL import Image, ImageTk
 from tkinter import filedialog
 from colorama import Fore, Style
 from common_functions import clear_screen, log_action, get_mongodb_uri
-from sudo_user import sudo_user
+from sudo_user_login import SudoUser
 from tables import print_animal_table_with_index
 from pymongo import MongoClient
 
@@ -14,6 +14,7 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 animals_collection = db['animals']
+users_collection = db['users']
 
 invalid_input = "Invalid input! Please enter a valid index."
 
@@ -135,7 +136,7 @@ def view_animal_profile(selected_index, selected_animal):
 
 def view_animals_full():
     clear_screen()
-    current_user = sudo_user()
+    current_user = SudoUser(users_collection.database).login()
     while True:
         # Continuous loop for viewing the animal options
         print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)

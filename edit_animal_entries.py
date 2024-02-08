@@ -3,7 +3,7 @@ from common_functions import clear_screen, get_mongodb_uri, load_animal_data
 from tables import print_animal_table
 from colorama import Fore, Style
 from pymongo import MongoClient
-from sudo_user import sudo_user
+from sudo_user_login import SudoUser
 
 # Connect to MongoDB
 uri = get_mongodb_uri()
@@ -11,6 +11,7 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 animals_collection = db['animals']
+users_collection = db['users']
 
 FIELDS = {
     1: "name",
@@ -46,7 +47,7 @@ def modify_animal():
     animals = load_animal_data(animals_collection)
 
     clear_screen()
-    sudo_user()
+    SudoUser(users_collection.database).login()
     print(Fore.CYAN + "\n🐾 Modify Animal 🐾\n" + Style.RESET_ALL)
 
     animal_name = get_animal_name()
