@@ -96,6 +96,7 @@ def reset_password(username):
         reset_password(username)
 
 def login():
+    clear_screen()
     attempts = 0
     # Continuous loop for login
     while attempts < MAX_ATTEMPTS:
