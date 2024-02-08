@@ -1,7 +1,7 @@
 import time
 from colorama import Fore, Style
 from common_functions import clear_screen, log_action, get_mongodb_uri, load_animal_data
-from sudo_user import sudo_user
+from sudo_user_login import SudoUser
 from tables import print_animal_table
 from pymongo import MongoClient
 
@@ -11,6 +11,7 @@ client = MongoClient(uri)
 
 db = client['animal_rescue']
 animals_collection = db['animals']
+users_collection = db['users']
 
 def add_animal():
 
@@ -20,7 +21,7 @@ def add_animal():
     while True:
         clear_screen()
 
-        sudo_user()
+        SudoUser(users_collection.database).login()
 
         # Display header 
         print(Fore.CYAN + "\n🐾 Add Animal 🐾\n" + Style.RESET_ALL)
@@ -65,7 +66,7 @@ def add_animal():
 
         clear_screen()
         # Make the user verify their identity
-        current_user = sudo_user() 
+        current_user = SudoUser(users_collection.database).login() 
 
         # Add hashed animal data to the animals collection
         animals_collection.insert_one ({

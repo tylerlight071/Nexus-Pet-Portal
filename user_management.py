@@ -2,8 +2,7 @@ import time
 from colorama import Fore, Style
 from common_functions import clear_screen, hash_password, get_mongodb_uri
 from pymongo import MongoClient
-from sudo_admin import sudo_admin
-
+from sudo_user_login import SudoAdmin
 
 # Connect to MongoDB
 uri = get_mongodb_uri()
@@ -37,7 +36,7 @@ def user_management():
 
 def reset_user_password(username):
     # Check if the user is ADMIN
-    sudo_admin()
+    SudoAdmin(users_collection.database).login()
 
     # Change password if the user exists and is not ADMIN
     user = users_collection.find_one({'username': username})
