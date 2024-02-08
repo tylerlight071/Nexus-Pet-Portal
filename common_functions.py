@@ -1,4 +1,5 @@
 import os
+import re
 from argon2 import PasswordHasher
 from argon2.exceptions import VerifyMismatchError
 import datetime
@@ -90,3 +91,8 @@ def get_input(prompt):
         else:
             print(Fore.RED + "\nThis field cannot be left blank. Please try again." + Style.RESET_ALL)
             time.sleep(2)
+
+def sanitize_input(input_string):
+    # Only allow alphanumeric characters and spaces
+    pattern = re.compile('a-zA-z')
+    return pattern.sub('', input_string)

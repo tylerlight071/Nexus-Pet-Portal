@@ -1,6 +1,6 @@
 import time
 from colorama import Fore, Style
-from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri
+from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri, sanitize_input
 from view_animal_profile import view_animals_full
 from sudo_user_login import SudoUserLevel1, SudoUser
 from edit_animal_entries import modify_animal
@@ -150,6 +150,9 @@ def sort_animals(animals, key='name', reverse=False):
     return sorted_animals
 
 def delete_animal(animal_name):
+
+    animal_name = sanitize_input(animal_name)
+
     try:
         animal_count = animals_collection.count_documents({"name": animal_name})
 
