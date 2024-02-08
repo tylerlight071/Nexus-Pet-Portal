@@ -23,6 +23,7 @@ FIELDS = {
 
 def get_animal_name():
     return input(Fore.CYAN + "Enter the name of the animal to modify (enter 'exit' to leave): " + Style.RESET_ALL).strip().capitalize()
+    
 
 def get_field_choice():
     return input("Enter the number of the field to modify or 'exit' to cancel: ")
@@ -75,6 +76,8 @@ def modify_animal():
         if field_choice.lower() == 'exit':
             print(Fore.YELLOW + "\nExiting..." + Style.RESET_ALL)
             time.sleep(2)
+            clear_screen()
+            print_animal_table(animals)
             return
         
         if field_choice.isdigit():

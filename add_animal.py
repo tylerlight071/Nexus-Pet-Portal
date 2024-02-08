@@ -29,7 +29,7 @@ def add_animal():
         print("Enter animal details or type 'exit' to cancel:")
 
         # Input fields for animal data
-        name = input(Fore.GREEN + "\nName: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
+        name = input(Fore.GREEN + "\nName: " + Style.RESET_ALL).strip().capitalize()
 
         # Check if user wants to exit
         if name.lower() == 'exit':
@@ -39,9 +39,9 @@ def add_animal():
             print_animal_table(animals)
             break
 
-        species = input(Fore.GREEN + "Species: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
-        breed = input(Fore.GREEN + "Breed: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
-        gender = input(Fore.GREEN + "Gender: " + Style.RESET_ALL).strip().capitalize()  # Capitalize the first letter
+        species = input(Fore.GREEN + "Species: " + Style.RESET_ALL).strip().capitalize() 
+        breed = input(Fore.GREEN + "Breed: " + Style.RESET_ALL).strip().capitalize()  
+        gender = input(Fore.GREEN + "Gender: " + Style.RESET_ALL).strip().capitalize()  
         age = input(Fore.GREEN + "Age: " + Style.RESET_ALL).strip()
 
         # Validate input fields
