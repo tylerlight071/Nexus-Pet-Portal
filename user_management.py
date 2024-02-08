@@ -13,6 +13,8 @@ users_collection = db['users']
 
 
 def user_management():
+
+    SudoAdmin(users_collection.database).login()
     # Continuous loop for user management options
     while True:
         clear_screen()
@@ -100,6 +102,9 @@ def update_user_level(username):
         print(Fore.RED + "\nInvalid user level. Please enter a valid level." + Style.RESET_ALL)
 
 def update_user_information():
+
+    SudoAdmin(users_collection.database).login()
+
     username = get_username()
     user = get_user(username)
 
@@ -126,6 +131,9 @@ def update_user_information():
     time.sleep(2)
 
 def delete_user():
+
+    SudoAdmin(users_collection.database).login()
+
     # Prompt for username to be deleted
     username = input("\nEnter the username to delete: ")
     confirm_delete = input("Are you sure you want to delete this user? (y/n) ")
