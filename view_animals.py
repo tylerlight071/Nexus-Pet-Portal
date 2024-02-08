@@ -267,9 +267,8 @@ def modify_animal_database():
         if delete_animal(animal_name):
             log_action(current_user, f"Deleted {animal_name} from the database")
  
-        
         else:
-            log_action(current_user, f"Failed to delete {animal_name} from the database")
+            log_action(current_user, "Failed to delete the selected animal from the database")
 
     # Exit   
     elif choice == '4':
