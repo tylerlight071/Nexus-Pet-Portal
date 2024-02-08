@@ -105,6 +105,12 @@ You can now use this MongoDB URI to connect to your MongoDB database from Nexus 
 
 (You will set the password to your own on first login)
 
+- To create a new user, go to User Management in the ADMIN Dashboard
+- Go to Register New User
+- Enter the desired username, password and user level. You can now log into the new user account.
+
+(For resetting forgotten passwords, from User Management, enter Update user information, log in via Sudo ADMIN and simply reset the password to **'password'**)
+
 ## System Requirements 💻
 
 Nexus Pet Portal is developed using Python. To run this application from the source code, you need:
