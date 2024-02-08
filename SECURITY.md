@@ -7,6 +7,8 @@ Right now, only the latest release is being patched for security and performance
 | Version | Supported          |
 | ------- | ------------------ |
 | 0.4.x   | :white_check_mark: |
+| 0.5.x   | :white_check_mark: |
+| 0.4.x   | :x:                |
 | 0.3.x   | :x:                |
 | 0.2.x   | :x:                |
 | 0.1.x   | :x:                |
