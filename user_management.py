@@ -1,6 +1,7 @@
 import time
 from colorama import Fore, Style
 from common_functions import clear_screen, hash_password, get_mongodb_uri
+from register import register
 from pymongo import MongoClient
 from sudo_user_login import SudoAdmin
 
@@ -17,16 +18,19 @@ def user_management():
         clear_screen()
         print(Fore.YELLOW + "\nUser Management" + Style.RESET_ALL)
         print("\n1. Update user information")
-        print("2. Delete user")
-        print("3. Back to ADMIN dashboard")
+        print("2. Register new user")
+        print("3. Delete user")
+        print("4. Back to ADMIN dashboard")
         option = input("\nPlease select an option: ")
 
         # Perform actions based on user input
         if option == '1':
             update_user_information()
         elif option == '2':
-            delete_user()
+            register()
         elif option == '3':
+            delete_user()
+        elif option == '4':
             print("\nReturning to ADMIN dashboard...")
             time.sleep(2)
             return
