@@ -220,7 +220,7 @@ def delete_selected_animal(cursor, selected_index):
         clear_screen()
         return True
     else:
-        print(f"Failed to delete {selected_animal['name']} from the database.")
+        print("Failed to delete from the database.")
         time.sleep(2)
         clear_screen()
         return False
