@@ -163,3 +163,4 @@ cython_debug/
 audit_log.txt
 config.ini
 
+.vscode/settings.json
