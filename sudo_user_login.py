@@ -1,4 +1,5 @@
 import time
+import sys
 import getpass
 from common_functions import clear_screen, verify_password, log_action
 from colorama import Fore, Style
@@ -51,7 +52,7 @@ class SudoUser:
                     return username
                 else:
                     self.print_insufficient_clearance(username)
-                    exit()
+                    sys.exit()
             else:
                 self.print_incorrect_password(username, attempts)
         else:

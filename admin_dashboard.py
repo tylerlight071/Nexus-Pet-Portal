@@ -1,4 +1,5 @@
 import time
+import sys
 from colorama import Fore, Style
 from common_functions import clear_screen, log_action
 from user_management import user_management
@@ -28,7 +29,7 @@ def admin_dashboard():
             print("\nLogging out...")
             log_action("ADMIN", "Logged Out")
             time.sleep(2)
-            exit()
+            sys.exit()
         else:
             print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
             time.sleep(2)
