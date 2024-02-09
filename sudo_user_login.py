@@ -1,6 +1,7 @@
 import time
 import sys
 import getpass
+from tabulate import tabulate
 from common_functions import clear_screen, verify_password, log_action
 from colorama import Fore, Style
 
@@ -19,7 +20,7 @@ class SudoUser:
         MAX_ATTEMPTS = 2 
 
         for attempts in range(MAX_ATTEMPTS):
-            print(Fore.LIGHTMAGENTA_EX + "\n👤 Sudo Login 👤" + Style.RESET_ALL)
+            print(tabulate([[Fore.LIGHTMAGENTA_EX + "👤 Sudo Login 👤" + Style.RESET_ALL]], tablefmt='fancy_grid'))
             print(enter_credentials)
 
             username, password = self.get_credentials()
@@ -106,7 +107,7 @@ class SudoUserLevel1(SudoUser):
     def login(self):
         for attempts in range(self.MAX_ATTEMPTS):
             clear_screen()
-            print(Fore.LIGHTMAGENTA_EX + "\n👤 Sudo Login 👤" + Style.RESET_ALL)
+            print(tabulate([[Fore.LIGHTMAGENTA_EX + "👤 Sudo Login 👤" + Style.RESET_ALL]], tablefmt='fancy_grid'))
             print(enter_credentials)
 
             username, password = self.get_credentials()
@@ -151,7 +152,7 @@ class SudoAdmin(SudoUser):
     def login(self):
         for attempts in range(self.MAX_ATTEMPTS):
             clear_screen()
-            print(Fore.LIGHTMAGENTA_EX + "\n👤 ADMIN Sudo Login 👤" + Style.RESET_ALL)
+            print(tabulate([[Fore.LIGHTMAGENTA_EX + "👤 ADMIN Sudo Login 👤" + Style.RESET_ALL]], tablefmt='fancy_grid'))
             print(enter_credentials)
 
             username, password = self.get_credentials()
