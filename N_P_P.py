@@ -53,8 +53,6 @@ def handle_option(option, functions):
         print(Fore.RED + "\nInvalid option. Please try again." + Style.RESET_ALL)
         time.sleep(2)
 
-from tabulate import tabulate
-
 def main_menu():
     options = [Fore.GREEN + "Login" + Style.RESET_ALL, Fore.YELLOW + "Exit" + Style.RESET_ALL]
     functions = [login, exit]
