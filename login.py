@@ -1,6 +1,7 @@
 import getpass
 import time
 from colorama import Fore, Style
+from tabulate import tabulate
 from common_functions import clear_screen, log_action, hash_password, verify_password, get_mongodb_uri
 from admin_dashboard import admin_dashboard
 from pymongo import MongoClient
@@ -98,7 +99,7 @@ def login():
     # Continuous loop for login
     while attempts < MAX_ATTEMPTS:
         # Display login prompt
-        print("\n👤 User Login 👤")
+        print(tabulate([["\n👤 User Login 👤"]], tablefmt='fancy_grid'))
         username = input("\nEnter your username: ")
         password = getpass.getpass("Enter your password: ")
 

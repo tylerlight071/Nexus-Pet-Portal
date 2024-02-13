@@ -2,7 +2,7 @@
 
 ## Supported Versions
 
-Right now, only the latest release is being patched for security and performance updates as they are pre-released versions. The higher the 'x' in the release, the newest release that will contain new patches or adjustments. 
+Right now, only the latest release is being patched for security and performance updates as they are pre-released versions. The latest version is the release that will contain new patches or adjustments.
 
 | Version | Supported          |
 | ------- | ------------------ |
