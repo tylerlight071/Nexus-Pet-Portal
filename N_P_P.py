@@ -8,6 +8,7 @@ from common_functions import clear_screen, log_action, hash_password, get_mongod
 from login import login
 from client_database import client_database
 from pymongo import MongoClient
+from tabulate import tabulate
 
 get_mongodb_uri()
 
@@ -37,8 +38,8 @@ def logout():
 
 # Main menu
 def display_menu(options):
-    for i, option in enumerate(options, 1):
-        print(f"{i}. {option}")
+    table_data = [[i, option] for i, option in enumerate(options, 1)]
+    print(tabulate(table_data, tablefmt='fancy_grid'))
 
 def handle_option(option, functions):
     try:
@@ -57,9 +58,12 @@ def main_menu():
     functions = [login, exit]
     while True:
         clear_screen()
-        print(Fore.CYAN + "\n🐕 Welcome to Nexus Pet Portal! 🐈\n" + Style.RESET_ALL)
-        display_menu(options)
-        choice = input("\nPlease select an option: ")
+        welcome_table = [[Fore.CYAN + "🐕 Welcome to Nexus Pet Portal! 🐈" + Style.RESET_ALL]]
+        options_table = [[f"{i}. {option}"] for i, option in enumerate(options, 1)]
+        options_table.append(["Please select an option:"])
+        print(tabulate(welcome_table, tablefmt='fancy_grid'))
+        print(tabulate(options_table, tablefmt='fancy_grid'))
+        choice = input("\n> ")
         user_details = handle_option(choice, functions)
         if user_details is not None:
             user_menu(user_details[0], user_details[1])
@@ -82,9 +86,12 @@ def user_menu(current_user, user_level):
     functions.append(logout)
     while True:
         clear_screen()
-        print(Fore.CYAN + "\n📖 Main Menu 📖\n" + Style.RESET_ALL)
-        display_menu(options)
-        choice = input("\nPlease select an option: ")
+        menu_table = [[Fore.CYAN + "📖 Main Menu 📖" + Style.RESET_ALL]]
+        options_table = [[f"{i}. {option}"] for i, option in enumerate(options, 1)]
+        options_table.append(["Please select an option:"])
+        print(tabulate(menu_table, tablefmt='fancy_grid'))
+        print(tabulate(options_table, tablefmt='fancy_grid'))
+        choice = input("\n> ")
         # Logout option
         if choice == str(len(options)):  
             log_action(current_user, "Logged out")

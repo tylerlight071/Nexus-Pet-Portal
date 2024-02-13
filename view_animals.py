@@ -1,5 +1,7 @@
 import time
+import ctypes
 from colorama import Fore, Style
+from tabulate import tabulate
 from common_functions import clear_screen, load_animal_data, log_action, get_mongodb_uri, sanitize_input
 from view_animal_profile import view_animals_full
 from sudo_user_login import SudoUserLevel1, SudoUser
@@ -7,6 +9,11 @@ from edit_animal_entries import modify_animal
 from add_animal import add_animal
 from tables import print_animal_table
 from pymongo import MongoClient
+
+# Get console window
+ctypes.windll.kernel32.GetConsoleWindow()
+# Set console title
+ctypes.windll.kernel32.SetConsoleTitleW("🐾 Nexus Pet Portal 🐾")
 
 # Connect to MongoDB
 uri = get_mongodb_uri()
@@ -287,9 +294,6 @@ def view_animals():
     animals = load_animal_data(animals_collection)
     current_user = SudoUserLevel1(users_collection.database).login()
 
-    # Load animal data
-    print_animal_table(animals)
-
     while True:
         print_options(current_user)
         user_input = input(select_option)
@@ -310,16 +314,22 @@ def view_animals():
 
 # Print options for the user
 def print_options(current_user):
-    print(Fore.CYAN + "\n⚙️ Options ⚙️" + Style.RESET_ALL)
-    print("\n1. " + Fore.GREEN + "Search for animal" + Style.RESET_ALL)
-    print("2. " + Fore.GREEN + "Sort/Filter Animals" + Style.RESET_ALL)
+    options = [
+        ["1. ", Fore.GREEN + "🔍 Search for animal" + Style.RESET_ALL],
+        ["2. ", Fore.GREEN + "🔼 Sort/Filter Animals" + Style.RESET_ALL]
+    ]
 
     if current_user['level'] >= 2:
-        print("3. " + Fore.GREEN + "View animal profile" + Style.RESET_ALL)
-        print("4. " + Fore.GREEN + "Modify Database" + Style.RESET_ALL)
-        print("5. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+        options.extend([
+            ["3. ", Fore.GREEN + "🐾 View animal profile" + Style.RESET_ALL],
+            ["4. ", Fore.GREEN + "📋 Modify Database" + Style.RESET_ALL],
+            ["5. ", Fore.YELLOW + "← Back" + Style.RESET_ALL]
+        ])
     else:
-        print("3. " + Fore.YELLOW + "Exit" + Style.RESET_ALL)
+        options.append(["3. ", Fore.YELLOW + "Exit" + Style.RESET_ALL])
+
+    print(tabulate([[Fore.CYAN + "☰ Options ☰" + Style.RESET_ALL]], tablefmt='fancy_grid'))
+    print(tabulate(options, tablefmt='fancy_grid'))
 
 # Search the database
 def search_database(animals, current_user):
