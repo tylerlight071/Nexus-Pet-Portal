@@ -75,7 +75,7 @@ def search_animals(animals, current_user):
         search_query = get_search_query()
 
         if search_query == 'exit':
-            clear_screen_and_print_animals(animals)
+            clear_screen_and_print_animals()
             return
 
         log_action(current_user, f"Searched for {search_query}")
@@ -83,9 +83,9 @@ def search_animals(animals, current_user):
         found_results = search_animals_by_query(animals, search_query)
 
         if found_results:
-            handle_found_results(animals, found_results)
+            handle_found_results(found_results)
         else:
-            handle_no_results(animals)
+            handle_no_results()
 
 def print_search_prompt():
     clear_screen()
@@ -114,7 +114,7 @@ def search_animals_by_query(animals, search_query):
                 found_results.append(animal)
     return found_results
 
-def handle_found_results(animals, found_results):
+def handle_found_results(found_results):
     clear_screen()
     print(Fore.LIGHTYELLOW_EX + "SEARCH RESULTS" + Style.RESET_ALL)
     print_animal_table(found_results)
@@ -125,19 +125,19 @@ def handle_found_results(animals, found_results):
     if exit_input == '1':
         return
     elif exit_input == '2':
-        clear_screen_and_print_animals(animals)
+        clear_screen_and_print_animals()
     else:
-        print_invalid_input(animals)
+        print_invalid_input()
 
-def handle_no_results(animals):
+def handle_no_results():
     print(Fore.RED + "No animals found matching the search criteria" + Style.RESET_ALL)
     time.sleep(2)
-    clear_screen_and_print_animals(animals)
+    clear_screen_and_print_animals()
 
-def print_invalid_input(animals):
+def print_invalid_input():
     print(Fore.RED + invalid_input + Style.RESET_ALL)
     time.sleep(2)
-    clear_screen_and_print_animals(animals)
+    clear_screen_and_print_animals()
 
 def clear_screen_and_print_animals(animals):
     clear_screen()
