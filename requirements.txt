@@ -20,7 +20,7 @@ click==8.1.7
 colorama==0.4.6
 colorzero==2.0
 comtypes==1.2.0
-cryptography==42.0.2
+cryptography==42.0.4
 customtkinter==5.2.2
 darkdetect==0.8.0
 decorator==5.1.1
