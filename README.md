@@ -57,6 +57,8 @@ Nexus Pet Portal is a heartwarming Animal Shelter Management System designed to 
 4. Extract the zip file if downloaded
 5. Run the exe file
 
+This is the Python version, once in a v1.0 release, I will be working on a GUI version using React and Electron.
+
 ## Setting Up MongoDB 🍃
 
 To use Nexus Pet Portal, you need to have a MongoDB database. Here's how you can set it up:
