@@ -68,7 +68,7 @@ opencv-python==4.9.0.80
 packaging==23.2
 parso==0.8.3
 pefile==2023.2.7
-pillow==10.2.0
+pillow==10.3.0
 prompt-toolkit==3.0.39
 proto-plus==1.23.0
 protobuf==4.25.1
@@ -86,7 +86,7 @@ pygame==2.5.2
 Pygments==2.16.1
 pyinstaller==6.3.0
 pyinstaller-hooks-contrib==2023.11
-pymongo==4.6.1
+pymongo==4.6.3
 pyparsing==3.1.1
 pypiwin32==223
 pyttsx3==2.90
