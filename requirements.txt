@@ -93,7 +93,7 @@ pyttsx3==2.90
 pywin32==306
 pywin32-ctypes==0.2.2
 readchar==4.0.5
-requests==2.31.0
+requests==2.32.0
 rsa==4.9
 runs==1.2.2
 setuptools==69.0.3
