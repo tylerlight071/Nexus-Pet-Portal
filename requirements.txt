@@ -13,7 +13,7 @@ bottle==0.12.25
 bottle-websocket==0.2.9
 browser-cookie3==0.19.1
 cachetools==5.3.2
-certifi==2023.7.22
+certifi==2024.7.4
 cffi==1.16.0
 charset-normalizer==3.3.2
 click==8.1.7
@@ -109,7 +109,7 @@ tqdm==4.66.3
 traitlets==5.13.0
 transforms==0.2.1
 typing_extensions==4.9.0
-urllib3==2.1.0
+urllib3==2.2.2
 waitress==2.1.2
 wcwidth==0.2.9
 Werkzeug==3.0.1
